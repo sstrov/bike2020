@@ -1,0 +1,102 @@
+@charset "UTF-8";
+/*통계연보 시작*/
+.annual-list {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: stretch;
+      -ms-flex-align: stretch;
+          align-items: stretch;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+}
+
+.annual-list .annual-item {
+  margin: 49px auto 0;
+  width: 30%;
+  max-width: 300px;
+  min-width: 240px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.annual-list .annual-title {
+  font-size: 16px;
+  letter-spacing: 0;
+  margin-bottom: 17px;
+}
+
+.annual-list .annual-btn-box {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  margin-top: 21px;
+}
+
+.annual-list .annual-btn-box .annual-btn {
+  width: 85px;
+  height: 39px;
+  border-radius: 3px;
+  border: 1px solid #cbcbcb;
+  text-align: left;
+  padding-left: 12px;
+  background: #ffffff url("../../image/C-statisticalPublication/down.png") no-repeat center right 12px;
+  color: #7a797d;
+  font-size: 14px;
+  letter-spacing: 0;
+}
+
+.annual-list .annual-btn-box .annual-btn.file {
+  margin-left: 11px;
+}
+
+.annual-register {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+  margin-top: 43px;
+}
+
+@media all and (max-width: 768px) {
+  .annual-list .annual-item {
+    width: 40%;
+  }
+}
+
+@media all and (max-width: 480px) {
+  .annual-list .annual-item {
+    width: 100%;
+  }
+}
+
+/*통계연보 끝*/

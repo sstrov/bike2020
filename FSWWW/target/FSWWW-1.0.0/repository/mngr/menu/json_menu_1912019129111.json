@@ -1,0 +1,12 @@
+{
+	"accKey" : "null",
+	"fKey"   : "1910117194592",
+	"pKey"   : "1910117194592",
+	"menuG"  : "2",
+	"nm"     : "게시판 설정",
+	"page"   : "1",
+	"target" : "_self",
+	"actAt"  : "Y",
+	"useAt"  : "Y",
+	"link"   : "/adm/bbs/estbs/list.do?key=1912019129111"
+}

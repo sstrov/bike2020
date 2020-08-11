@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="fscms.mods.bbs.service.BbsThumbMapper">
+
+	<sql id="columns">
+		BBS_THUMB_SN   AS bbsThumbSn
+		, BBS_ESTBS_SN AS bbsEstbsSn
+		, THUMB_NM     AS thumbNm
+		, WIDTH_SIZE   AS widthSize
+		, VRTICL_SIZE  AS vrticlSize
+	</sql>
+	
+	<sql id="wheres">
+		<where>
+			<if test="bbsThumbSn != null and bbsThumbSn != ''">
+				BBS_THUMB_SN = #{bbsThumbSn}
+			</if>
+			
+			<if test="bbsEstbsSn != null and bbsEstbsSn != ''">
+				AND BBS_ESTBS_SN = #{bbsEstbsSn}
+			</if>
+			
+			<if test="sc_keyArr != null and sc_keyArr != ''">
+				AND BBS_THUMB_SN NOT IN
+				<foreach item="item" collection="sc_keyArr" separator="," open="(" close=")">
+					#{item}
+				</foreach>
+			</if>
+		</where>
+	</sql>
+	
+	<select id="selectList" parameterType="bbsThumbVO" resultType="bbsThumbVO">
+		SELECT	<include refid="columns" />
+		FROM	FS_BBS_THUMB
+		<include refid="wheres" />
+		ORDER BY BBS_THUMB_SN ASC
+	</select>
+	
+</mapper>

@@ -1,0 +1,284 @@
+@import '../common/var';
+
+input[type=checkbox] {
+  margin-right: 7px;
+  position: relative;
+
+  &::after {
+    content: '';
+    @include position(absolute, 0, 0, 0, 0);
+    background: url('../../image/common/check-white.png') no-repeat center center/contain;
+  }
+
+  &:checked::after {
+    background-image: url('../../image/common/cheched-white.png');
+  }
+
+}
+input[type=radio] {
+  position: relative;
+}
+input[type=radio]::after {
+  content: '';
+  @include position(absolute, 0, 0, 0, 0);
+  background-image: url('../../image/A-stateData/radio.png');
+}
+
+input[type=radio]:checked::after {
+  background-image: url('../../image/A-stateData/radio-checked.png');
+}
+
+.data-filter {
+  @include flex(center, center);
+  flex-wrap: wrap;
+  background: #f7f7f7;
+  padding: 8px 0;
+  .filter-title {
+    font-size: 14px;
+    margin-right: 15px;
+    span {
+      color: #ff0000;
+    }
+  }
+  select {
+    font-size: 12px;
+    color: #7a797d;
+    border: 1px solid #cbcbcb;
+    border-radius: 3px;
+    width: 187px;
+    height: 34px;
+    padding-left: 12px;
+    margin-right: 20px;
+  }
+  label {
+    font-size: 12px;
+    color: #7a797d;
+    margin-right: 4px;
+  }
+}
+.service-type {
+  margin-top: 18px;
+  @include flex(center,space-between);
+  flex-wrap: wrap;
+
+  .checkbox {
+    font-size: 14px;
+    color: #666;
+    @include flex(center, flex-start);
+    p {
+      color: $black;
+      margin-right: 13px;
+    }
+    label {
+      margin-right: 24px;
+    }
+  }
+  .btn-primary {
+    width: 100%;
+    max-width: 183px;
+  }
+}
+
+.data-list {
+  margin-top: 25px;
+  margin-bottom: 130px;
+  .list-item {
+    padding: 34px 18px;
+    border-top: 1px solid #dddddd;
+    &:last-child {
+      border-bottom: 1px solid #dddddd;
+    }
+  }
+  .list-item:hover {
+    cursor: pointer;
+  }
+  .name {
+    font-size: 16px;
+    font-weight: $bold;
+    margin-bottom: 19px;
+  }
+  .info-container {
+    @include flex(flex-start,flex-start);
+    flex-wrap: wrap;
+  }
+  .info {
+    font-size: 14px;
+    font-weight: $light;
+    color: #545454;
+    @include flex(flex-start,flex-start);
+  }
+  .info-box div {
+    line-height: 24px;
+  }
+  .left-info {
+    margin-right: 40px;
+  } 
+  .right-info {
+    margin-right: 56px;
+  }
+  .type {
+    margin-top: auto;
+    font-size: 14px;
+    color: #545454;
+    font-weight: $light;
+    @include flex(center,flex-start);
+  }
+  .type-title {
+    margin-right: 20px;
+  }
+  .type-category {
+    @include flex(stretch, flex-start);
+  }
+  .type-item {
+    margin-right: 4px;
+    width: 73px;
+    height: 28px;
+    line-height: 28px;
+    border-radius: 3px;
+    font-size: 12px;
+    font-weight: $regular;
+    color: $white;
+    background: $primary-color;
+    text-align: center;
+  }
+  .type-item-02 {background: #56872e;}
+  .type-item-03 {background: #002d68;}
+  .type-item-04 {background: #555b69;}
+}
+.download-box {
+  @include flex(center, space-between,row, wrap);
+  margin: 13px 0;
+  select {
+    width: 113px;
+    padding: 6px 18px;
+    font-size: 14px;
+    color: #545454;
+    border-radius: 3px;
+    border: 1px solid #cccccc;
+  }
+  .btn-box {
+    @include flex(center,center);
+    p {
+      padding-left: 10px;
+      position: relative;
+      font-size: 12px;
+      font-weight: $light;
+      color: $black;
+      margin-right: 10px;
+      &::after {
+        content: '';
+        width: 2px;
+        height: 2px;
+        position: absolute;
+        top: 50%;
+        left: 0;
+        margin-top: -1px;
+        background: $black;
+      }
+    }
+    .download-btn {
+      border: 1px solid #cbcbcb;
+      font-size: 12px;
+      color: #545454;
+      background: #f7f7f7;
+      margin-left: 3px;
+      padding: 10px 12px;
+    }
+  }
+}
+
+@media all and (max-width: $tablet-width) {
+  .data-list .list-item {
+    padding: 30pox 10px;
+  }
+  .data-list .info {
+    flex-wrap: wrap;
+  }
+  .data-list .right-info {
+    margin-right: 20px;
+  }
+}
+
+@media all and (max-width: $mobile-width) {
+  .data-filter {
+    justify-content: flex-start;
+    padding-left: 30px;
+  }
+  .data-filter .filter-title {
+    margin-bottom: 15px;
+  }
+  .service-type .checkbox {
+    flex-wrap: wrap;
+  }
+  .service-type .checkbox label {
+    line-height: 24px;
+  }
+  .service-type {
+    justify-content: center;
+  }
+  .service-type .btn-primary {
+    margin: 0 auto;
+    margin-top: 20px;
+  }
+  .data-list .type {
+    margin-top: 10px;
+    align-items: flex-start;
+  }
+  .data-list .type-category {
+    flex-wrap: wrap;
+  }
+}
+
+//공공데이터 2 상세 
+
+h5 {
+  margin-top: 20px;
+  font-size: 16px;
+  font-weight: $medium;
+  padding-left: 16px;
+  position: relative;
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    width: 9px;
+    height: 2px;
+    background: $primary-color;
+  }
+}
+
+.content-container .data-tab {
+  margin-top: 27px;
+}
+.content-container .depth-tab-content {
+  overflow-x: scroll;
+}
+.data-tab-content.api {
+  min-width: 460px;
+}
+.btn-box-top {
+  text-align: right;
+  margin-top: 15px;
+  margin-bottom: 17px;
+  @include flex(center, flex-end);
+
+  button {
+    width: 109px;
+    height: 39px;
+    line-height: 39px;
+    border: 1px solid #cbcbcb;
+    background: $white;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: $light;
+    margin-left: 5px;
+    margin-right: unset;
+    @include flex(center, center);
+
+    img {
+      margin-right: 9px;
+    }
+  }
+}

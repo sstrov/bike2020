@@ -1,0 +1,197 @@
+@import '../common/var';
+
+/* api 인증키 신청*/
+.request-wrap {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 60;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  max-width: 1200px;
+  overflow-x: scroll;
+  display: none;
+  &.on {
+    display: inline-block;
+  }
+} 
+.key-request {
+  width: 1200px;
+  background: $white;
+  border: 1px solid #aaaaaa;
+  padding-bottom: 60px;
+  .top-box {
+    @include flex(center, flex-end);
+
+    .close-btn {
+      width: 40px;
+      height: 40px;
+      background: url('../../image/common/close-black.png') no-repeat center center;
+      opacity: .5;
+    }
+  }
+
+  .content-box {
+    padding: 0 45px;
+  }
+  .table-bordered tbody:first-child {
+    border-top: 2px solid $primary-color;
+  }
+  .inner-table tr th {
+    // width: auto;
+    text-align: center;
+    vertical-align: middle;
+    max-width: 140px;
+  }
+  .table.table-bordered tbody tr td {
+    text-align: left !important;
+    font-size: 14px;
+    font-weight: $regular;
+    color: #545454;
+    padding-left: 18px;
+  }
+
+  .request-title {
+    margin-top: 20px;
+    margin-bottom: 16px;
+    padding-left: 18px;
+    position: relative;
+    font-weight: $bold;
+    &::after {
+      content: '';
+      width: 9px;
+      height: 2px;
+      background: $primary-color;
+      @include position(absolute, 50%, null, 0);
+      transform: translateY(-50%);
+    }
+  }
+
+  .agree-box {
+    @include flex(center,flex-start,row,wrap);
+    font-size: 12px;
+    line-height: 16px;
+    img {
+      margin-right: 27px;
+    }
+    label {
+      margin-left: auto;
+      @include flex(center,center);
+    }
+  }
+  .announcement-text {
+    width: 100%;
+    min-height: 240px;
+    max-height: 340px;
+    overflow-y: scroll;
+    font-size: 14px;
+    padding: 22px;
+    color: #545454;
+    border: 1px solid #aaaaaa;
+  }
+  textarea {
+    width: 100%;
+    font-size: 14px;
+    padding: 22px;
+    color: #545454;
+  }
+  .input-table td {
+    padding: 7px 15px;
+
+    input[type=text] {
+      width: 100%;
+      height: 34px;
+    }
+  }
+  .radio-box {
+    @include flex(center,flex-start,row,wrap);
+    padding: 7px 0;
+    label {
+      margin-right: 10px;
+      @include flex(center,center);
+      line-height: 20px;
+      input {
+        margin-right: 10px;
+      }
+    }
+  }
+
+  .btn-box {
+    margin-top: 40px;
+    @include flex(center,flex-end);
+    button {
+      width: 79px;
+      height: 34px;
+      font-size: 12px;
+      font-weight: $light;
+      margin-left: 7px;
+      padding: 0;
+      border-radius: 3px;
+      &.btn-close {
+        border: 1px solid #cbcbcb;
+        opacity: 1;
+        background: $white;
+      }
+    }
+  }
+}
+
+
+/* 인증키 발급 완료*/
+
+.key-request-finish {
+  .title-box {
+    background: #f7f7f7;
+    padding: 56px 0;
+    @include flex(center,center,row,wrap);
+  }
+  .title-image {
+    margin-right: 80px;
+  }
+  .title-r {
+    font-size: 28px;
+    font-weight: $bold;
+    margin-bottom: 22px;
+  }
+  .title-s {
+    color: #545454;
+    font-size: 16px;
+    line-height: 20px;
+  }
+  .key-value {
+    margin-top: 33px;
+    @include flex(stretch,flex-start,row,wrap);
+  }
+  .value-btn {
+    background: #4f7b9e;
+    color: $white;
+    border-radius: 3px;
+    font-size: 14px;
+    padding: 10px 20px;
+  }
+  .value-input {
+    width: 100%;
+    max-width: 340px;
+  }
+  .finish-title-box {
+    @include flex(center,space-between,row,wrap);
+    margin-top: 40px;
+  }
+  .request-finish-btn {
+    @include flex(stretch,flex-start);
+    a {
+      width: 98px;
+      height: 34px;
+      @include flex(center,center);
+      border: 1px solid #cbcbcb;
+      border-radius: 3px;
+      color: #545454;
+      font-size: 12px;
+      font-weight: $light;
+      margin-left: 5px;
+      img {
+        margin-right: 10px;
+      }
+    }
+  }
+}

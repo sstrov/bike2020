@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="fscms.mods.bbs.service.BbsEstbsMapper">
+
+	<sql id="columns">
+		BBS_ESTBS_SN             AS bbsEstbsSn
+		, SKN_SN_DP1             AS sknSnDp1
+		, SKN_SN_DP2             AS sknSnDp2
+		, BBS_ESTBS_NM           AS bbsEstbsNm
+		, SJ_LT_LMTT             AS sjLtLmtt
+		, LIST_INDICT_CO         AS listIndictCo
+		, CTGRY_AT               AS ctgryAt
+		, ATCH_AT                AS atchAt
+		, ATCH_SIZE              AS atchSize
+		, THUMB_AT               AS thumbAt
+		, ANSWER_AT              AS answerAt
+		, NOTICE_AT              AS noticeAt
+		, SECRET_AT              AS secretAt
+		, SECRET_AT_ALWAYS       AS secretAtAlways
+		, RDCNT_DPLCT_AT         AS rdcntDplctAt
+		, REGISTER_NM_TY         AS registerNmTy
+		, INDICT_DAY_NW          AS indictDayNw
+		, HDER_TAG               AS hderTag
+		, HDER_CNTNTS_AT         As hderCntntsAt
+		, FOOT_TAG               AS footTag
+		, FOOT_CNTNTS_AT         AS footCntntsAt
+		, AUTHOR_LIST            AS authorList
+		, AUTHOR_REDNG           AS authorRedng
+		, AUTHOR_REGIST          AS authorRegist
+		, AUTHOR_ANSWER          AS authorAnswer
+		, AUTHOR_CM              AS authorCm
+		, CM_AT                  AS cmAt
+		, CM_ANSWER_AT           AS cmAnswerAt
+		, CM_LT_LMTT_AT          AS cmLtLmttAt
+		, CM_LT_LMTT_SIZE        AS cmLtLmttSize
+		, CM_NMCHANGE_AT         AS cmNmchangeAt
+		, CM_PGNG_AT             AS cmPgngAt
+		, CM_LIST_INDICT_CO      AS cmListIndictCo
+		, CM_SORT                AS cmSort
+		, FS_BBS_ESTBS.REGIST_DE AS registDe
+		, FS_BBS_ESTBS.UPDT_DE   AS updtDe
+	</sql>
+	
+	<sql id="wheres">
+		<where>
+			<if test="bbsEstbsSn != null and bbsEstbsSn != ''">
+				BBS_ESTBS_SN = #{bbsEstbsSn}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="selectObj" parameterType="bbsEstbsVO" resultType="bbsEstbsVO">
+		SELECT	<include refid="columns" />
+				, skn1.BBS_SKN_CODE AS sknSnDp1Code
+				, skn1.BBS_SKN_NM   AS sknSnDp1Nm
+				, skn2.BBS_SKN_CODE AS sknSnDp2Code
+				, skn2.BBS_SKN_NM   AS sknSnDp2Nm
+				, skn2.CMMN_VIEW_AT AS cmmnViewAt
+		FROM	FS_BBS_ESTBS
+		LEFT OUTER JOIN FS_BBS_SKN skn1 ON (skn1.BBS_SKN_SN = FS_BBS_ESTBS.SKN_SN_DP1)
+		LEFT OUTER JOIN FS_BBS_SKN skn2 ON (skn2.BBS_SKN_SN = FS_BBS_ESTBS.SKN_SN_DP2)
+		<include refid="wheres" />
+	</select>
+	
+</mapper>

@@ -1,0 +1,87 @@
+@charset "UTF-8";
+.box-e.type2 {
+  display: block;
+}
+
+.box-e.type2 .title-e {
+  margin-bottom: 30px;
+}
+
+.box-e.type2 .title-e::after {
+  display: none;
+}
+
+.box-e.type2 .text-e {
+  display: block;
+}
+
+.box-e.type2 .background-box {
+  background: #f7f7f7;
+  padding: 31px 39px;
+  margin-top: 36px;
+  padding-right: 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+}
+
+.box-e.type2 .background-box span {
+  position: relative;
+  line-height: 74px;
+}
+
+.box-e.type2 .background-box span::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  top: 68%;
+  left: 0;
+  line-height: 26px;
+  border-top: 1px solid #545454;
+  color: #ff0000;
+  text-align: center;
+}
+
+.box-e.type2 .background-box span.api-url::after {
+  content: 'Open API URL';
+}
+
+.box-e.type2 .background-box span.api-name::after {
+  content: 'Open API명';
+}
+
+.box-e.type2 .background-box span.api-value::after {
+  content: '인증키값';
+}
+
+.box-e.type2 ol {
+  list-style: decimal;
+  padding-left: 16px;
+  margin-top: 30px;
+}
+
+.box-e.type2 ol li {
+  line-height: 26px;
+  font-size: 14px;
+  word-break: keep-all;
+}
+
+.text-e.api-box {
+  overflow-x: scroll;
+}
+
+.data-tab-content.api {
+  min-width: 996px;
+}

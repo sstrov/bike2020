@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="fscms.mods.banner.service.BannerMapper">
+
+	<sql id="columns">
+		BANNER_SN                    AS bannerSn
+		, BANNER_ESTBS_SN            AS bannerEstbsSn
+		, BANNER_NM                  AS bannerNm
+		, BANNER_ORDR                AS bannerOrdr
+		, BANNER_BGNDE               AS bannerBgnde
+		, BANNER_ENDDE               AS bannerEndde
+		, BANNER_ITNADR              AS bannerItnadr
+		, BANNER_TRGT                AS bannerTrgt
+		, CONVERT(TAG_CN USING utf8) AS tagCn
+		, ATCHMNFL_IMAGE             AS atchmnflImage
+		, ATCHMNFL_BCRN_IMAGE        AS atchmnflBcrnImage
+		, FLPTH                      AS flpth
+		, CLASS_NM                   AS classNm
+		, USE_AT                     AS useAt
+		, REGIST_DE                  AS registDe
+		, UPDT_DE                    AS updtDe
+	</sql>
+	
+	<sql id="wheres">
+		<where>
+			<if test="bannerSn != null and bannerSn != ''">
+				BANNER_SN = #{bannerSn}
+			</if>
+			<if test="bannerEstbsSn != null and bannerEstbsSn != ''">
+				AND BANNER_ESTBS_SN = #{bannerEstbsSn}
+			</if>
+			<if test="useAt != null and useAt != ''">
+				AND USE_AT = #{useAt}
+			</if>
+			<if test="mainAt != null and mainAt != ''">
+				AND (
+					(
+						BANNER_BGNDE IS NULL
+						OR (
+							BANNER_BGNDE IS NOT NULL
+							AND DATE_FORMAT(BANNER_BGNDE, '%Y%m%d%H%i%s') <![CDATA[<=]]> DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
+						)
+					) AND (
+						BANNER_ENDDE IS NULL
+						OR (
+							BANNER_ENDDE IS NOT NULL
+							AND DATE_FORMAT(BANNER_ENDDE, '%Y%m%d%H%i%s') <![CDATA[>=]]> DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
+						)
+					)
+				)
+			</if>
+		</where>
+	</sql>
+	
+	<select id="selectObj" parameterType="bannerVO" resultType="bannerVO">
+		SELECT	<include refid="columns" />
+		FROM	FS_BANNER
+		<include refid="wheres" />
+	</select>
+	
+	<select id="selectList" parameterType="bannerVO" resultType="bannerVO">
+		SELECT	<include refid="columns" />
+		FROM	FS_BANNER
+		<include refid="wheres" />
+		ORDER BY BANNER_ORDR ASC
+	</select>
+	
+</mapper>

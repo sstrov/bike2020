@@ -1,0 +1,157 @@
+@import '../common/var';
+
+.filter {
+  margin: 26px 0;
+
+  .category {
+    background: #f7f7f7;
+    padding: 8px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    span {
+      font-size: 14px;
+      margin-right: 16px;
+    }
+    select {
+      font-size: 12px;
+      color: #7a797d;
+      padding: 10px 16px;
+      border-radius: 4px;
+      border: 1px solid $gray200;
+      width: 100%;
+      max-width: 596px;
+    }
+  }
+
+  .options {
+    padding: 0 25px;
+    border: 1px solid #dee2e6;
+  }
+  .inner {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 12px 7px;
+    &:first-child {
+      border-bottom: 1px solid #dee2e6;
+    }
+
+    .name {
+      font-size: 14px;
+      margin-right: 30px;
+      font-weight: $regular;
+    }
+    .date-box {
+      display: flex;
+      align-items: center;
+      
+      .date-input {
+        width: 100%;
+        max-width: 150px;
+        font-size: 14px;
+        padding: 6px 12px;
+        border-radius: 3px;
+        margin-right: 5px;
+        background: $white;
+        box-shadow: none;
+        border: 1px solid #aaaaaa;
+      }
+      button {
+        background: $white;
+      }
+      span {
+        margin: 0 7px;
+      }
+    }
+    label {
+      font-size: 14px;
+      color: #666666;
+      margin-right: 26px;
+      line-height: 2;
+    }
+  }
+  .chcekbox.top {
+    display: flex;
+    align-items: center;
+    margin: 0 auto;
+  }
+  .chcekbox {
+    .btn {
+      color: $white;
+      font-size: 14px;
+      background: #4f7b9e;
+      padding: 5px 20px;
+      border-radius: 3px;
+    }
+  }
+  .chart-type {
+    border: 1px solid $gray200;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 380px;
+    height: 20px;
+  }
+}
+.charts {
+  min-height: 490px;
+  margin-top: 30px;
+}
+.bubble-chart {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  .item {
+    width: 45%;
+    min-height: 500px;
+    margin-bottom: 30px;
+  }
+}
+
+@media all and (max-width: $tablet-width) {
+  .filter .chcekbox.top,
+  .filter .chart-type {
+    margin: 0;
+    margin-top: 10px;
+  }
+  .filter .inner {
+    padding: 20px 0;
+  }
+  .bubble-chart {
+    width: calc(100vw - 20px);
+    padding-right: 20px;
+    .item {
+      width:100%;
+    }
+  } 
+}
+@media all and (max-width: $mobile-width) {
+  .filter .category span {
+    margin-right: auto;
+    margin-bottom: 7px;
+  }
+  .filter .inner .name {
+    margin-bottom: 7px;
+  }
+  .filter .options {
+    padding: 0 20px;
+  }
+  .bottom.chcekbox {
+    width: 100%;
+  }
+  .filter .inner .date-box .date-input {
+    width: 30%;
+  }
+  .filter .inner .bottom.chcekbox label {
+    margin-right: 17px;
+    &:last-of-type {
+      margin-right: 0;
+    }
+  }
+  .filter .chcekbox .btn {
+    display: block;
+    margin-left: auto;
+    margin-top: 7px;
+  }
+}

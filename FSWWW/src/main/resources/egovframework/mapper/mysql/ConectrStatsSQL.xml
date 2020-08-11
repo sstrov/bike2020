@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="fscms.mods.conectr.service.ConectrStatsMapper">
+
+	<insert id="insertInfo" parameterType="conectrStatsVO">
+		INSERT INTO FS_CONECTR_STATS
+			(STATS_YEAR, STATS_MONTH, STATS_DATE, STATS_HOUR,
+			STATS_MIN, STATS_SEC, STATS_WEEK, STATS_OPERSYSM,
+			STATS_LOCALE, STATS_REF, STATS_BRWSR_NM, STATS_BRWSR_VER,
+			STATS_PLTFOM, REGIST_IP, REGIST_DE)
+		VALUES
+			(#{statsYear}, #{statsMonth}, #{statsDate}, #{statsHour},
+			#{statsMin}, #{statsSec}, #{statsWeek}, #{statsOpersysm, jdbcType=VARCHAR},
+			#{statsLocale, jdbcType=VARCHAR}, #{statsRef, jdbcType=VARCHAR}, #{statsBrwsrNm, jdbcType=VARCHAR}, #{statsBrwsrVer, jdbcType=VARCHAR},
+			#{statsPltfom, jdbcType=VARCHAR}, #{registIp}, NOW())
+	</insert>
+	
+</mapper>

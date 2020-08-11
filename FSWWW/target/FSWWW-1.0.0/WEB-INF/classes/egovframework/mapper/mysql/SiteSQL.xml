@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="fscms.mods.site.service.SiteMapper">
+
+	<sql id="columns">
+		SITE_NM               AS siteNm
+		, ROLE_SN             AS roleSn
+		, OPEN_DE             AS openDe
+		, DPLCT_LOGIN_AT      AS dplctLoginAt
+		, LOGIN_FAILR_LOCK_CO AS loginFailrLockCo
+		, ACTVTY_AT           AS actvtyAt
+		, SNS_USE_AT          AS snsUseAt
+		, REGIST_DE           AS registDe
+		, UPDT_DE             AS updtDe
+	</sql>
+	
+	<select id="selectObj" resultType="siteVO">
+		SELECT	<include refid="columns" />
+		FROM	FS_SITE
+	</select>
+	
+</mapper>

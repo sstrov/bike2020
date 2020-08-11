@@ -1,0 +1,219 @@
+@import '../common/var';
+
+/*세종통계데이터 등록*/
+
+.register {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 1200px;
+  display: none;
+  background: $white;
+  border: 1px solid #aaaaaa;
+
+  &.on {
+    display: inline-block;
+  }
+}
+
+.register-title {
+  @include flex(center, space-between);
+  color: $white;
+  background: $primary-color;
+  font-size: 16px;
+  font-weight: $medium;
+  padding: 11px 20px 14px;
+
+  button {
+    width: 28px;
+    height: 24px;
+    background: url('../../image/common/close.png') no-repeat center center;
+  }
+}
+
+.register {
+  
+  .content-container {
+    padding: 30px 45px;
+  }
+  .table {
+    margin-bottom: 20px;
+  }
+
+  .table-bordered {
+    border-top: 2px solid $primary-color;
+  }
+
+  .table.th-center {
+    tbody th {
+      font-size: 14px;
+      text-align: center;
+      vertical-align: middle;
+    }
+    .inner-table tr th {
+      width: 140px;
+    }
+  }
+
+  select {
+    width: 100%;
+    max-width: 340px;
+    font-size: 14px;
+    padding: 10px 14px;
+    margin-left: 10px;
+    border: 1px solid #aaaaaa;
+    color: #545454;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background: url('../../image/A-stateData/icon-down-gray.png') no-repeat center right 8px;
+
+    &::-ms-expand {
+      display: none;
+    }
+    &.years {
+      width: 130px;
+    }
+  }
+  input[type=radio] {
+    position: relative;
+  }
+  input[type=radio]::after {
+    content: '';
+    @include position(absolute, 0, 0, 0, 0);
+    background-image: url('../../image/A-stateData/radio.png');
+  }
+  
+  input[type=radio]:checked::after {
+    background-image: url('../../image/A-stateData/radio-checked.png');
+  }
+}
+.table .inner-table {
+  margin-bottom: 0;
+}
+.upload-type {
+  @include flex(center, flex-start);
+  margin-left: 10px;
+  font-size: 14px;
+
+  label {
+    @include flex(center,flex-start);
+    margin-right: 10px;
+    input[type=radio] {
+      margin-right: 10px;
+    }
+  }
+  .file-name {
+    width: 278px;
+    height: 34px;
+    margin-left: 30px;
+    margin-right: 10px;
+  }
+
+  .file-box label {
+    color: $white;
+    padding: 10px;
+    background: #4f7b9e;
+    border-radius: 3px;
+  }
+  input[type=file] {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    border: 0;
+    margin-left: -1;
+    opacity: 0;
+  }
+}
+
+.register {
+  .register-input {
+    width: 100%;
+    font-size: 12px;
+    padding: 6px 10px;
+  }
+
+  .table-type-02 {
+    .inner-table tr th {
+      vertical-align: middle;
+    }
+    .inner-table tr td {
+      padding: 5px;
+    }
+    select {
+      margin-left: 0;
+    }
+  }
+  .btn-box {
+    @include flex(center,flex-end);
+    button {
+      width: 79px;
+      height: 34px;
+      font-size: 12px;
+      font-weight: $light;
+      margin-left: 7px;
+      padding: 0;
+      border-radius: 3px;
+      &.btn-close {
+        border: 1px solid #cbcbcb;
+        opacity: 1;
+        background: $white;
+      }
+      &.delete {
+        margin-right: auto;
+      }
+    }
+  }
+  .sheet-content {
+    height: 300px;
+    overflow-y: scroll;
+    margin-top: 30px;
+    padding-right: 12px;
+  }
+  .table.table-sheet {
+    th {
+      padding: 0;
+    }
+    td input,
+    th input {
+      width: 100%;
+      border: none;
+      padding: 10px 0;
+      margin: 0;
+      font-size: 14px;
+      text-align: center;
+      color: #545454;
+    }
+    th input {
+      color: $primary-color;
+      background: #f9f9f9;
+    }
+  }
+
+}
+
+
+/* 공공데이터 등록*/
+.public .public-hidden {
+  display: none !important;
+}
+.public-view {
+  display: none !important;
+}
+.public .public-view {
+  display: block !important;
+}
+
+.public {
+  .table-type-02 .inner-table tr td {
+    vertical-align: middle;
+    span {
+      padding-left: 10px;
+    }
+  }
+  .register-input.small {
+    width: 194px;
+  }
+}

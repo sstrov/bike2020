@@ -1,0 +1,47 @@
+@import '../common/var';
+
+.ui-link-list {
+  overflow: hidden;
+  width: 100%;
+}
+.ui-link-list li {
+  float: left;
+  display: block;
+  margin: 0 1% 1% 0;
+  padding: 0;
+  width: 32.6%;
+}
+.ui-link-list [class^=item] {
+  position: relative;
+  display: block;
+  padding: 0;
+  background: #fff;
+  border: 1px solid #d9d9d9;
+  text-align: center;
+}
+.sub0505 .ui-link-list [class^=item] a {
+  display: block;
+}
+.ui-link-list .item:after {
+  position: absolute;
+  bottom: -4px;
+  left: -1px;
+  display: block;
+  width: 100%;
+  height: 3px;
+  background: #f1f1f1;
+}
+@media (max-width: 820px) {
+  .sub0505 .ui-link-list.col3 li {
+    width: 49%;
+    margin-right: 1%;
+  }
+}
+
+@media (max-width: 500px) {
+  .sub0505 .ui-link-list.col3 li {
+    width: 100%;
+    margin-right: 0;
+    margin-bottom: 2%;
+  }
+}

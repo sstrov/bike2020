@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="fscms.mods.tn.service.CmmtInfoMapper">
+
+	<sql id="columns">
+		CMMT_SN       AS cmmtSn
+		, CMMT_SE     AS cmmtSe
+		, ORG_ID      AS orgId
+		, TBL_ID      AS tblId
+		, VAR_LVL_CO  AS varLvlCo
+		, OBJ_VAR_ID  AS objVarId
+		, ITM_ID      AS itmId
+		, ITM_RCGN_SN AS itmRcgnSn
+		, PRD_SE      AS prdSe
+		, PRD_DE      AS prdDe
+		, LINE_SN     AS lineSn
+		, LNG_SE      AS lngSe
+		, CMMT_DC     AS cmmtDc
+		, LST_CHN_DE  AS lstChnDe
+		, LST_CHN_NM  AS lstChnNm
+	</sql>
+	
+	<sql id="wheres">
+		<where>
+			<if test="orgId != null and orgId != ''">
+				ORG_ID = #{orgId}
+			</if>
+			<if test="tblId != null and tblId != ''">
+				AND TBL_ID = #{tblId}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="selectObj" parameterType="cmmtInfoVO" resultType="cmmtInfoVO">
+		SELECT	<include refid="columns" />
+		FROM	TN_CMMT_INFO
+		<include refid="wheres" />
+	</select>
+	
+	<select id="selectList" parameterType="cmmtInfoVO" resultType="cmmtInfoVO">
+		SELECT	<include refid="columns" />
+		FROM	TN_CMMT_INFO
+		<include refid="wheres" />
+		ORDER BY LINE_SN ASC
+	</select>
+	
+</mapper>

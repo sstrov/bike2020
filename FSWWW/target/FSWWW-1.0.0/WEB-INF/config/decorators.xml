@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<decorators defaultdir="/">
+
+	<excludes>
+		<pattern>/error/*</pattern>
+		
+		<pattern>/index.do</pattern>
+	</excludes>
+	
+	<!-- 사용자 -->
+	<decorator name="home_template" page="/WEB-INF/jsp/www/sub.jsp">
+		<pattern>/bbs/list.do</pattern>
+		<pattern>/bbs/view.do</pattern>
+		<pattern>/bbs/form.do</pattern>
+		<pattern>/content.do</pattern>
+	</decorator>
+
+</decorators>

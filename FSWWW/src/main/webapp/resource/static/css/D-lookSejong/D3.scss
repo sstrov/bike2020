@@ -1,0 +1,52 @@
+@import '../common/var';
+
+/* 04.23 추가된 부분 */
+.helpertext {
+  margin-top: 32px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.image-box-list {
+  @include flex(flex-start,space-between,row,wrap);
+  margin-top: 42px;
+
+  .image-box-item {
+    background: #f7f7f7;
+    width: 19.5%;
+    max-width: 215px;
+    min-width: 164px;
+    height: 215px;
+    margin-bottom: 15px;
+    @include flex(center,center,column);
+    &.dummy {
+      background: none;
+      height: 0;
+    }
+    p {
+      font-size: 22px;
+      font-weight: $bold;
+      margin-top: 12px;
+    }
+    span {
+      font-size: 16px;
+      font-weight: $light;
+      margin-top: 25px; 
+    }
+  }
+}
+
+@media all and (max-width:$tablet-width) {
+  .image-box-list .image-box-item {
+    width: 33%;
+  }
+}
+
+@media all and (max-width:$mobile-width) {
+  .image-box-list .image-box-item {
+    width: 49%;
+    min-width: 0;
+  }
+
+}

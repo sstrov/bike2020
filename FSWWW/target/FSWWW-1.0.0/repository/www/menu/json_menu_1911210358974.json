@@ -1,0 +1,19 @@
+{
+	"accKey"   : "null",
+	"fKey"     : "1910168794317",
+	"fNm"      : "시각화서비스",
+	"pKey"     : "1910168794317",
+	"pNm"      : "시각화서비스",
+	"menuG"    : "2",
+	"nm"       : "통계월보",
+	"page"     : "1",
+	"target"   : "_self",
+	"tag"      : "",
+	"class"    : "",
+	"fileImage": "null",
+	"filePath" : "null",
+	"actAt"    : "Y",
+	"useAt"    : "Y",
+	"link"     : "/stats/mthpr/form.do?key=1911210358974",
+	"subImg"   : ""
+}

@@ -1,0 +1,57 @@
+$white: #ffffff;
+$gray100: #eeeeee;
+$gray150: #c6c6c6;
+$gray200: #a9a9a9;
+$gray300: #999999;
+$gray400: #757575;
+$gray500: #666666;
+$gray600: #505050;
+$gray700: #333333;
+
+$black: #000000;
+
+$blue-gray100: #898995;
+$blue-gray200: rgba(65, 67, 71, 0.9);
+$blue-gray300: #444b5b;
+$blue-gray400: #1f1f29;
+
+$blue100: #d6dbe4;
+$blue500: #236dc7;
+$blue600: #5b6095;
+$blue800: #232b3e;
+$blue900: #121519;
+
+$purple500: #4d4d6b;
+
+$yellow100: #fff36f;
+$yellow300: #fff100;
+$yellow500: #b5ab03;
+
+$primary-color: $blue500;  
+$background: $gray100;
+
+$max-width: 1400px;
+$tablet-width: 768px;
+$mobile-width: 480px;
+
+$light: 300; 
+$regular: 400; 
+$medium: 500; 
+$bold: 900;
+
+@mixin flex($align-items, $justify-content, $direction: null, $flex-wrap: null) {
+  display: flex;
+  align-items: $align-items;
+  justify-content: $justify-content;
+  flex-direction: $direction;
+  flex-wrap: $flex-wrap;
+}
+
+@mixin position($position:null, $top:null, $bottom: null, $left: null, $right: null, $zindex: null) {
+  position: $position;
+  top: $top;
+  bottom: $bottom;
+  left: $left;
+  right: $right;
+  z-index: $zindex;
+}

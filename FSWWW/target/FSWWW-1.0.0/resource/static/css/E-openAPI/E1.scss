@@ -1,0 +1,65 @@
+@import '../common/var';
+
+.box-e {
+  padding-top: 35px;
+  margin-top: 40px;
+  &.border-top{
+    border-top: 1px solid #dddddd;
+  }
+  @include flex(flex-start,flex-start);
+  .title-e {
+    min-width: 200px;
+    font-size: 24px;
+    font-weight: $bold;
+    position: relative;
+    &::after {
+      content: '';
+      position: absolute;
+      top: -7px;
+      left: 0;
+      width: 18px;
+      height: 2px;
+      background: $primary-color;
+    }
+  }
+
+  .text-e {
+    color: #545454;
+    font-size: 16px;
+    line-height: 26px;
+    word-break: keep-all;
+    @include flex(flex-start,flex-start);
+    p {
+      line-height: 26px;
+    }
+  }
+}
+
+.image-box-e {
+  background: #f7f7f7;
+  text-align: center;
+  margin-top: 54px;
+  padding: 58px 16px;
+}
+
+@media all and (max-width: 1200px) {
+  .box-e .text-e {
+    flex-wrap: wrap;
+  }
+}
+@media all and (max-width: $tablet-width) {
+  .box-e {
+    flex-direction: column;
+    .title-e {
+      margin-bottom: 30px;
+    }
+    img {
+      margin: 0 auto;
+    }
+  }
+}
+
+
+@media all and (max-width: $mobile-width) {
+
+}

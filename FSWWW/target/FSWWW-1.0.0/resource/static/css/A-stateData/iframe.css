@@ -1,0 +1,31 @@
+@charset "UTF-8";
+
+/* 차트 */
+	.chart_box {margin-top:15px;border:1px solid #ccc;}
+	/* 상단 회색 박스 */
+	.chart .chart_box .bg-box {padding:10px;background:#f7f7f7;border-bottom:1px solid #ccc;}
+	.chart .chart_box .bg-box .chart_btnbox {display:inline-block;}
+	.chart .chart_box .bg-box .chart_btnbox button {line-height:0;margin-right:2px;border:1px solid #ccc;vertical-align:middle !important;}
+	.chart .chart_box .bg-box .btn_box {float:right;display:inline-block;}
+	.chart .chart_box .bg-box .btn_box button {color:#555;font-size:14px;}
+	.chart .chart_box .bg-box .btn_box .chart_stor {padding-left:20px;background:url(/stat2/resource/static/image/A-stateData/download_ico.gif) left center no-repeat;}
+	.chart .chart_box .bg-box .btn_box .chaer_print {margin:0 10px;padding-left:20px;background:url(/stat2/resource/static/image/A-stateData/print_ico.gif) left center no-repeat;}
+	.chart .chart_box .bg-box .btn_box .select_box {width:40px;height:30px;border-radius:3px;background:#ffffff;border:1px solid #cbcbcb;margin-right:5px;font-size:12px;}
+	.chart .chart_box .bg-box .btn_box .close {width:50px;height:30px;line-height:30px;color:#fff;font-size:12px;font-weight:200;background:#111;border-radius:3px;}
+
+	/* 차트 영역 */
+	.chart .chart_box .chart_cbox {padding:30px 20px;background:#f7f9ec;border-bottom:1px solid #ccc;}
+	.chart .chart_box .chart_cbox .tit {margin-bottom:20px;text-align:center;font-size:24px;}
+	.chart .chart_box .chart_cbox .chart_con {height:350px;}
+	.chart .chart_box .chart_cbox .chart_con img {height:100%;}
+
+	/* 하단 텍스트 */
+	.chart .chart_box .txt_box {margin:15px 0 0 15px;padding-bottom:20px;font-size:14px;}
+	.chart .chart_box .txt_box p .cr_blue {color:#1e64bb;}
+	.chart .chart_box .txt_box .list {margin-top:10px;}
+	.chart .chart_box .txt_box .list li {position:relative;margin:5px 0;padding-left:15px;}
+	.chart .chart_box .txt_box .list li:after {content:"*";position:absolute;left:0;top:4px;}
+
+	.chart .btxt_box {margin-top:5px;font-size:14px;}
+	.chart .btxt_box p {display:inline-block;}
+	.chart .btxt_box .rbox {float:right;}

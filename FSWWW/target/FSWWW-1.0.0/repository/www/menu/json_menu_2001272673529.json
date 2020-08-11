@@ -1,0 +1,19 @@
+{
+	"accKey"   : "null",
+	"fKey"     : "2001272673529",
+	"fNm"      : "마이페이지",
+	"pKey"     : "null",
+	"pNm"      : "",
+	"menuG"    : "1",
+	"nm"       : "마이페이지",
+	"page"     : "0",
+	"target"   : "_self",
+	"tag"      : "",
+	"class"    : "",
+	"fileImage": "null",
+	"filePath" : "null",
+	"actAt"    : "N",
+	"useAt"    : "Y",
+	"link"     : "/sub.do?key=2001272673529",
+	"subImg"   : ""
+}

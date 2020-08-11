@@ -1,0 +1,16 @@
+.table thead th,
+.table tbody td {
+  font-size: 15px;
+  vertical-align: middle;
+}
+
+@media (max-width: 768px) {
+  .table-responsive {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+  }
+  .table-responsive .table {
+    width: 995px;
+  }
+}

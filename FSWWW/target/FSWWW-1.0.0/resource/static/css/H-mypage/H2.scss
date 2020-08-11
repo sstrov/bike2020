@@ -1,0 +1,177 @@
+@import '../common/var';
+
+.table tbody td.subject {
+  text-align: center;
+}
+.tablet-view {
+  display: none;
+}
+
+@media all and (max-width: $tablet-width) {
+  .tablet-view {
+    display: inline-block;
+  }
+  col {
+    width: 100% !important;
+  }
+  .table thead tr:first-child th {
+    font-size: 0;
+    padding: 0;
+  }
+  .table tbody > tr {
+    position: relative;
+    @include flex(flex-start,flex-start,row,wrap);
+    max-width: $tablet-width;
+    width: 100%;
+    border-bottom: 1px solid #cac8c7;
+    padding: 14px 50px 17px 0;
+  }
+  .no-more-tables .table-default td[data-cell-header]:last-child {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    text-align: right;
+    transform: translateY(-50%);
+  }
+  .no-more-tables .table-default td[data-cell-header] {
+    border: none;
+    border-right: #dddddd;
+    font-weight: $light;
+    padding: 0 7px;
+  }
+  .no-more-tables .table-default td[data-cell-header=종류] {
+    width: 100%;
+    text-align: left;
+    color: $primary-color;
+  }
+  .no-more-tables .table-default td[data-cell-header=인증키] {
+    width: 100%;
+    text-align: left;
+    color: $black;
+    font-weight: $regular;
+    margin-top: 10px;
+    margin-bottom: 14px;
+  }
+  .no-more-tables .table-default td[data-cell-header=요청자],
+  .no-more-tables .table-default td[data-cell-header=발급일],
+  .no-more-tables .table-default td[data-cell-header=호출건수] {
+    border-right: 1px solid #dddddd;
+  }
+}
+
+@media all and (max-width: $mobile-width) {
+  .table tbody > tr {
+    padding-right: 0;
+  }
+  .no-more-tables .table-default td[data-cell-header]:last-child {
+    top: 10px;
+    transform: translateY(0);
+  }
+}
+
+
+.title-b {
+  @include flex(center, flex-start);
+  font-size: 16px;
+  font-weight: $medium;
+  padding-left: 20px;
+  margin-bottom: 21px;
+  position: relative;
+
+  &::after {
+    content: '';
+    width: 9px;
+    height: 2px;
+    background: $primary-color;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+  }
+}
+
+.layer-popup {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 50;
+  transform: translate(-50%,-50%);
+  width: 100%;
+  max-width: 800px;
+  border: .5px solid $black;
+  background: $white;
+  &.on {
+    display: block;
+  }
+  .title-box {
+    padding: 20px;
+    @include flex(center,space-between);
+    border-bottom: 1px solid #dddddd;
+    .title-b {
+      margin-bottom: 0;
+    }
+    .close-btn {
+      color: transparent;
+      background: url('../../image/common/close-black.png') no-repeat center center;
+
+    }
+  }
+  col {
+    width: 25% !important;
+  }
+  .datepicker {
+    @include flex(center,flex-start,row,wrap);
+    padding-left: 28px;
+    margin: 20px 0;
+    span {
+      font-size: 13px;
+      color: #333333;
+      margin-right: 12px;
+      &:last-of-type {
+        margin-left: 12px;
+      }
+    }
+  }
+  input[type=text] {
+    width: 150px;
+    font-size: 14px;
+    padding: 5px;
+  }
+  input[type=submit] {
+    width: auto;
+    padding: 0 11px;
+    background: #4f7b9e;
+    font-size: 14px;
+    border-radius: 4px;
+    letter-spacing: 0.05em;
+    overflow: hidden;
+    font-weight: bold;
+    border: none;
+    color: $white;
+    align-self: stretch;
+    margin-left: 13px;
+    height: 34px;
+  }
+  .table-box {
+    width: 100%;
+    height: 480px;
+    overflow-y: scroll;
+    padding: 0 28px;
+  }
+}
+.fixed-table {
+  .table thead tr:first-child th {
+    font-size: inherit;
+    padding: 10px;
+  }
+  .table tbody > tr {
+    display: table-row;
+  }
+  .table-default td[data-cell-header]:last-child {
+    position: static !important;
+    transform: translate(0,0) !important;
+    padding: 10px;
+    text-align: center;
+  }
+}

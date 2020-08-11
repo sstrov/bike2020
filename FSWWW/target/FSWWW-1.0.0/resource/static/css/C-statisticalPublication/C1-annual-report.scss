@@ -1,0 +1,56 @@
+@import '../common/var';
+
+/*통계연보 시작*/
+.annual-list {
+  @include flex(stretch,flex-start,row,wrap);
+
+  .annual-item {
+    margin: 49px auto 0;
+    width: 30%;
+    max-width: 300px;
+    min-width: 240px;
+    @include flex(center,flex-start,column);
+  }
+  .annual-title {
+    font-size: 16px;
+    letter-spacing: 0;
+    margin-bottom: 17px;
+  }
+  .annual-btn-box {
+    @include flex(center,center);
+    margin-top: 21px;
+
+    .annual-btn {
+      width: 85px;
+      height: 39px;
+      border-radius: 3px;
+      border: 1px solid #cbcbcb;
+      text-align: left;
+      padding-left: 12px;
+      background: $white url('../../image/C-statisticalPublication/down.png') no-repeat center right 12px;
+      color: #7a797d;
+      font-size: 14px;
+      letter-spacing: 0;
+      &.file {
+        margin-left: 11px;
+      }
+    }
+  }
+}
+
+.annual-register {
+  @include flex(center,flex-end);
+  margin-top: 43px;
+}
+@media all and (max-width: $tablet-width) {
+  .annual-list .annual-item {
+    width: 40%;
+  }
+}
+@media all and (max-width: $mobile-width) {
+  .annual-list .annual-item {
+    width: 100%;
+  }  
+}
+
+/*통계연보 끝*/

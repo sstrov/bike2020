@@ -1,0 +1,56 @@
+@import '../common/var';
+
+.box-e.type2  {
+    display: block;
+  .title-e {
+    margin-bottom: 30px;
+    &::after {
+      display: none;
+    }
+  }
+  .text-e {
+    display: block;
+  }
+  .background-box {
+    background: #f7f7f7;
+    padding: 31px 39px;
+    margin-top: 36px;
+    padding-right: 0;
+    @include flex(center,flex-start,row,wrap);
+    span {
+      position: relative;
+      line-height: 74px;
+      &::after {
+        content:'';
+        position: absolute;
+        width: 100%;
+        top: 68%;
+        left: 0;
+        line-height: 26px;
+        border-top: 1px solid #545454;
+        color: #ff0000;
+        text-align: center;
+      }
+      &.api-url::after {content: 'Open API URL';}
+      &.api-name::after {content: 'Open API명';}
+      &.api-value::after {content: '인증키값';}
+    }
+  }
+  ol {
+    list-style: decimal;
+    padding-left: 16px;
+    margin-top: 30px;
+    li {
+      line-height: 26px;
+      font-size: 14px;
+      word-break: keep-all;
+    }
+  }
+}
+
+.text-e.api-box {
+  overflow-x: scroll;
+}
+.data-tab-content.api {
+  min-width: 996px;
+}

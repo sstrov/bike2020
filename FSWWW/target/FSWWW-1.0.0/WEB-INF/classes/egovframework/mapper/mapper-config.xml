@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+	<settings>
+		<setting name="mapUnderscoreToCamelCase" value="true"/>
+	</settings>
+	
+
+	<typeAliases>
+		<typeAlias alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap" />
+		
+		<typeAlias alias="atchmnflVO"                  type="fscms.mods.atchmnfl.vo.AtchmnflVO"/>
+		
+		<typeAlias alias="bannerVO"                    type="fscms.mods.banner.vo.BannerVO"/>
+		<typeAlias alias="bannerSearchVO"              type="fscms.mods.banner.vo.BannerSearchVO"/>
+		
+		<typeAlias alias="bbsCtgryVO"                  type="fscms.mods.bbs.vo.BbsCtgryVO"/>
+		<typeAlias alias="bbsCmVO"                     type="fscms.mods.bbs.vo.BbsCmVO"/>
+		<typeAlias alias="bbsCmSearchVO"               type="fscms.mods.bbs.vo.BbsCmSearchVO"/>
+		<typeAlias alias="bbsEstbsVO"                  type="fscms.mods.bbs.vo.BbsEstbsVO"/>
+		<typeAlias alias="bbsFieldVO"                  type="fscms.mods.bbs.vo.BbsFieldVO"/>
+		<typeAlias alias="bbsRoleVO"                   type="fscms.mods.bbs.vo.BbsRoleVO"/>
+		<typeAlias alias="bbsThumbVO"                  type="fscms.mods.bbs.vo.BbsThumbVO"/>
+		<typeAlias alias="bbsVO"                       type="fscms.mods.bbs.vo.BbsVO"/>
+		<typeAlias alias="bbsSearchVO"                 type="fscms.mods.bbs.vo.BbsSearchVO"/>
+		
+		<typeAlias alias="codeVO"                      type="fscms.mods.code.vo.CodeVO"/>
+		<typeAlias alias="codeDetailVO"                type="fscms.mods.code.vo.CodeDetailVO"/>
+		<typeAlias alias="conectrStatsVO"              type="fscms.mods.conectr.vo.ConectrStatsVO"/>
+		<typeAlias alias="conectrStatsMenuVO"          type="fscms.mods.conectr.vo.ConectrStatsMenuVO"/>
+		
+		<typeAlias alias="dataChghstVO"                type="fscms.mods.data.vo.DataChghstVO"/>
+		
+		<typeAlias alias="errorHistVO"                 type="fscms.mods.error.vo.ErrorHistVO"/>
+		
+		<typeAlias alias="popupVO"                     type="fscms.mods.popup.vo.PopupVO"/>
+		
+		<typeAlias alias="siteVO"                      type="fscms.mods.site.vo.SiteVO"/>
+		
+		<typeAlias alias="userVO"                      type="fscms.mods.user.vo.UserVO"/>
+		<typeAlias alias="userSearchVO"                type="fscms.mods.user.vo.UserSearchVO"/>
+		<typeAlias alias="userMenuVO"                  type="fscms.mods.user.vo.UserMenuVO"/>
+	</typeAliases>
+
+</configuration>

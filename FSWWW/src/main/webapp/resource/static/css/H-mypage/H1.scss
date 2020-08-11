@@ -1,0 +1,29 @@
+@import '../common/var';
+
+.table tbody td.subject {
+  text-align: left;
+}
+
+@media only screen and (max-width: 560px) {
+
+
+.no-more-tables .table-default td[data-cell-header].title, .no-more-tables .table-default td[data-cell-header].subject, .no-more-tables .table-default td[data-cell-header]:last-child {
+    display: table-cell;
+}
+}
+
+@media all and (max-width: $mobile-width) {
+  .no-more-tables .table-default td[data-cell-header].subject {
+    margin-bottom: 15px;
+  }
+  .table tbody > tr {
+    position: relative;
+  }
+  .no-more-tables .table-default td[data-cell-header]:last-child {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    text-align: right;
+    transform: translateY(-50%);
+  }
+}

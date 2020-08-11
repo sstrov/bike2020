@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="fscms.mods.data.service.DataChghstMapper">
+
+	<sql id="columns">
+		DATA_CHGHST_SN                   AS dataChghstSn
+		, USER_ID                        AS userId
+		, MNGR_ID                        AS mngrId
+		, TABLE_NM                       AS tableNm
+		, CONVERT(BFCHG_DATA USING utf8) AS bfchgData
+		, CONVERT(AFTCH_DATA USING utf8) AS aftchData
+		, REGIST_PLTFOM                  AS registPltfom
+		, REGIST_BRWSR                   AS registBrwsr
+		, REGIST_IP                      AS registIp
+		, REGIST_DE                      AS registDe
+	</sql>
+	
+	<sql id="wheres">
+		<where>
+			<if test="dataChghstSn != null and dataChghstSn != ''">
+				DATA_CHGHST_SN = #{dataChghstSn}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="selectObj" parameterType="dataChghstVO" resultType="dataChghstVO">
+		SELECT	<include refid="columns" />
+		FROM	FS_DATA_CHGHST
+		<include refid="wheres" />
+	</select>
+	
+	<insert id="insertInfo" useGeneratedKeys="true" keyProperty="dataChghstSn" parameterType="dataChghstVO">
+		INSERT INTO FS_DATA_CHGHST
+			(USER_ID, MNGR_ID, TABLE_NM, BFCHG_DATA,
+			AFTCH_DATA, REGIST_PLTFOM, REGIST_BRWSR,
+			REGIST_IP, REGIST_DE)
+		VALUES
+			(#{userId, jdbcType=VARCHAR}, #{mngrId, jdbcType=VARCHAR}, #{tableNm}, #{bfchgData:BLOB, jdbcType=VARCHAR},
+			#{aftchData:BLOB, jdbcType=VARCHAR}, #{registPltfom, jdbcType=VARCHAR}, #{registBrwsr, jdbcType=VARCHAR},
+			#{registIp}, NOW())
+	</insert>
+	
+</mapper>

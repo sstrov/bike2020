@@ -1,0 +1,277 @@
+@import '../common/var';
+
+/* e-세종지표 */
+.tab2-content {
+  display: none;
+
+  &.on {
+    display: block;
+  }
+}
+
+.e-category {
+  @include flex(stretch, flex-start, null, wrap);
+
+  .e-category-item {
+    flex: 1;
+    min-width: 86px;
+    background: #555b69;
+    color: $white;
+    font-size: 14px;
+    text-align: center;
+    padding-bottom: 16px;
+    padding-top: 16px;
+
+    &.on {
+      background: $black;
+    }
+
+    .img-box {
+      height: 40px;
+      margin-bottom: 14px;
+      @include flex(center, center);
+    }
+  }
+}
+
+.detail-title {
+  @include flex(center, space-between, null, wrap);
+  margin-top: 33px;
+
+  p {
+    padding-left: 18px;
+    font-size: 20px;
+    font-weight: $bold;
+    position: relative;
+
+    &::after {
+      content: '';
+      width: 9px;
+      height: 2px;
+      background: $primary-color;
+      position: absolute;
+      top: 50%;
+      left: 0;
+      margin-top: -1px;
+    }
+  }
+
+  .align-type {
+    margin-top: 10px;
+    align-self: flex-end;
+    @include flex(stretch, flex-start, null, wrap);
+
+    .type-item {
+      width: 100px;
+      height: 38px;
+      line-height: 38px;
+      padding-left: 20px;
+      color: $gray500;
+      font-size: 14px;
+      background: url('../../image/A-stateData/default-bar.png') no-repeat center right 7px;
+      border: 0.5px solid #dddddd;
+
+      &.on {
+        border: 1px solid $primary-color;
+        background: url('../../image/A-stateData/primary-down.png') no-repeat center right 10px;
+        color: $primary-color;
+        font-weight: $bold;
+      }
+    }
+  }
+}
+
+.align-type-content {
+  @include flex(center, flex-end, null, wrap);
+  padding: 8px 0;
+  background: #f7f7f7;
+  color: #545454;
+  font-size: 14px;
+
+  .type-detail {
+    padding: 0 14px;
+    margin: 4px 0;
+
+    &:not(:first-child) {
+      border-left: 1px solid #dddddd;
+    }
+  }
+}
+
+@media all and (max-width: $tablet-width) {
+  .align-type-content {
+    margin-top: 10px;
+  }
+}
+
+
+@media all and (max-width: $mobile-width) {
+  .align-type-content {
+    margin-top: 16px;
+    justify-content: flex-start;
+  }
+}
+
+.category-select select {
+  margin-top: 34px;
+  width: 100%;
+  max-width: 342px;
+  height: 34px;
+  border: 1px solid #aaaaaa;
+  padding-left: 12px;
+  font-size: 16px;
+  font-weight: $medium;
+  color: #545454;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background: url('../../image/A-stateData/icon-down-gray.png') no-repeat center right 8px;
+  &::-ms-expand {
+    display: none;
+  }
+}
+
+.blue-green-btn {
+  background: #4f7b9e;
+  color: $white;
+  border-radius: 3px;
+  width: 52px;
+  height: 34px;
+  font-size: 14px;
+}
+.graph-list {
+  border-top: 2px solid $primary-color;
+  margin-top: 30px;
+  .graph-item {
+    min-height: 400px;
+    overflow-x: auto;
+    margin-top: 11px;
+    margin-bottom: 20px;
+  }
+  .graph-content {
+    width: 1118px;
+    min-height: 300px;
+    margin-top: 10px;
+    border: 1px solid #cbcbcb;
+  }
+  .title-box {
+    @include flex(center, flex-start);
+    p {
+      font-size: 20px;
+      font-weight: $bold;
+      color: $black;
+      margin-right: 17px;
+    }
+    .blue-green-btn {
+      font-size: 12px;
+      font-weight: $medium;
+      height: 28px;
+      width: 57px;
+      text-align: right;
+      padding-right: 10px;
+      vertical-align: middle;
+      line-height: 2;
+      background: #4f7b9e url('../../image/common/icon_list.png') no-repeat;
+      background-position: -272px -1px;
+    }
+  }
+  .explain {
+    margin-top: 10px;
+    font-size: 16px;
+    font-weight: $light;
+    color: $black;
+  }
+  .date {
+    margin: 18px 0;
+    color: $primary-color;
+    font-size: 16px;
+    font-weight: $light;
+  }
+  .info-box {
+    padding-top: 8px;
+    border-top: 1px solid #cbcbcb;
+    margin-bottom: 20px;
+    @include flex(center, space-between);
+    p {
+      font-size: 16px;
+      color: #545454;
+      span {
+        font-weight: $bold;
+        font-size: 18px;
+        color: $black;
+        margin-left: 10px;
+      }
+    }
+    .chart-view {
+      width: 100px;
+      height: 34px;
+      background: $white;
+      border-radius: 3px;
+      border: 1px solid #cbcbcb;
+      font-size: 12px;
+      font-weight: $light;
+      padding-left: 10px;
+      @include flex(center,flex-start);
+      i {
+        width: 14px;
+        height: 14px;
+        background: url('../../image/common/icon_list.png') no-repeat;
+      background-position: -160px -8px;
+      margin-right: 6px;
+      }
+    }
+  }
+}
+
+.comment-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: rgba($black,.5);
+  display: none;
+  &.on {
+    @include flex(center,center);
+  }
+  .comment-content {
+    width: 750px;
+    padding: 15px;
+    border-radius: 10px;
+    background: $white;
+  }
+  .title-box {
+    @include flex(center,flex-start);
+    p {
+      font-size: 18px;
+      font-weight: $bold;
+    }
+    span {
+      color: $white;
+      background: $primary-color;
+      font-size: 14px;
+      padding: 6px 15px;
+      margin-left: 12px;
+      border-radius: 25px;
+    }
+    .close-btn {
+      margin-left: auto;
+      color: transparent;
+      overflow: hidden;
+      width: 40px;
+      height: 30px;
+      background: url('../../image/common/close-black.png') no-repeat center center/15px;
+    }
+  }
+  .data-box {
+    margin-top: 15px;
+    padding: 20px;
+    width: 100%;
+    height: 345px;
+    overflow-y: auto;
+    border: 1px solid #cbcbcb;
+    font-size: 16px;
+    line-height: 1.5rem;
+    letter-spacing: 0;
+  }
+}

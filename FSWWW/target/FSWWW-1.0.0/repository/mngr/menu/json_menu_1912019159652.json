@@ -1,0 +1,12 @@
+{
+	"accKey" : "null",
+	"fKey"   : "1910072181253",
+	"pKey"   : "1910072181253",
+	"menuG"  : "2",
+	"nm"     : "게시판 스킨 관리",
+	"page"   : "1",
+	"target" : "_self",
+	"actAt"  : "Y",
+	"useAt"  : "Y",
+	"link"   : "/adm/bbs/skn/form.do?key=1912019159652"
+}

@@ -1,0 +1,510 @@
+@charset "UTF-8";
+/* 기본 게시판  리스트 시작*/
+.table-default td,
+.table-default th {
+  border-bottom: 1px solid #cbcbcb;
+}
+
+.annual-register {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+  margin-top: 43px;
+}
+
+.table .thead-light th {
+  border-bottom: 1px solid #cbcbcb;
+}
+
+.table thead th {
+  font-size: 15px;
+  font-weight: 900;
+}
+
+.table tbody td {
+  font-size: 15px;
+  text-align: center;
+}
+
+.table tbody > tr > td {
+  padding: 7px;
+  vertical-align: middle;
+}
+
+.table a {
+  margin: 0;
+  color: #545454;
+}
+
+.btn-file.btn-not-ico {
+  font-size: 0;
+  border: none;
+  background-color: transparent;
+}
+
+.mobile-view {
+  display: none;
+}
+
+@media all and (min-width: 992px) {
+  .float-md-left {
+    float: left;
+  }
+  .float-md-right {
+    float: right;
+  }
+}
+
+@media all and (max-width: 768px) {
+  .table tbody > tr > td[data-cell-header=조회수] {
+    display: none;
+  }
+}
+
+@media all and (max-width: 480px) {
+  .mobile-view {
+    display: inline-block;
+  }
+  col {
+    width: 100% !important;
+  }
+  .table .thead-light th {
+    font-size: 0;
+    padding: 0;
+  }
+  .table tbody > tr {
+    padding: 19px 16px;
+  }
+  .table tbody > tr > td {
+    padding: 0;
+    font-weight: 300;
+  }
+  .table tr > td {
+    border: none;
+  }
+  .table tbody > tr > td[data-cell-header=번호] {
+    display: none;
+  }
+  .table tbody > tr {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    -webkit-box-pack: start;
+        -ms-flex-pack: start;
+            justify-content: flex-start;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: row;
+            flex-direction: row;
+    -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+    border-bottom: 1px solid #cac8c7;
+  }
+  .table tbody > tr > td[data-cell-header=조회수] {
+    display: inline-block;
+  }
+  .table tbody > tr > td[data-cell-header=제목] {
+    display: block;
+    width: 100%;
+    text-align: left;
+    -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+    word-break: keep-all;
+    word-wrap: break-word;
+    margin-bottom: 5px;
+    font-weight: 400;
+  }
+  .table tbody > tr > td[data-cell-header=제목] a {
+    color: #000000;
+  }
+  .table tbody > tr > td[data-cell-header=작성자] {
+    width: 90px;
+    text-align: left;
+    margin-right: 10px;
+  }
+  .table tbody > tr > td[data-cell-header=조회수] {
+    -webkit-box-ordinal-group: 4;
+        -ms-flex-order: 3;
+            order: 3;
+    margin-left: auto;
+  }
+  .table tbody > tr > td[data-cell-header=첨부파일] {
+    -webkit-box-ordinal-group: 5;
+        -ms-flex-order: 4;
+            order: 4;
+  }
+}
+
+/* 기본 게시판  리스트 끝 */
+/*기본게시판 뷰화면 시작*/
+.btn,
+.btn-file *,
+.btn-group,
+.btn-group-down,
+.btn-group-down span,
+.btn-group-vertical,
+.caret,
+.checkbox-inline,
+.radio-inline {
+  vertical-align: middle;
+}
+
+.bbs--view--content p {
+  font-size: 14px;
+  line-height: 24px;
+  font-weight: 300;
+  color: #545454;
+}
+
+.bbs--view .bbs--view--header .bbs--view--tit {
+  font-size: 18px;
+  color: #000000;
+}
+
+.bbs--view .bbs--view--header span {
+  vertical-align: middle;
+  color: #545454;
+  font-weight: 300;
+}
+
+.bbs--view .bbs--view--header span i {
+  padding-right: 0;
+  margin-right: 0;
+}
+
+.bbs--view .bbs--view--header span:before {
+  top: 2px;
+}
+
+.kogl-mask {
+  background: #fafafa;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  padding: 13px 0 26px 24px;
+}
+
+.kogl-mask .kogl-title {
+  margin-left: 20px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  margin-right: 32px;
+}
+
+.kogl-mask .kogl-title em {
+  margin-left: 28px;
+  max-width: 136px;
+  font-size: 18px;
+  line-height: 24px;
+  color: #000000;
+  word-break: keep-all;
+  word-wrap: break-word;
+  font-weight: 900;
+}
+
+.kogl-mask .inner {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+}
+
+.kogl-mask .kogl-mark-icon {
+  margin-right: 24px;
+}
+
+.kogl-mask .kogl--text {
+  max-width: 420px;
+  word-break: keep-all;
+  word-wrap: break-word;
+}
+
+.kogl-mask .kogl--text a {
+  font-size: 14px;
+  color: #545454;
+  line-height: 24px;
+  font-weight: 300;
+}
+
+.kogl-mask .kogl--text a i,
+.kogl-mask .kogl--text a em {
+  color: #eb6100;
+  font-weight: 500;
+}
+
+.bbs--view + .box-footer {
+  margin-top: 47px;
+}
+
+.btn-default.btn-copy {
+  border: 1px solid #cbcbcb;
+}
+
+@media all and (max-width: 768px) {
+  .kogl-mask {
+    padding-right: 20px;
+  }
+  .kogl-mask .inner {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-box-align: start;
+        -ms-flex-align: start;
+            align-items: flex-start;
+  }
+  .kogl-mask .kogl-mark-icon {
+    margin-bottom: 8px;
+  }
+}
+
+/*기본게시판 뷰화면 끝*/
+/* 기본게시판 등록화면 시작 */
+.board-form .inner-table tr th {
+  width: 120px;
+  text-align: left;
+  padding-left: 26px;
+  font-size: 14px;
+}
+
+.board-form .table tbody td {
+  text-align: left;
+  padding-left: 18px;
+}
+
+.board-form input[type=text] {
+  padding: 5px 10px;
+  font-size: 14px;
+  border: 1px solid #dddddd;
+  width: 100%;
+  max-width: 580px;
+}
+
+.board-form select {
+  width: 100%;
+  max-width: 340px;
+  font-size: 14px;
+  padding: 10px 14px;
+  border: 1px solid #dddddd;
+  color: #545454;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background: url("../../image/A-stateData/icon-down-gray.png") no-repeat center right 8px;
+}
+
+.board-form select::-ms-expand {
+  display: none;
+}
+
+.board-form select.years {
+  width: 130px;
+}
+
+.board-form input[type=radio] {
+  position: relative;
+  margin-right: 10px;
+}
+
+.board-form input[type=radio]::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-image: url("../../image/A-stateData/radio.png");
+}
+
+.board-form input[type=radio]:checked::after {
+  background-image: url("../../image/A-stateData/radio-checked.png");
+}
+
+.board-form .radio-box {
+  color: #666666;
+  font-size: 13px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+}
+
+.board-form .radio-box label {
+  margin-right: 30px;
+  vertical-align: middle;
+  line-height: 24px;
+}
+
+.board-form .radio-inner span {
+  margin-right: 30px;
+}
+
+.board-form textarea {
+  width: 100%;
+  padding: 16px;
+  font-size: 14px;
+  border: 1px solid #dddddd;
+}
+
+.board-form .file-box {
+  max-width: 580px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+}
+
+.board-form .file-box label {
+  color: #000000;
+  padding: 10px;
+  background: #ffffff;
+  border-radius: 3px;
+  border: 1px solid #aaaaaa;
+  font-size: 13px;
+}
+
+.board-form input[type=file] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  border: 0;
+  margin-left: -1;
+  opacity: 0;
+}
+
+.board-form .file-box span {
+  font-weight: 300;
+  font-size: 13px;
+}
+
+.board-form .file-box span:first-of-type {
+  margin-left: auto;
+  margin-right: 8px;
+}
+
+.board-form .bbs--view--file {
+  margin-top: 17px;
+}
+
+.board-form .bbs--view--file a {
+  font-size: 13px;
+  font-weight: 300;
+  line-height: 32px;
+}
+
+.board-form .btn-box {
+  margin-top: 51px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.board-form .btn-box button {
+  width: 79px;
+  height: 39px;
+  font-size: 14px;
+  font-weight: 900;
+  margin-left: 7px;
+  padding: 0;
+  border-radius: 3px;
+}
+
+.board-form .btn-box button.btn-close {
+  border: 1px solid #cbcbcb;
+  opacity: 1;
+  background: #ffffff;
+  color: #666666;
+}
+
+@media all and (max-width: 480px) {
+  .board-form .table tbody > tr {
+    padding: 0;
+    border-bottom-color: #dddddd;
+  }
+  .board-form .inner-table tr th,
+  .board-form .inner-table tr td {
+    display: block;
+    width: 100%;
+  }
+  .board-form .inner-table tr th {
+    border: none;
+  }
+  .board-form .inner-table tr td {
+    padding: 10px 15px;
+  }
+  .board-form .radio-box {
+    -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+            justify-content: space-between;
+  }
+  .board-form .radio-box label {
+    margin-right: 0;
+  }
+  .board-form .radio-inner {
+    min-width: 50%;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+            justify-content: space-between;
+  }
+  .board-form .radio-inner span {
+    margin-right: 0;
+  }
+}
+
+/* 기본게시판 등록화면 끝*/

@@ -1,0 +1,238 @@
+@charset "UTF-8";
+.table tbody td.subject {
+  text-align: center;
+}
+
+.tablet-view {
+  display: none;
+}
+
+@media all and (max-width: 768px) {
+  .tablet-view {
+    display: inline-block;
+  }
+  col {
+    width: 100% !important;
+  }
+  .table thead tr:first-child th {
+    font-size: 0;
+    padding: 0;
+  }
+  .table tbody > tr {
+    position: relative;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: start;
+        -ms-flex-align: start;
+            align-items: flex-start;
+    -webkit-box-pack: start;
+        -ms-flex-pack: start;
+            justify-content: flex-start;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: row;
+            flex-direction: row;
+    -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+    max-width: 768px;
+    width: 100%;
+    border-bottom: 1px solid #cac8c7;
+    padding: 14px 50px 17px 0;
+  }
+  .no-more-tables .table-default td[data-cell-header]:last-child {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    text-align: right;
+    -webkit-transform: translateY(-50%);
+            transform: translateY(-50%);
+  }
+  .no-more-tables .table-default td[data-cell-header] {
+    border: none;
+    border-right: #dddddd;
+    font-weight: 300;
+    padding: 0 7px;
+  }
+  .no-more-tables .table-default td[data-cell-header=종류] {
+    width: 100%;
+    text-align: left;
+    color: #236dc7;
+  }
+  .no-more-tables .table-default td[data-cell-header=인증키] {
+    width: 100%;
+    text-align: left;
+    color: #000000;
+    font-weight: 400;
+    margin-top: 10px;
+    margin-bottom: 14px;
+  }
+  .no-more-tables .table-default td[data-cell-header=요청자],
+  .no-more-tables .table-default td[data-cell-header=발급일],
+  .no-more-tables .table-default td[data-cell-header=호출건수] {
+    border-right: 1px solid #dddddd;
+  }
+}
+
+@media all and (max-width: 480px) {
+  .table tbody > tr {
+    padding-right: 0;
+  }
+  .no-more-tables .table-default td[data-cell-header]:last-child {
+    top: 10px;
+    -webkit-transform: translateY(0);
+            transform: translateY(0);
+  }
+}
+
+.title-b {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  font-size: 16px;
+  font-weight: 500;
+  padding-left: 20px;
+  margin-bottom: 21px;
+  position: relative;
+}
+
+.title-b::after {
+  content: '';
+  width: 9px;
+  height: 2px;
+  background: #236dc7;
+  position: absolute;
+  top: 50%;
+  left: 0;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+}
+
+.layer-popup {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 50;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  width: 100%;
+  max-width: 800px;
+  border: 0.5px solid #000000;
+  background: #ffffff;
+}
+
+.layer-popup.on {
+  display: block;
+}
+
+.layer-popup .title-box {
+  padding: 20px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  border-bottom: 1px solid #dddddd;
+}
+
+.layer-popup .title-box .title-b {
+  margin-bottom: 0;
+}
+
+.layer-popup .title-box .close-btn {
+  color: transparent;
+  background: url("../../image/common/close-black.png") no-repeat center center;
+}
+
+.layer-popup col {
+  width: 25% !important;
+}
+
+.layer-popup .datepicker {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  padding-left: 28px;
+  margin: 20px 0;
+}
+
+.layer-popup .datepicker span {
+  font-size: 13px;
+  color: #333333;
+  margin-right: 12px;
+}
+
+.layer-popup .datepicker span:last-of-type {
+  margin-left: 12px;
+}
+
+.layer-popup input[type=text] {
+  width: 150px;
+  font-size: 14px;
+  padding: 5px;
+}
+
+.layer-popup input[type=submit] {
+  width: auto;
+  padding: 0 11px;
+  background: #4f7b9e;
+  font-size: 14px;
+  border-radius: 4px;
+  letter-spacing: 0.05em;
+  overflow: hidden;
+  font-weight: bold;
+  border: none;
+  color: #ffffff;
+  -ms-flex-item-align: stretch;
+      -ms-grid-row-align: stretch;
+      align-self: stretch;
+  margin-left: 13px;
+  height: 34px;
+}
+
+.layer-popup .table-box {
+  width: 100%;
+  height: 480px;
+  overflow-y: scroll;
+  padding: 0 28px;
+}
+
+.fixed-table .table thead tr:first-child th {
+  font-size: inherit;
+  padding: 10px;
+}
+
+.fixed-table .table tbody > tr {
+  display: table-row;
+}
+
+.fixed-table .table-default td[data-cell-header]:last-child {
+  position: static !important;
+  -webkit-transform: translate(0, 0) !important;
+          transform: translate(0, 0) !important;
+  padding: 10px;
+  text-align: center;
+}

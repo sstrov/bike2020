@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="fscms.mods.code.service.CodeMapper">
+
+	<sql id="columns">
+		CODE_ID      AS codeId
+		, CODE_CL_ID AS codeClId
+		, CODE_NM    AS codeNm
+		, CODE_DC    AS codeDc
+		, USE_AT     AS useAt
+		, REGIST_DE  AS registDe
+		, UPDT_DE    AS updtDe
+	</sql>
+	
+	<sql id="wheres">
+		<where>
+			<if test="codeId != null and codeId != ''">
+				CODE_ID = #{codeId}
+			</if>
+			<if test="codeClId != null and codeClId != ''">
+				AND CODE_CL_ID = #{codeClId}
+			</if>
+			<if test="useAt != null and useAt != ''">
+				AND FS_CODE.USE_AT = #{useAt}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="selectList" parameterType="codeVO" resultType="codeVO">
+		SELECT	<include refid="columns" />
+		FROM	FS_CODE
+		<include refid="wheres" />
+		ORDER BY CODE_ID ASC
+	</select>
+	
+</mapper>
