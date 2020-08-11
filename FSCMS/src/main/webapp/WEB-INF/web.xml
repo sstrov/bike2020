@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+		version="3.0">
+		
+	<display-name>fscms</display-name>
+    
+	<filter>
+		<filter-name>encodingFilter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+		<init-param>
+			<param-name>forceEncoding</param-name>
+			<param-value>true</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>encodingFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+    
+	<!-- <filter>
+		<filter-name>HTMLTagFilter</filter-name>
+		<filter-class>egovframework.rte.ptl.mvc.filter.HTMLTagFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>HTMLTagFilter</filter-name>
+		<url-pattern>*.do</url-pattern>
+	</filter-mapping> -->
+	
+	<filter>
+		<filter-name>xssEscapeServletFilter</filter-name>
+		<filter-class>com.navercorp.lucy.security.xss.servletfilter.XssEscapeServletFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>xssEscapeServletFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+		
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>classpath*:egovframework/spring/context-*.xml</param-value>
+	</context-param>
+	
+	<servlet>
+		<servlet-name>action</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>/WEB-INF/config/egovframework/springmvc/dispatcher-servlet.xml</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+    
+	<servlet-mapping>
+		<servlet-name>action</servlet-name>
+		<url-pattern>*.do</url-pattern>
+	</servlet-mapping>
+	
+	<filter>
+		<filter-name>sitemesh</filter-name>
+		<filter-class>com.opensymphony.sitemesh.webapp.SiteMeshFilter</filter-class>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>sitemesh</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+    
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	
+	<!-- start: 세션 체크 -->
+	<listener>
+		<listener-class>fscms.mods.sso.util.LoginSessionHelper</listener-class>
+	</listener>
+	<!-- end: 세션 체크 -->
+	
+	<!-- start: 서버 시작/종료 관련 -->
+	<listener>
+		<listener-class>fscms.cmm.util.ServerListener</listener-class>
+	</listener>
+	<!-- end: 서버 시작/종료 관련 -->
+	
+	<!-- start: CUSTOM TAG -->
+	<jsp-config>
+		<taglib>
+			<taglib-uri>sitemesh-page</taglib-uri>
+			<taglib-location>/WEB-INF/tld/sitemesh-page.tld</taglib-location>
+		</taglib>
+		<taglib>
+			<taglib-uri>sitemesh-decorator</taglib-uri>
+			<taglib-location>/WEB-INF/tld/sitemesh-decorator.tld</taglib-location>
+		</taglib>
+	</jsp-config>
+	<!-- end: CUSTOM TAG -->
+	
+	<security-constraint>
+		<display-name>JSON Protection</display-name>
+		<web-resource-collection>
+			<web-resource-name>SecureJSONPages</web-resource-name>
+			<url-pattern>*.json</url-pattern>
+		</web-resource-collection>
+		<auth-constraint />
+	</security-constraint>
+
+	<welcome-file-list>
+		<welcome-file>index.jsp</welcome-file>
+	</welcome-file-list>
+	
+	<!-- jsessionid 표시 제거 -->
+	<session-config>
+		<tracking-mode>COOKIE</tracking-mode>
+	</session-config>
+
+	<login-config>
+		<auth-method>BASIC</auth-method>
+	</login-config>
+    
+	<error-page>
+		<exception-type>java.lang.Throwable</exception-type>
+		<location>/error/error_re.jsp</location>
+	</error-page>
+	<error-page>
+		<error-code>400</error-code>
+		<location>/error/error_re.jsp</location>
+	</error-page>
+	<error-page>	
+		<error-code>401</error-code>
+		<location>/error/error_re.jsp</location>
+	</error-page>
+	<error-page>
+		<error-code>403</error-code>
+		<location>/error/error_re.jsp</location>
+	</error-page>
+	<error-page>
+		<error-code>404</error-code>
+		<location>/error/error_re.jsp</location>
+	</error-page>
+	<error-page>
+		<error-code>500</error-code>
+		<location>/error/error_re.jsp</location>
+	</error-page>
+	
+</web-app>

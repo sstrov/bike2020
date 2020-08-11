@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="fscms.mods.banner.service.BannerEstbsMapper">
+
+	<sql id="columns">
+		BANNER_ESTBS_SN      AS bannerEstbsSn
+		, BANNER_ESTBS_NM    AS bannerEstbsNm
+		, WIDTH_SIZE         AS widthSize
+		, VRTICL_SIZE        AS vrticlSize
+		, BANNER_ESTBS_DC    AS bannerEstbsDc
+		, UPLOAD_LMTT_CPCTY  AS uploadLmttCpcty
+		, OPTN_TAG_AT        AS optnTagAt
+		, OPTN_IMAGE_AT      AS optnImageAt
+		, OPTN_BCRN_IMAGE_AT AS optnBcrnImageAt
+		, OPTN_CLASS_AT      AS optnClassAt
+		, REGIST_DE          AS registDe
+		, UPDT_DE            AS updtDe
+	</sql>
+	
+	<sql id="wheres">
+		<where>
+			<if test="bannerEstbsSn != null and bannerEstbsSn != ''">
+				BANNER_ESTBS_SN = #{bannerEstbsSn}
+			</if>
+		</where>
+	</sql>
+	
+	<sql id="searchWheres">
+		<where>
+			<if test="sw != null and sw != ''">
+				<choose>
+					<when test="sc != null and sc != ''">
+						${sc} LIKE '%'||#{sw}||'%'
+					</when>
+					<otherwise>
+						(
+							BANNER_ESTBS_NM    LIKE CONCAT('%', #{sw}, '%')
+							OR BANNER_ESTBS_DC LIKE CONCAT('%', #{sw}, '%')
+						)
+					</otherwise>
+				</choose>
+			</if>
+			
+			<if test="sc_wDateS != null and sc_wDateS != ''">
+				AND DATE_FORMAT(REGIST_DE, '%Y-%m-%d') <![CDATA[>=]]> #{sc_wDateS}
+			</if>
+			<if test="sc_wDateE != null and sc_wDateE != ''">
+				AND DATE_FORMAT(REGIST_DE, '%Y-%m-%d') <![CDATA[<=]]> #{sc_wDateE}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="selectObj" parameterType="bannerEstbsVO" resultType="bannerEstbsVO">
+		SELECT	<include refid="columns" />
+		FROM	FS_BANNER_ESTBS
+		<include refid="wheres" />
+	</select>
+	
+	<select id="selectTCount" parameterType="bannerEstbsSearchVO" resultType="int">
+		SELECT	COUNT(BANNER_ESTBS_SN)
+		FROM	FS_BANNER_ESTBS
+		<include refid="searchWheres" />
+	</select>
+	
+	<select id="selectPageList" parameterType="bannerEstbsSearchVO" resultType="bannerEstbsVO">
+		SELECT	<include refid="columns" />
+		FROM	FS_BANNER_ESTBS
+		<include refid="searchWheres" />
+		
+		<choose>
+			<when test="orderBy != null and orderBy != ''">
+				ORDER BY ${orderBy}
+			</when>
+			<otherwise>
+				ORDER BY REGIST_DE DESC
+			</otherwise>
+		</choose>
+		
+		LIMIT #{firstIndex}, #{recordCountPerPage}
+	</select>
+	
+	<insert id="insertInfo" useGeneratedKeys="true" keyProperty="bannerEstbsSn" parameterType="bannerEstbsVO">
+		INSERT INTO FS_BANNER_ESTBS
+			(BANNER_ESTBS_NM, WIDTH_SIZE, VRTICL_SIZE, BANNER_ESTBS_DC,
+			UPLOAD_LMTT_CPCTY, OPTN_TAG_AT, OPTN_IMAGE_AT, OPTN_BCRN_IMAGE_AT,
+			OPTN_CLASS_AT, REGIST_DE, UPDT_DE)
+		VALUES
+			(#{bannerEstbsNm}, #{widthSize, jdbcType=INTEGER}, #{vrticlSize, jdbcType=INTEGER}, #{bannerEstbsDc, jdbcType=VARCHAR},
+			#{uploadLmttCpcty, jdbcType=INTEGER}, #{optnTagAt}, #{optnImageAt}, #{optnBcrnImageAt},
+			#{optnClassAt}, NOW(), NOW())
+	</insert>
+	
+	<update id="updateInfo" parameterType="bannerEstbsVO">
+		UPDATE	FS_BANNER_ESTBS
+		<set>
+			<if test="bannerEstbsNm != null and bannerEstbsNm != ''">
+				BANNER_ESTBS_NM = #{bannerEstbsNm},
+			</if>
+			<if test="widthSize != null">
+				WIDTH_SIZE = #{widthSize, jdbcType=INTEGER},
+			</if>
+			<if test="vrticlSize != null">
+				VRTICL_SIZE = #{vrticlSize, jdbcType=INTEGER},
+			</if>
+			<if test="bannerEstbsDc != null">
+				BANNER_ESTBS_DC = #{bannerEstbsDc, jdbcType=VARCHAR},
+			</if>
+			<if test="uploadLmttCpcty != null">
+				UPLOAD_LMTT_CPCTY = #{uploadLmttCpcty, jdbcType=INTEGER},
+			</if>
+			<if test="optnTagAt != null and optnTagAt != ''">
+				OPTN_TAG_AT = #{optnTagAt},
+			</if>
+			<if test="optnImageAt != null and optnImageAt != ''">
+				OPTN_IMAGE_AT = #{optnImageAt},
+			</if>
+			<if test="optnBcrnImageAt != null and optnBcrnImageAt != ''">
+				OPTN_BCRN_IMAGE_AT = #{optnBcrnImageAt},
+			</if>
+			<if test="optnClassAt != null and optnClassAt != ''">
+				OPTN_CLASS_AT = #{optnClassAt},
+			</if>
+			UPDT_DE = NOW()
+		</set>
+		WHERE	BANNER_ESTBS_SN = #{bannerEstbsSn}
+	</update>
+	
+	<delete id="deleteInfo" parameterType="bannerEstbsVO">
+		DELETE FROM FS_BANNER_ESTBS
+		WHERE BANNER_ESTBS_SN = #{bannerEstbsSn}
+	</delete>
+	
+</mapper>

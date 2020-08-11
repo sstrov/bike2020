@@ -1,0 +1,12 @@
+{
+	"accKey" : "null",
+	"fKey"   : "1910117195303",
+	"pKey"   : "null",
+	"menuG"  : "1",
+	"nm"     : "콘텐츠 관리",
+	"page"   : "1",
+	"target" : "_self",
+	"actAt"  : "Y",
+	"useAt"  : "Y",
+	"link"   : "/adm/cntnts/list.do?key=1910117195303"
+}

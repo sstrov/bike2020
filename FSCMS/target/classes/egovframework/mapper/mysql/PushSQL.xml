@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="fscms.mods.push.service.PushMapper">
+
+	<sql id="columns">
+		PUSH_SN                      AS pushSn,
+		PUSH_SJ                      AS pushSj,
+		CONVERT(PUSH_CN USING utf8)  AS pushCn,
+		PUSH_TYPE                    AS pushType,
+		REGIST_ID                    AS registId,
+		REGIST_DE                    AS registDe,
+		UPDT_DE                      AS updtDe
+	</sql>
+	
+	<sql id="wheres">
+		<where>
+			<if test="pushSn != null and pushSn != ''">
+				PUSH_SN = #{pushSn}
+			</if>
+		</where>
+	</sql>
+	
+	<sql id="searchWheres">
+		<where>
+			<if test="sw != null and sw != ''">
+				<choose>
+					<when test="sc != null and sc != ''">
+						${sc} LIKE '%'||#{sw}||'%'
+					</when>
+					<otherwise>
+						(
+							PUSH_SJ LIKE CONCAT('%', #{sw}, '%')
+						)
+					</otherwise>
+				</choose>
+			</if>
+			
+			<if test="sc_wDateS != null and sc_wDateS != ''">
+				AND DATE_FORMAT(REGIST_DE, '%Y-%m-%d') <![CDATA[>=]]> #{sc_wDateS}
+			</if>
+			<if test="sc_wDateE != null and sc_wDateE != ''">
+				AND DATE_FORMAT(REGIST_DE, '%Y-%m-%d') <![CDATA[<=]]> #{sc_wDateE}
+			</if>
+			
+		</where>
+	</sql>
+	
+	<select id="selectObj" parameterType="pushVO" resultType="pushVO">
+		SELECT	<include refid="columns" />
+		FROM	FS_PUSH
+		<include refid="wheres" />
+	</select>
+	
+	<select id="selectList" parameterType="pushVO" resultType="pushVO">
+		SELECT	<include refid="columns" />
+		FROM	FS_PUSH
+		<include refid="wheres" />
+		ORDER BY REGIST_DE DESC
+	</select>
+	
+	<select id="selectTCount" parameterType="pushSearchVO" resultType="int">
+		SELECT	COUNT(PUSH_SN)
+		FROM	FS_PUSH
+		<include refid="searchWheres" />
+	</select>
+	
+	<select id="selectPageList" parameterType="pushSearchVO" resultType="pushVO">
+		SELECT	<include refid="columns" />
+		FROM	FS_PUSH
+		<include refid="searchWheres" />
+		
+		<choose>
+			<when test="orderBy != null and orderBy != ''">
+				ORDER BY ${orderBy}
+			</when>
+			<otherwise>
+				ORDER BY REGIST_DE DESC
+			</otherwise>
+		</choose>
+		
+		LIMIT #{firstIndex}, #{recordCountPerPage}
+	</select>
+	
+	<insert id="insertInfo" useGeneratedKeys="true" keyProperty="pushSn" parameterType="pushVO">
+		INSERT INTO FS_PUSH
+			(PUSH_SN, PUSH_SJ, PUSH_CN, PUSH_TYPE,
+			REGIST_ID, REGIST_DE, UPDT_DE)
+		VALUES
+			(#{pushSn}, #{pushSj, jdbcType=VARCHAR}, #{pushCn:BLOB, jdbcType=VARCHAR}, #{pushType},
+			#{registId}, NOW(), NOW())
+	</insert>
+	
+	<update id="updateInfo" parameterType="pushVO">
+		UPDATE	FS_PUSH
+		<set>
+			<if test="pushSj != null and pushSj != ''">
+				PUSH_SJ = #{pushSj},
+			</if>
+			<if test="pushCn != null and pushCn != ''">
+				PUSH_CN = #{pushCn:BLOB, jdbcType=VARCHAR},
+			</if>
+			<if test="pushType != null and pushType !=''">
+				PUSH_TYPE = #{pushType},
+			</if>
+			UPDT_DE = NOW()
+		</set>
+		WHERE	PUSH_SN = #{pushSn}
+	</update>
+	
+	<delete id="deleteInfo" parameterType="pushVO">
+		DELETE FROM FS_PUSH
+		WHERE PUSH_SN = #{pushSn}
+	</delete>
+	
+	<select id="selectMaxPushSn" parameterType="pushVO" resultType="int">
+		SELECT	MAX(PUSH_SN)
+		FROM	FS_PUSH
+		<where>
+			<choose>
+				<when test='pushType == "S"'>
+					PUSH_TYPE = 'S'
+				</when>
+				<otherwise>
+					PUSH_TYPE = 'M'
+				</otherwise>
+			</choose>
+		</where>
+	</select>
+</mapper>

@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="fscms.mods.mngr.service.MngrMapper">
+
+	<sql id="columns">
+		MNGR_SN       AS mngrSn
+		, ROLE_SN     AS roleSn
+		, ACC_SN      AS accSn
+		, MNGR_ID     AS mngrId
+		, MNGR_PW     AS mngrPw
+		, MNGR_NM     AS mngrNm
+		, LOCK_CO     AS lockCo
+		, LOCK_DE     AS lockDe
+		, MNGR_SALT   AS mngrSalt
+		, MNGR_SSO_AT AS mngrSsoAt
+		, REGIST_DE   AS registDe
+		, UPDT_DE     AS updtDe
+	</sql>
+	
+	<sql id="wheres">
+		<where>
+			<if test="mngrSn != null and mngrSn != ''">
+				MNGR_SN = #{mngrSn}
+			</if>
+			<if test="mngrId != null and mngrId != ''">
+				AND MNGR_ID = #{mngrId}
+			</if>
+			<if test="accSn != null and accSn != ''">
+				AND ACC_SN = #{accSn}
+			</if>
+			<if test="mngrSsoAt != null and mngrSsoAt != ''">
+				AND MNGR_SSO_AT = #{mngrSsoAt}
+			</if>
+		</where>
+	</sql>
+	
+	<sql id="searchWheres">
+		<where>
+			<if test="sw_entry != null and sw_entry != ''">
+				(
+					<choose>
+						<when test="sc != null and sc != ''">
+							${sc} = #{sw_entry}
+						</when>
+						<otherwise>
+							(
+								MNGR_ID    = #{sw_entry}
+								OR MNGR_NM = #{sw_entry}
+							)
+						</otherwise>
+					</choose>
+				) OR (
+					<choose>
+						<when test="sc != null and sc != ''">
+							${sc} LIKE CONCAT('%', #{sw}, '%')
+						</when>
+						<otherwise>
+							(
+								MNGR_ID    LIKE CONCAT('%', #{sw}, '%')
+								OR MNGR_NM LIKE CONCAT('%', #{sw}, '%')
+							)
+						</otherwise>
+					</choose>
+				)
+			</if>
+			
+			<if test="sc_wDateS != null and sc_wDateS != ''">
+				AND DATE_FORMAT(REGIST_DE, '%Y-%m-%d') <![CDATA[>=]]> #{sc_wDateS}
+			</if>
+			<if test="sc_wDateE != null and sc_wDateE != ''">
+				AND DATE_FORMAT(REGIST_DE, '%Y-%m-%d') <![CDATA[<=]]> #{sc_wDateE}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="selectObj" parameterType="mngrVO" resultType="mngrVO">
+		SELECT	<include refid="columns" />
+		FROM	FS_MNGR
+		<include refid="wheres" />
+	</select>
+	
+	<select id="selectTCount" parameterType="mngrSearchVO" resultType="int">
+		SELECT	COUNT(MNGR_SN)
+		FROM	FS_MNGR
+		<include refid="searchWheres" />
+	</select>
+	
+	<select id="selectPageList" parameterType="mngrSearchVO" resultType="mngrVO">
+		SELECT	<include refid="columns" />
+		FROM	FS_MNGR
+		<include refid="searchWheres" />
+		
+		<choose>
+			<when test="orderBy != null and orderBy != ''">
+				ORDER BY ${orderBy}
+			</when>
+			<otherwise>
+				ORDER BY REGIST_DE DESC
+			</otherwise>
+		</choose>
+		
+		LIMIT #{firstIndex}, #{recordCountPerPage}
+	</select>
+	
+	<insert id="insertInfo" useGeneratedKeys="true" keyProperty="mngrSn" parameterType="mngrVO">
+		INSERT INTO FS_MNGR
+			(ROLE_SN, ACC_SN, MNGR_ID, MNGR_PW,
+			MNGR_NM, MNGR_SALT, REGIST_DE, UPDT_DE,
+			MNGR_SSO_AT)
+		VALUES
+			(#{roleSn}, #{accSn, jdbcType=INTEGER}, #{mngrId}, #{mngrPw, jdbcType=VARCHAR},
+			#{mngrNm}, #{mngrSalt, jdbcType=VARCHAR}, NOW(), NOW(),
+			#{mngrSsoAt})
+	</insert>
+	
+	<update id="updateInfo" parameterType="mngrVO">
+		UPDATE	FS_MNGR
+		<set>
+			<if test="roleSn != null and roleSn != ''">
+				ROLE_SN = #{roleSn},
+			</if>
+			<if test="mngrPw != null and mngrPw != ''">
+				MNGR_PW = #{mngrPw},
+			</if>
+			<if test="mngrNm != null and mngrNm != ''">
+				MNGR_NM = #{mngrNm},
+			</if>
+			<if test="mngrSsoAt != null and mngrSsoAt != ''">
+				MNGR_SSO_AT = #{mngrSsoAt},
+			</if>
+			<if test="lockCo != null">
+				LOCK_CO = #{lockCo},
+			</if>
+			<if test="lockDe != null and lockDe != ''">
+				<choose>
+					<when test="lockDe == 'Y'.toString()">
+						LOCK_DE = NOW(),
+					</when>
+					<otherwise>
+						LOCK_DE = NULL,
+					</otherwise>
+				</choose>
+			</if>
+			UPDT_DE = NOW()
+		</set>
+		WHERE	MNGR_SN = #{mngrSn}
+	</update>
+	
+	<delete id="deleteInfo" parameterType="mngrVO">
+		DELETE FROM FS_MNGR
+		WHERE MNGR_SN = #{mngrSn}
+	</delete>
+	
+</mapper>

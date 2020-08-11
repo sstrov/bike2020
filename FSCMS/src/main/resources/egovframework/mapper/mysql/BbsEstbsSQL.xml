@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="fscms.mods.bbs.service.BbsEstbsMapper">
+
+	<sql id="columns">
+		BBS_ESTBS_SN             AS bbsEstbsSn
+		, SKN_SN_DP1             AS sknSnDp1
+		, SKN_SN_DP2             AS sknSnDp2
+		, BBS_ESTBS_NM           AS bbsEstbsNm
+		, SJ_LT_LMTT             AS sjLtLmtt
+		, LIST_INDICT_CO         AS listIndictCo
+		, CTGRY_AT               AS ctgryAt
+		, ATCH_AT                AS atchAt
+		, ATCH_SIZE              AS atchSize
+		, THUMB_AT               AS thumbAt
+		, ANSWER_AT              AS answerAt
+		, NOTICE_AT              AS noticeAt
+		, SECRET_AT              AS secretAt
+		, SECRET_AT_ALWAYS       AS secretAtAlways
+		, RDCNT_DPLCT_AT         AS rdcntDplctAt
+		, REGISTER_NM_TY         AS registerNmTy
+		, INDICT_DAY_NW          AS indictDayNw
+		, HDER_TAG               AS hderTag
+		, HDER_CNTNTS_AT         As hderCntntsAt
+		, FOOT_TAG               AS footTag
+		, FOOT_CNTNTS_AT         AS footCntntsAt
+		, AUTHOR_LIST            AS authorList
+		, AUTHOR_REDNG           AS authorRedng
+		, AUTHOR_REGIST          AS authorRegist
+		, AUTHOR_ANSWER          AS authorAnswer
+		, AUTHOR_CM              AS authorCm
+		, CM_AT                  AS cmAt
+		, CM_ANSWER_AT           AS cmAnswerAt
+		, CM_LT_LMTT_AT          AS cmLtLmttAt
+		, CM_LT_LMTT_SIZE        AS cmLtLmttSize
+		, CM_NMCHANGE_AT         AS cmNmchangeAt
+		, CM_PGNG_AT             AS cmPgngAt
+		, CM_LIST_INDICT_CO      AS cmListIndictCo
+		, CM_SORT                AS cmSort
+		, FS_BBS_ESTBS.REGIST_DE AS registDe
+		, FS_BBS_ESTBS.UPDT_DE   AS updtDe
+	</sql>
+	
+	<sql id="wheres">
+		<where>
+			<if test="bbsEstbsSn != null and bbsEstbsSn != ''">
+				BBS_ESTBS_SN = #{bbsEstbsSn}
+			</if>
+		</where>
+	</sql>
+	
+	<sql id="searchWheres">
+		<where>
+			<if test="sw != null and sw != ''">
+				<choose>
+					<when test="sc != null and sc != ''">
+						${sc} LIKE CONCAT('%', #{sw}, '%')
+					</when>
+					<otherwise>
+						(
+							BBS_ESTBS_NM LIKE CONCAT('%', #{sw}, '%')
+						)
+					</otherwise>
+				</choose>
+			</if>
+		</where>
+	</sql>
+	
+	<select id="selectObj" parameterType="bbsEstbsVO" resultType="bbsEstbsVO">
+		SELECT	<include refid="columns" />
+				, skn1.BBS_SKN_CODE AS sknSnDp1Code
+				, skn1.BBS_SKN_NM   AS sknSnDp1Nm
+				, skn2.BBS_SKN_CODE AS sknSnDp2Code
+				, skn2.BBS_SKN_NM   AS sknSnDp2Nm
+				, skn2.CMMN_VIEW_AT AS cmmnViewAt
+		FROM	FS_BBS_ESTBS
+		LEFT OUTER JOIN FS_BBS_SKN skn1 ON (skn1.BBS_SKN_SN = FS_BBS_ESTBS.SKN_SN_DP1)
+		LEFT OUTER JOIN FS_BBS_SKN skn2 ON (skn2.BBS_SKN_SN = FS_BBS_ESTBS.SKN_SN_DP2)
+		<include refid="wheres" />
+	</select>
+	
+	<select id="selectTCount" parameterType="bbsEstbsSearchVO" resultType="int">
+		SELECT	COUNT(BBS_ESTBS_SN)
+		FROM	FS_BBS_ESTBS
+		LEFT OUTER JOIN FS_BBS_SKN skn1 ON (skn1.BBS_SKN_SN = FS_BBS_ESTBS.SKN_SN_DP1)
+		LEFT OUTER JOIN FS_BBS_SKN skn2 ON (skn2.BBS_SKN_SN = FS_BBS_ESTBS.SKN_SN_DP2)
+		<include refid="searchWheres" />
+	</select>
+	
+	<select id="selectPageList" parameterType="bbsEstbsSearchVO" resultType="bbsEstbsVO">
+		SELECT	<include refid="columns" />
+				, skn1.BBS_SKN_NM AS sknSnDp1Nm
+				, skn2.BBS_SKN_NM AS sknSnDp2Nm
+		FROM	FS_BBS_ESTBS
+		LEFT OUTER JOIN FS_BBS_SKN skn1 ON (skn1.BBS_SKN_SN = FS_BBS_ESTBS.SKN_SN_DP1)
+		LEFT OUTER JOIN FS_BBS_SKN skn2 ON (skn2.BBS_SKN_SN = FS_BBS_ESTBS.SKN_SN_DP2)
+		<include refid="searchWheres" />
+		
+		<choose>
+			<when test="orderBy != null and orderBy != ''">
+				ORDER BY ${orderBy}
+			</when>
+			<otherwise>
+				ORDER BY FS_BBS_ESTBS.REGIST_DE DESC
+			</otherwise>
+		</choose>
+		
+		LIMIT #{firstIndex}, #{recordCountPerPage}
+	</select>
+	
+	<insert id="insertInfo" useGeneratedKeys="true" keyProperty="bbsEstbsSn" parameterType="bbsEstbsVO">
+		INSERT INTO FS_BBS_ESTBS
+			(SKN_SN_DP1, SKN_SN_DP2, BBS_ESTBS_NM, SJ_LT_LMTT,
+			LIST_INDICT_CO, CTGRY_AT, ATCH_AT, ATCH_SIZE,
+			THUMB_AT, ANSWER_AT, NOTICE_AT, SECRET_AT,
+			SECRET_AT_ALWAYS, RDCNT_DPLCT_AT, REGISTER_NM_TY, INDICT_DAY_NW,
+			HDER_TAG, HDER_CNTNTS_AT, FOOT_TAG, FOOT_CNTNTS_AT,
+			AUTHOR_LIST, AUTHOR_REDNG, AUTHOR_REGIST, AUTHOR_ANSWER,
+			AUTHOR_CM, CM_AT, CM_ANSWER_AT, CM_LT_LMTT_AT,
+			CM_LT_LMTT_SIZE, CM_NMCHANGE_AT, CM_PGNG_AT, CM_LIST_INDICT_CO,
+			CM_SORT, REGIST_DE, UPDT_DE)
+		VALUES
+			(#{sknSnDp1}, #{sknSnDp2}, #{bbsEstbsNm}, #{sjLtLmtt},
+			#{listIndictCo}, #{ctgryAt}, #{atchAt}, #{atchSize, jdbcType=INTEGER},
+			#{thumbAt}, #{answerAt}, #{noticeAt}, #{secretAt},
+			#{secretAtAlways}, #{rdcntDplctAt}, #{registerNmTy}, #{indictDayNw},
+			#{hderTag:BLOB, jdbcType=VARCHAR}, #{hderCntntsAt}, #{footTag:BLOB, jdbcType=VARCHAR}, #{footCntntsAt},
+			#{authorList}, #{authorRedng}, #{authorRegist}, #{authorAnswer},
+			#{authorCm}, #{cmAt}, #{cmAnswerAt}, #{cmLtLmttAt},
+			#{cmLtLmttSize, jdbcType=INTEGER}, #{cmNmchangeAt}, #{cmPgngAt}, #{cmListIndictCo, jdbcType=INTEGER},
+			#{cmSort}, NOW(), NOW())
+	</insert>
+	
+	<update id="updateInfo" parameterType="bbsEstbsVO">
+		UPDATE	FS_BBS_ESTBS
+		<set>
+			<if test="sknSnDp1 != null and sknSnDp1 != ''">
+				SKN_SN_DP1 = #{sknSnDp1},
+			</if>
+			<if test="sknSnDp2 != null and sknSnDp2 != ''">
+				SKN_SN_DP2 = #{sknSnDp2},
+			</if>
+			<if test="bbsEstbsNm != null and bbsEstbsNm != ''">
+				BBS_ESTBS_NM = #{bbsEstbsNm},
+			</if>
+			<if test="sjLtLmtt != null and sjLtLmtt != ''">
+				SJ_LT_LMTT = #{sjLtLmtt},
+			</if>
+			<if test="listIndictCo != null and listIndictCo != ''">
+				LIST_INDICT_CO = #{listIndictCo},
+			</if>
+			<if test="ctgryAt != null and ctgryAt != ''">
+				CTGRY_AT = #{ctgryAt},
+			</if>
+			<if test="atchAt != null and atchAt != ''">
+				ATCH_AT = #{atchAt},
+			</if>
+			<if test="atchSize != null">
+				ATCH_SIZE = #{atchSize, jdbcType=INTEGER},
+			</if>
+			<if test="thumbAt != null and thumbAt != ''">
+				THUMB_AT = #{thumbAt},
+			</if>
+			<if test="answerAt != null and answerAt != ''">
+				ANSWER_AT = #{answerAt},
+			</if>
+			<if test="noticeAt != null and noticeAt != ''">
+				NOTICE_AT = #{noticeAt},
+			</if>
+			<if test="secretAt != null and secretAt != ''">
+				SECRET_AT = #{secretAt},
+			</if>
+			<if test="secretAtAlways != null and secretAtAlways != ''">
+				SECRET_AT_ALWAYS = #{secretAtAlways},
+			</if>
+			<if test="rdcntDplctAt != null and rdcntDplctAt != ''">
+				RDCNT_DPLCT_AT = #{rdcntDplctAt},
+			</if>
+			<if test="registerNmTy != null and registerNmTy != ''">
+				REGISTER_NM_TY = #{registerNmTy},
+			</if>
+			<if test="indictDayNw != null and indictDayNw != ''">
+				INDICT_DAY_NW = #{indictDayNw},
+			</if>
+			<if test="hderTag != null">
+				HDER_TAG = #{hderTag:BLOB, jdbcType=VARCHAR},
+			</if>
+			<if test="hderCntntsAt != null and hderCntntsAt != ''">
+				HDER_CNTNTS_AT = #{hderCntntsAt},
+			</if>
+			<if test="footTag != null">
+				FOOT_TAG = #{footTag:BLOB, jdbcType=VARCHAR},
+			</if>
+			<if test="footCntntsAt != null and footCntntsAt != ''">
+				FOOT_CNTNTS_AT = #{footCntntsAt},
+			</if>
+			<if test="authorList != null and authorList != ''">
+				AUTHOR_LIST = #{authorList},
+			</if>
+			<if test="authorRedng != null and authorRedng != ''">
+				AUTHOR_REDNG = #{authorRedng},
+			</if>
+			<if test="authorRegist != null and authorRegist != ''">
+				AUTHOR_REGIST = #{authorRegist},
+			</if>
+			<if test="authorAnswer != null and authorAnswer != ''">
+				AUTHOR_ANSWER = #{authorAnswer},
+			</if>
+			<if test="authorCm != null and authorCm != ''">
+				AUTHOR_CM = #{authorCm},
+			</if>
+			<if test="cmAt != null and cmAt != ''">
+				CM_AT = #{cmAt},
+			</if>
+			<if test="cmAnswerAt != null and cmAnswerAt != ''">
+				CM_ANSWER_AT = #{cmAnswerAt},
+			</if>
+			<if test="cmLtLmttAt != null and cmLtLmttAt != ''">
+				CM_LT_LMTT_AT = #{cmLtLmttAt},
+			</if>
+			<if test="cmLtLmttSize != null">
+				CM_LT_LMTT_SIZE = #{cmLtLmttSize, jdbcType=INTEGER},
+			</if>
+			<if test="cmNmchangeAt != null and cmNmchangeAt != ''">
+				CM_NMCHANGE_AT = #{cmNmchangeAt},
+			</if>
+			<if test="cmPgngAt != null and cmPgngAt != ''">
+				CM_PGNG_AT = #{cmPgngAt},
+			</if>
+			<if test="cmListIndictCo != null">
+				CM_LIST_INDICT_CO = #{cmListIndictCo, jdbcType=INTEGER},
+			</if>
+			<if test="cmSort != null and cmSort != ''">
+				CM_SORT = #{cmSort},
+			</if>
+			UPDT_DE = NOW()
+		</set>
+		WHERE	BBS_ESTBS_SN = #{bbsEstbsSn}
+	</update>
+	
+	<delete id="deleteInfo" parameterType="bbsEstbsVO">
+		DELETE FROM FS_BBS_ESTBS
+		WHERE BBS_ESTBS_SN = #{bbsEstbsSn}
+	</delete>
+	
+</mapper>

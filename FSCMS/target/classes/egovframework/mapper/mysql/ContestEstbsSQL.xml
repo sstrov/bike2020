@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="fscms.mods.contest.service.ContestEstbsMapper">
+
+	<sql id="columns">
+		FS_CONTEST_ESTBS.CONTEST_ESTBS_SN		AS contestEstbsSn, 
+		FS_CONTEST_ESTBS.CONTEST_ESTBS_NM		AS contestEstbsNm, 
+		FS_CONTEST_ESTBS.CONTEST_ESTBS_CN		AS contestEstbsCn, 
+		FS_CONTEST_ESTBS.CONTEST_BGNDE			AS contestBgnde, 
+		FS_CONTEST_ESTBS.CONTEST_ENDDE			AS contestEndde, 
+		FS_CONTEST_ESTBS.REGIST_DE				AS registDe, 
+		FS_CONTEST_ESTBS.UPDT_DE				AS updtDe, 
+		FS_CONTEST_ESTBS.REGIST_NM		 		AS registNm, 
+		FS_CONTEST_ESTBS.UPDT_NM				AS updtNm, 
+		FS_CONTEST_ESTBS.ATCHMNFL_IMAGE 		AS atchmnflImage, 
+		FS_CONTEST_ESTBS.FLPTH					AS flpth
+	</sql>
+	
+	<sql id="wheres">
+		<where>
+			1 = 1
+		</where>
+	</sql>
+	
+	<sql id="searchWheres">
+		<where>
+			<if test="sw != null and sw != ''">
+				<choose>
+					<when test="sc != null and sc != ''">
+						${sc} LIKE '%'||#{sw}||'%'
+					</when>
+					<otherwise>
+						(
+							FS_CONTEST_ESTBS.CONTEST_ESTBS_NM		LIKE CONCAT('%', #{sw}, '%')
+							OR FS_CONTEST_ESTBS.CONTEST_ESTBS_CN	LIKE CONCAT('%', #{sw}, '%')
+						)
+					</otherwise>
+				</choose>
+			</if>
+			
+		</where>
+	</sql>
+	
+	<select id="selectTCount" parameterType="contestEstbsSearchVO" resultType="int">
+		SELECT	COUNT(CONTEST_ESTBS_SN)
+		FROM	FS_CONTEST_ESTBS
+		<include refid="searchWheres" />
+	</select>
+	
+	<select id="selectPageList" parameterType="contestEstbsSearchVO" resultType="contestEstbsVO">
+		SELECT	<include refid="columns" />
+				, T1.WORK_COUNT AS workCount
+		FROM	FS_CONTEST_ESTBS
+		LEFT OUTER JOIN 
+			(SELECT CONTEST_ESTBS_SN, COUNT(CONTEST_SN) AS WORK_COUNT 
+			FROM FS_CONTEST
+			GROUP BY CONTEST_ESTBS_SN) T1
+		ON FS_CONTEST_ESTBS.CONTEST_ESTBS_SN = T1.CONTEST_ESTBS_SN
+		<include refid="searchWheres" />
+		
+		<choose>
+			<when test="orderBy != null and orderBy != ''">
+				ORDER BY ${orderBy}
+			</when>
+			<otherwise>
+				ORDER BY REGIST_DE DESC
+			</otherwise>
+		</choose>
+		
+		LIMIT #{firstIndex}, #{recordCountPerPage}
+	</select>
+	
+	<select id="selectObj" parameterType="contestEstbsVO" resultType="contestEstbsVO">
+		SELECT	<include refid="columns" />
+		FROM	FS_CONTEST_ESTBS
+		WHERE CONTEST_ESTBS_SN = ${contestEstbsSn}
+	</select>
+	
+	<insert id="insertInfo" useGeneratedKeys="true" keyProperty="contestEstbsSn" parameterType="contestEstbsVO">
+		INSERT INTO FS_CONTEST_ESTBS
+			(CONTEST_ESTBS_SN, CONTEST_ESTBS_NM, CONTEST_ESTBS_CN
+			, CONTEST_BGNDE, CONTEST_ENDDE
+			, ATCHMNFL_IMAGE, REGIST_DE, REGIST_NM, UPDT_DE, UPDT_NM)
+		VALUES
+			(#{contestEstbsSn}, #{contestEstbsNm}, #{contestEstbsCn:BLOB, jdbcType=VARCHAR}, 
+			<choose>
+				<when test="contestBgnde != null and contestBgnde != ''">DATE_FORMAT(#{contestBgnde}, '%Y-%m-%d %H:%i:%s')</when>
+				<otherwise>null</otherwise>
+			</choose>, <choose>
+				<when test="contestEndde != null and contestEndde != ''">DATE_FORMAT(#{contestEndde}, '%Y-%m-%d %H:%i:%s')</when>
+				<otherwise>null</otherwise>
+			</choose>, 
+			#{atchmnflImage, jdbcType=VARCHAR}, NOW(), #{registNm, jdbcType=VARCHAR}, NOW(), #{registNm, jdbcType=VARCHAR})
+	</insert>
+	
+	<update id="updateInfo" parameterType="contestEstbsVO">
+		UPDATE	FS_CONTEST_ESTBS
+		<set>
+			<if test="contestEstbsNm != null and contestEstbsNm != ''">
+				CONTEST_ESTBS_NM = #{contestEstbsNm},
+			</if>
+			<if test="contestEstbsCn != null">
+				CONTEST_ESTBS_CN = #{contestEstbsCn:BLOB, jdbcType=VARCHAR},
+			</if>
+			<choose>
+				<when test="contestBgnde != null and contestBgnde != ''">
+					CONTEST_BGNDE = DATE_FORMAT(#{contestBgnde}, '%Y-%m-%d %H:%i:%s'),
+				</when>
+				<otherwise>
+					CONTEST_BGNDE = null,
+				</otherwise>
+			</choose>
+			<choose>
+				<when test="contestEndde != null and contestEndde != ''">
+					CONTEST_ENDDE = DATE_FORMAT(#{contestEndde}, '%Y-%m-%d %H:%i:%s'),
+				</when>
+				<otherwise>
+					CONTEST_ENDDE = null,
+				</otherwise>
+			</choose>
+			<if test="atchmnflImage != null">
+				ATCHMNFL_IMAGE = #{atchmnflImage, jdbcType=VARCHAR},
+			</if>
+			<if test="flpth != null and flpth != ''">
+				FLPTH = #{flpth},
+			</if>
+			<if test="updtNm != null and updtNm != ''">
+				UPDT_NM = #{updtNm},
+			</if>
+			UPDT_DE = NOW()
+		</set>
+		WHERE	CONTEST_ESTBS_SN = #{contestEstbsSn}
+	</update>
+	
+	<delete id="deleteInfo" parameterType="contestEstbsVO">
+		DELETE FROM FS_CONTEST_ESTBS
+		WHERE CONTEST_ESTBS_SN = #{contestEstbsSn}
+	</delete>
+	
+	
+	
+</mapper>

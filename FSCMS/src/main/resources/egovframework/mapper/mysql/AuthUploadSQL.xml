@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="fscms.mods.auth.service.AuthUploadMapper">
+
+	<sql id="columns">
+		AU_SN				as auSn,
+		USER_NM				AS userNm,
+		USER_BIRTH			AS userBirth,
+		USER_SEX			AS userSex,
+		USER_TELNO			AS userTelno,
+		USER_ZIP			AS userZip,
+		USER_ADRES_BASS		AS userAdresBase,
+		USER_ADRES_DETAIL	AS userAdresDetail,
+		USER_EMAIL			AS userEmail,
+		NOTE_SN				AS noteSn,
+		AUTH_SN				AS authSn,
+		COURSE_NM			AS courseNm,
+		COURSE_START		AS courseStart,
+		AUTH_STATUS			AS authStatus,
+		AUTH_CENTER			AS authCenter,
+		PUB_DE				AS pubDe,
+		REGIST_DE			AS registDe
+	</sql>
+	
+	<sql id="searchWheres">
+		<where>
+			<if test="sw != null and sw != ''">
+				<choose>
+					<when test="sc != null and sc != ''">
+						${sc} LIKE '%'||#{sw}||'%'
+					</when>
+					<otherwise>
+						(
+							USER_NM		LIKE CONCAT('%', #{sw}, '%')
+							OR NOTE_SN		LIKE CONCAT('%', #{sw}, '%')
+							OR COURSE_NM		LIKE CONCAT('%', #{sw}, '%')
+						)
+					</otherwise>
+				</choose>
+			</if>
+			<if test="noteSn != null and noteSn != ''">
+				NOTE_SN = #{noteSn}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="selectTCount" parameterType="authUploadSearchVO" resultType="int">
+		SELECT	COUNT(AU_SN)
+		FROM	FS_AUTH_UPLOAD
+		<include refid="searchWheres" />
+	</select>
+	
+	<select id="selectPageList" parameterType="authUploadSearchVO" resultType="authUploadVO">
+		SELECT	<include refid="columns" />
+		FROM	FS_AUTH_UPLOAD
+		<include refid="searchWheres" />
+		
+		<choose>
+			<when test="orderBy != null and orderBy != ''">
+				ORDER BY ${orderBy}
+			</when>
+			<otherwise>
+				ORDER BY REGIST_DE DESC
+			</otherwise>
+		</choose>
+		
+		LIMIT #{firstIndex}, #{recordCountPerPage}
+	</select>
+	
+	<select id="selectObj" parameterType="authUploadVO" resultType="authUploadVO">
+		SELECT	<include refid="columns" />
+		FROM	FS_AUTH_UPLOAD
+		WHERE	AU_SN = #{auSn}
+	</select>
+	
+	<insert id="insertExcelInfo" useGeneratedKeys="true" keyProperty="auSn" parameterType="authUploadVO">
+		INSERT INTO FS_AUTH_UPLOAD
+		(
+			USER_NM, USER_BIRTH, USER_SEX, USER_TELNO, 
+			USER_ZIP, USER_ADRES_BASS, USER_EMAIL, 
+			NOTE_SN, AUTH_SN, COURSE_NM, COURSE_START, 
+			AUTH_STATUS, AUTH_CENTER, PUB_DE, REGIST_DE
+		) VALUES (
+			#{userNm}, #{userBirth}, #{userSex}, #{userTelno},
+			#{userZip}, #{userAdresBass}, #{userEmail}, 
+			#{noteSn}, #{authSn}, #{courseNm}, #{courseStart}, 
+			#{authStatus}, #{authCenter}, #{pubDe}, NOW()
+		)
+	</insert>
+	
+	<select id="selectNoteList" parameterType="authUploadSearchVO" resultType="authUploadVO">
+		SELECT	<include refid="columns" />
+		FROM	FS_AUTH_UPLOAD
+		WHERE	NOTE_SN = #{noteSn}
+		GROUP BY NOTE_SN
+		ORDER BY REGIST_DE DESC
+	</select>
+	
+	<update id="updateAuth" parameterType="authUploadVO">
+		UPDATE FS_AUTH_UPLOAD
+		SET USER_NM = #{userNm}
+		WHERE NOTE_SN = #{noteSn}
+			AND USER_NM = #{oldData}
+	</update>
+	
+	<select id="getObj" parameterType="authUploadVO" resultType="authUploadVO">
+		SELECT <include refid="columns" />
+		FROM FS_AUTH_UPLOAD
+		WHERE NOTE_SN = #{noteSn}
+			AND USER_NM = #{oldData}
+	</select>
+	
+	<select id="selectTCountWeb" parameterType="authUploadSearchVO" resultType="int">
+		SELECT COUNT(*)
+		FROM FS_AUTH_ROAD,
+			(SELECT FS_AUTH_WEB.*, FS_AUTH_ROAD_SUB.AUTH_NM 
+			FROM FS_AUTH_ROAD_SUB, 
+				(SELECT FS_AUTH_WEB.ROAD_CD, FS_AUTH_WEB.AUTH_CD, FS_AUTH_WEB.NOTE_SN, FS_AUTH_WEB.REGIST_DE
+				, (SELECT USER_ID FROM FS_USER WHERE FS_USER.USER_SN = FS_AUTH_WEB.USER_SN) USER_ID
+				, (SELECT USER_NM FROM FS_USER WHERE FS_USER.USER_SN = FS_AUTH_WEB.USER_SN) USER_NM
+				, (SELECT USER_SALT FROM FS_USER WHERE FS_USER.USER_SN = FS_AUTH_WEB.USER_SN) USER_SALT
+				FROM FS_AUTH_WEB WHERE FS_AUTH_WEB.NOTE_SN = #{noteSn}) FS_AUTH_WEB
+			WHERE FS_AUTH_WEB.ROAD_CD = FS_AUTH_ROAD_SUB.ROAD_CD AND FS_AUTH_WEB.AUTH_CD = FS_AUTH_ROAD_SUB.AUTH_CD AND FS_AUTH_ROAD_SUB.USE_AT = 'Y') SUB
+		WHERE FS_AUTH_ROAD.ROAD_CD = SUB.ROAD_CD
+	</select>
+	
+	<select id="selectPageListWeb" parameterType="authUploadSearchVO" resultType="authUploadVO">
+		<!-- SELECT SUB.ROAD_CD AS roadCd
+			, SUB.AUTH_CD AS authCd
+			, SUB.NOTE_SN AS noteSn
+			, SUB.REGIST_DE AS registDe
+			, SUB.USER_ID AS userId
+			, SUB.USER_NM AS userNM
+			, FS_AUTH_ROAD.ROAD_NM AS roadNm -->
+		SELECT SUB.ROAD_CD AS roadCd
+			, SUB.AUTH_CD AS authCd
+			, SUB.NOTE_SN AS noteSn
+			, SUB.REGIST_DE AS registDe
+			, SUB.USER_ID AS userId
+			, SUB.USER_NM AS userNM
+			, SUB.USER_SALT AS userSalt
+			, SUB.AUTH_NM AS authNm
+			, FS_AUTH_ROAD.ROAD_NM AS roadNm
+		FROM FS_AUTH_ROAD,
+			(SELECT FS_AUTH_WEB.*, FS_AUTH_ROAD_SUB.AUTH_NM 
+			FROM FS_AUTH_ROAD_SUB, 
+				(SELECT FS_AUTH_WEB.ROAD_CD, FS_AUTH_WEB.AUTH_CD, FS_AUTH_WEB.NOTE_SN, FS_AUTH_WEB.REGIST_DE
+				, (SELECT USER_ID FROM FS_USER WHERE FS_USER.USER_SN = FS_AUTH_WEB.USER_SN) USER_ID
+				, (SELECT USER_NM FROM FS_USER WHERE FS_USER.USER_SN = FS_AUTH_WEB.USER_SN) USER_NM
+				, (SELECT USER_SALT FROM FS_USER WHERE FS_USER.USER_SN = FS_AUTH_WEB.USER_SN) USER_SALT
+				FROM FS_AUTH_WEB WHERE FS_AUTH_WEB.NOTE_SN = #{noteSn}) FS_AUTH_WEB
+			WHERE FS_AUTH_WEB.ROAD_CD = FS_AUTH_ROAD_SUB.ROAD_CD AND FS_AUTH_WEB.AUTH_CD = FS_AUTH_ROAD_SUB.AUTH_CD AND FS_AUTH_ROAD_SUB.USE_AT = 'Y') SUB
+		WHERE FS_AUTH_ROAD.ROAD_CD = SUB.ROAD_CD
+	</select>
+	
+</mapper>

@@ -1,0 +1,12 @@
+{
+	"accKey" : "null",
+	"fKey"   : "2004233211751",
+	"pKey"   : "2004233211751",
+	"menuG"  : "2",
+	"nm"     : "전입자수/사유별 구성비",
+	"page"   : "1",
+	"target" : "_self",
+	"actAt"  : "Y",
+	"useAt"  : "Y",
+	"link"   : "/adm/trnsfrn/cmpntrt/form.do?key=2004233213037"
+}

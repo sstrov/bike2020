@@ -1,0 +1,12 @@
+{
+	"accKey" : "null",
+	"fKey"   : "1910117197403",
+	"pKey"   : "1910117197403",
+	"menuG"  : "2",
+	"nm"     : "일별 통계",
+	"page"   : "1",
+	"target" : "_self",
+	"actAt"  : "Y",
+	"useAt"  : "Y",
+	"link"   : "/adm/stat/day.do?key=1910117201131"
+}

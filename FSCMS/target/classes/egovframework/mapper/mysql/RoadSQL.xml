@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="fscms.mods.road.service.RoadMapper">
+
+	<sql id="columns">
+		FS_AUTH_ROAD.ROAD_SN			AS roadSn,
+		FS_AUTH_ROAD.ROAD_CD			AS roadCd,
+		FS_AUTH_ROAD.ROAD_NM			AS roadNm,
+		FS_AUTH_ROAD.ROAD_ORDR			AS roadOrdr
+	</sql>
+	<sql id="columns1">
+		FS_AUTH_ROAD_SUB.CD_SN				AS cdSn,
+		FS_AUTH_ROAD_SUB.ROAD_CD			AS roadCd,
+		FS_AUTH_ROAD_SUB.AUTH_CD			AS authCd,
+		FS_AUTH_ROAD_SUB.AUTH_NM			AS authNm,
+		FS_AUTH_ROAD_SUB.AUTH_TYPE			AS authType,
+		FS_AUTH_ROAD_SUB.AUTH_ORDR			AS authOrdr
+	</sql>
+	
+	<sql id="wheres">
+		<where>
+			OS_SN = 1
+		</where>
+	</sql>
+	
+	<select id="selectRoadAllList" parameterType="roadVO" resultType="roadVO">
+		SELECT <include refid="columns" />, 
+			<include refid="columns1" />
+		FROM FS_AUTH_ROAD
+		LEFT OUTER JOIN FS_AUTH_ROAD_SUB
+			ON FS_AUTH_ROAD.ROAD_CD = FS_AUTH_ROAD_SUB.ROAD_CD
+		WHERE FS_AUTH_ROAD.USE_AT = 'Y' 
+	</select>
+	
+	<select id="selectRoadList" parameterType="roadVO" resultType="roadVO">
+		SELECT <include refid="columns" /> 
+		FROM FS_AUTH_ROAD
+		WHERE FS_AUTH_ROAD.USE_AT = 'Y' 
+	</select>
+	
+	<select id="selectAuthList" parameterType="roadVO" resultType="roadVO">
+		SELECT <include refid="columns1" /> 
+		FROM FS_AUTH_ROAD_SUB
+		WHERE FS_AUTH_ROAD_SUB.USE_AT = 'Y' AND AUTH_TYPE = 0
+	</select>
+	
+	<select id="selectAuthConfirmList" parameterType="roadVO" resultType="roadVO">
+		SELECT <include refid="columns1" />
+		FROM FS_AUTH_ROAD_SUB
+		<where>
+			<if test='authType != null and authType != ""'>
+				AUTH_TYPE = #{authType}
+			</if>
+			<if test='roadCd != null and roadCd != ""'>
+				AND ROAD_CD = #{roadCd}
+			</if>
+		</where>
+	</select>
+	
+	<insert id="insertAuthConfirm" useGeneratedKeys="true" keyProperty="authSn" parameterType="roadVO" >
+		INSERT INTO FS_AUTH_WEB
+			(AUTH_CD, ROAD_CD, AUTH_STATE, USER_SN, NOTE_SN, REGIST_DE)
+		VALUES
+			(#{authCd}, #{roadCd}, 'Y', #{userSn}, #{noteSn}, now())
+	</insert>
+	
+	<select id="selectObj" parameterType="roadVO" resultType="roadVO">
+		SELECT AUTH_SN AS authSn, ROAD_CD AS roadCd, AUTH_CD as authCd, AUTH_STATE AS authState, USER_SN AS userSn, NOTE_SN AS noteSn
+		FROM FS_AUTH_WEB
+		WHERE AUTH_CD = #{authCd} AND USER_SN = #{userSn} AND NOTE_SN = #{noteSn} AND ROAD_CD = #{roadCd}
+	</select>
+	
+	<delete id="deleteAuthConfirm" parameterType="roadVO">
+		DELETE FROM FS_AUTH_WEB
+		WHERE USER_SN = #{userSn} AND NOTE_SN = #{noteSn}
+	</delete>
+	
+	<select id="selectConfirmList" parameterType="roadVO" resultType="roadVO">
+		SELECT AUTH_SN AS authSn, ROAD_CD AS roadCd, AUTH_CD as authCd, AUTH_STATE AS authState, USER_SN AS userSn, NOTE_SN AS noteSn
+		FROM FS_AUTH_WEB
+		WHERE USER_SN = #{userSn} AND NOTE_SN = #{noteSn} 
+	</select>
+	
+	<select id="selectAuthObj" parameterType="roadVO" resultType="roadVO">
+		SELECT <include refid="columns1" />
+		FROM FS_AUTH_ROAD_SUB
+		WHERE ROAD_CD = #{roadCd} AND AUTH_CD = #{authCd} AND AUTH_TYPE = 0
+	</select>
+</mapper>

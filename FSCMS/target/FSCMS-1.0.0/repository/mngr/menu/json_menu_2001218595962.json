@@ -1,0 +1,12 @@
+{
+	"accKey" : "null",
+	"fKey"   : "2001218595962",
+	"pKey"   : "null",
+	"menuG"  : "1",
+	"nm"     : "통계데이터입력",
+	"page"   : "1",
+	"target" : "_self",
+	"actAt"  : "Y",
+	"useAt"  : "Y",
+	"link"   : "/adm/stat/saver.do?key=2001218595962"
+}

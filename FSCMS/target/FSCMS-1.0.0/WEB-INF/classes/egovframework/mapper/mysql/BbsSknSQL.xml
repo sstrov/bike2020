@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="fscms.mods.bbs.service.BbsSknMapper">
+
+	<resultMap type="bbsSknVO" id="bbsSkn_C">
+		<result property="bbsSknSn"      column="bbsSknSn" />
+		<result property="bbsSknBestSn"  column="bbsSknBestSn" />
+		<result property="bbsSknUpperSn" column="bbsSknUpperSn" />
+		<result property="bbsSknOrdr"    column="bbsSknOrdr" />
+		<result property="bbsSknDp"      column="bbsSknDp" />
+		<result property="bbsSknNm"      column="bbsSknNm" />
+		<result property="bbsSknCode"    column="bbsSknCode" />
+		<result property="cmmnViewAt"    column="cmmnViewAt" />
+		<result property="atchmnflImage" column="atchmnflImage" />
+		<result property="flpth"         column="flpth" />
+		<result property="useAt"         column="useAt" />
+		<result property="registDe"      column="registDe" />
+		<result property="updtDe"        column="updtDe" />
+		
+		<collection property="childList" column="{bbsSknUpperSn=bbsSknSn}" javaType="ArrayList" ofType="bbsSknVO" select="selectList_C" />
+	</resultMap>
+
+	<sql id="columns">
+		BBS_SKN_SN         AS bbsSknSn
+		, BBS_SKN_BEST_SN  AS bbsSknBestSn
+		, BBS_SKN_UPPER_SN AS bbsSknUpperSn
+		, BBS_SKN_ORDR     AS bbsSknOrdr
+		, BBS_SKN_DP       AS bbsSknDp
+		, BBS_SKN_NM       AS bbsSknNm
+		, BBS_SKN_CODE     AS bbsSknCode
+		, CMMN_VIEW_AT     AS cmmnViewAt
+		, ATCHMNFL_IMAGE   AS atchmnflImage
+		, FLPTH            AS flpth
+		, USE_AT           AS useAt
+		, REGIST_DE        AS registDe
+		, UPDT_DE          AS updtDe
+	</sql>
+	
+	<sql id="wheres">
+		<where>
+			<if test="bbsSknSn != null and bbsSknSn != ''">
+				BBS_SKN_SN = #{bbsSknSn}
+			</if>
+			
+			<if test="bbsSknBestSn != null and bbsSknBestSn != ''">
+				AND BBS_SKN_BEST_SN = #{bbsSknBestSn}
+			</if>
+			
+			<if test="bbsSknUpperSn != null and bbsSknUpperSn != ''">
+				AND BBS_SKN_UPPER_SN = #{bbsSknUpperSn}
+			</if>
+			
+			<if test="bbsSknOrdr != null and bbsSknOrdr != ''">
+				AND BBS_SKN_ORDR = #{bbsSknOrdr}
+			</if>
+			
+			<if test="bbsSknDp != null and bbsSknDp != ''">
+				AND BBS_SKN_DP = #{bbsSknDp}
+			</if>
+			
+			<if test="useAt != null and useAt != ''">
+				AND USE_AT = #{useAt}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="selectObj" parameterType="bbsSknVO" resultType="bbsSknVO">
+		SELECT	<include refid="columns" />
+		FROM	FS_BBS_SKN
+		<include refid="wheres" />
+	</select>
+	
+	<select id="selectList" parameterType="bbsSknVO" resultType="bbsSknVO">
+		SELECT	<include refid="columns" />
+		FROM	FS_BBS_SKN
+		<include refid="wheres" />
+		ORDER BY BBS_SKN_ORDR ASC
+	</select>
+	
+	<select id="selectList_C" parameterType="bbsSknVO" resultMap="bbsSkn_C">
+		SELECT	<include refid="columns" />
+		FROM	FS_BBS_SKN
+		<include refid="wheres" />
+		ORDER BY BBS_SKN_ORDR ASC
+	</select>
+	
+	<select id="selectMaxKey" resultType="int">
+		SELECT	IFNULL(MAX(BBS_SKN_SN), 0) + 1
+		FROM	FS_BBS_SKN
+	</select>
+	
+	<select id="selectMaxO" parameterType="bbsSknVO" resultType="int">
+		SELECT	IFNULL(MAX(BBS_SKN_ORDR), 0)
+		FROM	FS_BBS_SKN
+		<include refid="wheres" />
+	</select>
+	
+	<insert id="insertInfo" useGeneratedKeys="true" keyProperty="bbsSknSn" parameterType="bbsSknVO">
+		INSERT INTO FS_BBS_SKN
+			(BBS_SKN_BEST_SN, BBS_SKN_UPPER_SN, BBS_SKN_ORDR, BBS_SKN_DP,
+			BBS_SKN_NM, BBS_SKN_CODE, CMMN_VIEW_AT, USE_AT, REGIST_DE, UPDT_DE)
+		VALUES
+			(#{bbsSknBestSn, jdbcType=INTEGER}, #{bbsSknUpperSn, jdbcType=INTEGER}, #{bbsSknOrdr}, #{bbsSknDp},
+			#{bbsSknNm}, #{bbsSknCode, jdbcType=VARCHAR}, #{cmmnViewAt}, #{useAt}, NOW(), NOW())
+	</insert>
+	
+	<update id="updateInfo" parameterType="bbsSknVO">
+		UPDATE	FS_BBS_SKN
+		<set>
+			<if test="bbsSknBestSn != null and bbsSknBestSn != ''">
+				BBS_SKN_BEST_SN = #{bbsSknBestSn, jdbcType=VARCHAR},
+			</if>
+			<if test="bbsSknUpperSn != null">
+				<choose>
+					<when test="bbsSknUpperSn == 'Y'.toString()">
+						BBS_SKN_UPPER_SN = null,
+					</when>
+					<otherwise>
+						BBS_SKN_UPPER_SN = #{bbsSknUpperSn, jdbcType=VARCHAR},
+					</otherwise>
+				</choose>
+			</if>
+			<if test="bbsSknOrdr != null and bbsSknOrdr != ''">
+				BBS_SKN_ORDR = #{bbsSknOrdr},
+			</if>
+			<if test="bbsSknDp != null and bbsSknDp != ''">
+				BBS_SKN_DP = #{bbsSknDp},
+			</if>
+			<if test="bbsSknNm != null and bbsSknNm != ''">
+				BBS_SKN_NM = #{bbsSknNm},
+			</if>
+			<if test="bbsSknCode != null">
+				BBS_SKN_CODE = #{bbsSknCode, jdbcType=VARCHAR},
+			</if>
+			<if test="cmmnViewAt != null and cmmnViewAt != ''">
+				CMMN_VIEW_AT = #{cmmnViewAt},
+			</if>
+			<if test="atchmnflImage != null">
+				ATCHMNFL_IMAGE = #{atchmnflImage},
+			</if>
+			<if test="flpth != null and flpth != ''">
+				FLPTH = #{flpth},
+			</if>
+			<if test="useAt != null and useAt != ''">
+				USE_AT = #{useAt},
+			</if>
+			UPDT_DE = NOW()
+		</set>
+		WHERE	BBS_SKN_SN = #{bbsSknSn}
+	</update>
+	
+	<delete id="deleteInfo" parameterType="bbsSknVO">
+		DELETE FROM FS_BBS_SKN
+		WHERE BBS_SKN_SN = #{bbsSknSn}
+	</delete>
+	
+</mapper>

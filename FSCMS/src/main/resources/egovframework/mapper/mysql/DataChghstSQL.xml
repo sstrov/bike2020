@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="fscms.mods.data.service.DataChghstMapper">
+
+	<sql id="columns">
+		DATA_CHGHST_SN                   AS dataChghstSn
+		, USER_ID                        AS userId
+		, MNGR_ID                        AS mngrId
+		, TABLE_NM                       AS tableNm
+		, CONVERT(BFCHG_DATA USING utf8) AS bfchgData
+		, CONVERT(AFTCH_DATA USING utf8) AS aftchData
+		, REGIST_PLTFOM                  AS registPltfom
+		, REGIST_BRWSR                   AS registBrwsr
+		, REGIST_IP                      AS registIp
+		, REGIST_DE                      AS registDe
+	</sql>
+	
+	<sql id="wheres">
+		<where>
+			<if test="dataChghstSn != null and dataChghstSn != ''">
+				DATA_CHGHST_SN = #{dataChghstSn}
+			</if>
+		</where>
+	</sql>
+	
+	<sql id="searchWheres">
+		<where>
+			<if test="sw_entry != null and sw_entry != ''">
+				(
+					<choose>
+						<when test="sc != null and sc != ''">
+							<choose>
+								<when test="sc == 'USER_ID'.toString()">
+									(
+										USER_ID    = #{sw_entry}
+										OR MNGR_ID = #{sw_entry}
+									)
+								</when>
+								<otherwise>
+									${sc} = #{sw_entry}
+								</otherwise>
+							</choose>
+						</when>
+						<otherwise>
+							(
+								MNGR_ID      = #{sw_entry}
+								OR TABLE_NM  = #{sw_entry}
+								OR REGIST_IP = #{sw_entry}
+							)
+						</otherwise>
+					</choose>
+				) OR (
+					<choose>
+						<when test="sc != null and sc != ''">
+							<choose>
+								<when test="sc == 'USER_ID'.toString()">
+									(
+										USER_ID    = #{sw}
+										OR MNGR_ID = #{sw}
+									)
+								</when>
+								<otherwise>
+									${sc} LIKE CONCAT('%', #{sw}, '%')
+								</otherwise>
+							</choose>
+						</when>
+						<otherwise>
+							(
+								MNGR_ID      LIKE CONCAT('%', #{sw}, '%')
+								OR TABLE_NM  LIKE CONCAT('%', #{sw}, '%')
+								OR REGIST_IP LIKE CONCAT('%', #{sw}, '%')
+							)
+						</otherwise>
+					</choose>
+				)
+			</if>
+			
+			<if test="sc_wDateS != null and sc_wDateS != ''">
+				AND DATE_FORMAT(REGIST_DE, '%Y-%m-%d') <![CDATA[>=]]> #{sc_wDateS}
+			</if>
+			<if test="sc_wDateE != null and sc_wDateE != ''">
+				AND DATE_FORMAT(REGIST_DE, '%Y-%m-%d') <![CDATA[<=]]> #{sc_wDateE}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="selectObj" parameterType="dataChghstVO" resultType="dataChghstVO">
+		SELECT	<include refid="columns" />
+		FROM	FS_DATA_CHGHST
+		<include refid="wheres" />
+	</select>
+	
+	<select id="selectTCount" parameterType="dataChghstSearchVO" resultType="int">
+		SELECT	COUNT(DATA_CHGHST_SN)
+		FROM	FS_DATA_CHGHST
+		<include refid="searchWheres" />
+	</select>
+	
+	<select id="selectPageList" parameterType="dataChghstSearchVO" resultType="dataChghstVO">
+		SELECT	<include refid="columns" />
+		FROM	FS_DATA_CHGHST
+		<include refid="searchWheres" />
+		
+		<choose>
+			<when test="orderBy != null and orderBy != ''">
+				ORDER BY ${orderBy}
+			</when>
+			<otherwise>
+				ORDER BY REGIST_DE DESC
+			</otherwise>
+		</choose>
+		
+		LIMIT #{firstIndex}, #{recordCountPerPage}
+	</select>
+	
+	<insert id="insertInfo" useGeneratedKeys="true" keyProperty="dataChghstSn" parameterType="dataChghstVO">
+		INSERT INTO FS_DATA_CHGHST
+			(USER_ID, MNGR_ID, TABLE_NM, BFCHG_DATA,
+			AFTCH_DATA, REGIST_PLTFOM, REGIST_BRWSR,
+			REGIST_IP, REGIST_DE)
+		VALUES
+			(#{userId, jdbcType=VARCHAR}, #{mngrId, jdbcType=VARCHAR}, #{tableNm}, #{bfchgData:BLOB, jdbcType=VARCHAR},
+			#{aftchData:BLOB, jdbcType=VARCHAR}, #{registPltfom, jdbcType=VARCHAR}, #{registBrwsr, jdbcType=VARCHAR},
+			#{registIp}, NOW())
+	</insert>
+	
+</mapper>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="fscms.mods.site.service.SiteMapper">
+
+	<sql id="columns">
+		SITE_NM               AS siteNm
+		, ROLE_SN             AS roleSn
+		, OPEN_DE             AS openDe
+		, DPLCT_LOGIN_AT      AS dplctLoginAt
+		, LOGIN_FAILR_LOCK_CO AS loginFailrLockCo
+		, ACTVTY_AT           AS actvtyAt
+		, SNS_USE_AT          AS snsUseAt
+		, REGIST_DE           AS registDe
+		, UPDT_DE             AS updtDe
+	</sql>
+	
+	<select id="selectObj" resultType="siteVO">
+		SELECT	<include refid="columns" />
+		FROM	FS_SITE
+	</select>
+	
+	<insert id="insertInfo" parameterType="siteVO">
+		INSERT INTO FS_SITE
+			(SITE_NM, ROLE_SN, OPEN_DE, DPLCT_LOGIN_AT,
+			LOGIN_FAILR_LOCK_CO, ACTVTY_AT, REGIST_DE, UPDT_DE)
+		VALUES
+			(#{siteNm}, #{roleSn, jdbcType=INTEGER}, #{openDe, jdbcType=VARCHAR}, #{dplctLoginAt},
+			#{loginFailrLockCo}, #{actvtyAt}, NOW(), NOW())
+	</insert>
+	
+	<update id="updateInfo" parameterType="siteVO">
+		UPDATE	FS_SITE
+		<set>
+			<if test="siteNm != null and siteNm != ''">
+				SITE_NM = #{siteNm},
+			</if>
+			<if test="roleSn != null">
+				ROLE_SN = #{roleSn, jdbcType=INTEGER},
+			</if>
+			<if test="openDe != null">
+				OPEN_DE = #{openDe, jdbcType=VARCHAR},
+			</if>
+			<if test="dplctLoginAt != null and dplctLoginAt != ''">
+				DPLCT_LOGIN_AT = #{dplctLoginAt},
+			</if>
+			<if test="loginFailrLockCo != null and loginFailrLockCo != ''">
+				LOGIN_FAILR_LOCK_CO = #{loginFailrLockCo},
+			</if>
+			<if test="actvtyAt != null and actvtyAt != ''">
+				ACTVTY_AT = #{actvtyAt},
+			</if>
+			<if test="snsUseAt != null and snsUseAt != ''">
+				SNS_USE_AT = #{snsUseAt},
+			</if>
+			UPDT_DE = NOW()
+		</set>
+	</update>
+	
+</mapper>

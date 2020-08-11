@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="fscms.mods.app.service.AppVersionMapper">
+
+	<sql id="columns">
+		OS_SN			AS osSn,
+		OS				AS os,
+		IOS				AS ios,
+		ANDROID			AS android,
+		REGIST_DT		AS registDt,
+		REGIST_ID		AS registId,
+		UPDT_DT			AS updtDt,
+		UPDT_ID			AS updtId
+	</sql>
+	
+	<sql id="wheres">
+		<where>
+			OS_SN = 1
+		</where>
+	</sql>
+	
+	
+	
+	<select id="selectObj" parameterType="appVersionVO" resultType="appVersionVO">
+		SELECT	<include refid="columns" />
+		FROM	FS_APP_VERSION
+		WHERE OS_SN = 1
+	</select>
+	
+	<update id="updateAppVersionInfo" parameterType="appVersionVO">
+		UPDATE FS_APP_VERSION
+		SET OS			= #{os},
+			IOS			= #{ios},
+			ANDROID		= #{android},
+			UPDT_DT		= NOW(),
+			UPDT_ID		= #{updtId}
+		WHERE OS_SN = 1
+	</update>
+</mapper>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="fscms.mods.mngr.service.MngrMenuAccMapper">
+
+	<sql id="columns">
+		MENU_ACC_SN     AS menuAccSn
+		, MENU_SN       AS menuSn
+		, ROLE_SN       AS roleSn
+		, AUTHOR_REDNG  AS authorRedng
+		, AUTHOR_REGIST AS authorRegist
+	</sql>
+	
+	<sql id="wheres">
+		<where>
+			<if test="menuAccSn != null and menuAccSn != ''">
+				MENU_ACC_SN = #{menuAccSn}
+			</if>
+			
+			<if test="menuSn != null and menuSn != ''">
+				AND MENU_SN = #{menuSn}
+			</if>
+			
+			<if test="roleSn != null and roleSn != ''">
+				AND ROLE_SN = #{roleSn}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="selectObj" resultType="mngrMenuAccVO">
+		SELECT	<include refid="columns" />
+		FROM	FS_MNGR_MENU_ACC
+		<include refid="wheres" />
+	</select>
+	
+	<select id="selectList" parameterType="mngrMenuAccVO" resultType="mngrMenuAccVO">
+		SELECT	<include refid="columns" />
+		FROM	FS_MNGR_MENU_ACC
+		<include refid="wheres" />
+		ORDER BY MENU_ACC_SN ASC
+	</select>
+	
+	<insert id="insertInfo" useGeneratedKeys="true" keyProperty="menuAccSn" parameterType="mngrMenuAccVO">
+		INSERT INTO FS_MNGR_MENU_ACC
+			(MENU_SN, ROLE_SN, AUTHOR_REDNG, AUTHOR_REGIST)
+		VALUES
+			(#{menuSn}, #{roleSn}, #{authorRedng}, #{authorRegist})
+	</insert>
+	
+	<update id="updateInfo" parameterType="mngrMenuAccVO">
+		UPDATE	FS_MNGR_MENU_ACC
+		<set>
+			<if test="authorRedng != null and authorRedng != ''">
+				AUTHOR_REDNG = #{authorRedng},
+			</if>
+			<if test="authorRegist != null and authorRegist != ''">
+				AUTHOR_REGIST = #{authorRegist}
+			</if>
+		</set>
+		WHERE MENU_ACC_SN = #{menuAccSn}
+	</update>
+	
+	<delete id="deleteInfo" parameterType="mngrMenuAccVO">
+		DELETE FROM FS_MNGR_MENU_ACC
+		WHERE MENU_ACC_SN = #{menuAccSn}
+	</delete>
+	
+</mapper>

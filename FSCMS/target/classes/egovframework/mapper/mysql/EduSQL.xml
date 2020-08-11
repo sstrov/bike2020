@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="fscms.mods.edu.service.EduMapper">
+
+	<sql id="columns">
+		EDU_SN                      AS eduSn,
+		EDU_HOST                    AS eduHost,
+		EDU_NM                      AS eduNm,
+		EDU_TARGET                  AS eduTarget,
+		EDU_DAY                     AS eduDay,
+		EDU_PLACE                   AS eduPlace,
+		EDU_TEL                     AS eduTel,
+		REGIST_DE                   AS registDe,
+		REGIST_ID                   AS registId,
+		UPDT_DE                     AS updtDe
+	</sql>
+	
+	<sql id="wheres">
+		<where>
+			<if test="eduSn != null and eduSn != ''">
+				EDU_SN = #{eduSn}
+			</if>
+		</where>
+	</sql>
+	
+	<sql id="searchWheres">
+		<where>
+			<if test="sw != null and sw != ''">
+				<choose>
+					<when test="sc != null and sc != ''">
+						${sc} LIKE '%'||#{sw}||'%'
+					</when>
+					<otherwise>
+						(
+							EDU_NM LIKE CONCAT('%', #{sw}, '%')
+						)
+					</otherwise>
+				</choose>
+			</if>
+			
+			<if test="sc_wDateS != null and sc_wDateS != ''">
+				AND DATE_FORMAT(REGIST_DE, '%Y-%m-%d') <![CDATA[>=]]> #{sc_wDateS}
+			</if>
+			<if test="sc_wDateE != null and sc_wDateE != ''">
+				AND DATE_FORMAT(REGIST_DE, '%Y-%m-%d') <![CDATA[<=]]> #{sc_wDateE}
+			</if>
+			
+		</where>
+	</sql>
+	
+	<select id="selectObj" parameterType="eduVO" resultType="eduVO">
+		SELECT	<include refid="columns" />
+		FROM	FS_EDU
+		<include refid="wheres" />
+	</select>
+	
+	<select id="selectList" parameterType="eduVO" resultType="eduVO">
+		SELECT	<include refid="columns" />
+		FROM	FS_EDU
+		<include refid="wheres" />
+		ORDER BY EDU_HOST ASC
+	</select>
+	
+	<select id="selectTCount" parameterType="eduSearchVO" resultType="int">
+		SELECT	COUNT(EDU_SN)
+		FROM	FS_EDU
+		<include refid="searchWheres" />
+	</select>
+	
+	<select id="selectPageList" parameterType="eduSearchVO" resultType="eduVO">
+		SELECT	<include refid="columns" />
+		FROM	FS_EDU
+		<include refid="searchWheres" />
+		
+		<choose>
+			<when test="orderBy != null and orderBy != ''">
+				ORDER BY ${orderBy}
+			</when>
+			<otherwise>
+				ORDER BY HOST_ORDR ASC
+			</otherwise>
+		</choose>
+		
+		LIMIT #{firstIndex}, #{recordCountPerPage}
+	</select>
+	
+	<insert id="insertInfo" useGeneratedKeys="true" keyProperty="eduSn" parameterType="eduVO">
+		INSERT INTO FS_EDU
+			(EDU_HOST, EDU_NM, EDU_TARGET, EDU_DAY,
+			EDU_PLACE, EDU_TEL, REGIST_ID, REGIST_DE, UPDT_DE, HOST_ORDR)
+		VALUES
+			(#{eduHost, jdbcType=VARCHAR}, #{eduNm, jdbcType=VARCHAR}, #{eduTarget}, #{eduDay},
+			#{eduPlace}, #{eduTel}, #{registId}, NOW(), NOW(), #{hostOrdr})
+	</insert>
+	
+	<update id="updateInfo" parameterType="eduVO">
+		UPDATE	FS_EDU
+		<set>
+			<if test="eduHost != null and eduHost != ''">
+				EDU_HOST = #{eduHost},
+			</if>
+			<if test="eduNm != null and eduNm != ''">
+				EDU_NM = #{eduNm, jdbcType=VARCHAR},
+			</if>
+			<if test="eduTarget != null and eduTarget !=''">
+				EDU_TARGET = #{eduTarget},
+			</if>
+			<if test="eduDay != null and eduDay != ''">
+				EDU_DAY = #{eduDay, jdbcType=VARCHAR},
+			</if>
+			<if test="eduPlace != null and eduPlace != ''">
+				EDU_PLACE = #{eduPlace, jdbcType=VARCHAR},
+			</if>
+			<if test="eduTel != null and eduTel != ''">
+				EDU_TEL = #{eduTel, jdbcType=VARCHAR},
+			</if>
+			<if test="hostOrdr != null and hostOrdr != ''">
+				HOST_ORDR = #{hostOrdr, jdbcType=VARCHAR},
+			</if>
+			UPDT_DE = NOW()
+		</set>
+		WHERE	EDU_SN = #{eduSn}
+	</update>
+	
+	<delete id="deleteInfo" parameterType="eduVO">
+		DELETE FROM FS_EDU
+		WHERE EDU_SN = #{eduSn}
+	</delete>
+	
+</mapper>

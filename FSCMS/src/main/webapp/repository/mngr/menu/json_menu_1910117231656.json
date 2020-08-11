@@ -1,0 +1,12 @@
+{
+	"accKey" : "null",
+	"fKey"   : "1910117230564",
+	"pKey"   : "1910117230564",
+	"menuG"  : "2",
+	"nm"     : "데이터 변경 이력",
+	"page"   : "1",
+	"target" : "_self",
+	"actAt"  : "Y",
+	"useAt"  : "Y",
+	"link"   : "/adm/data/chghst/list.do?key=1910117231656"
+}

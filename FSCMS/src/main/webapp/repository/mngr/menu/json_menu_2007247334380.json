@@ -1,0 +1,12 @@
+{
+	"accKey" : "null",
+	"fKey"   : "1910117195936",
+	"pKey"   : "1910117195936",
+	"menuG"  : "2",
+	"nm"     : "수첩인증관리",
+	"page"   : "1",
+	"target" : "_self",
+	"actAt"  : "Y",
+	"useAt"  : "Y",
+	"link"   : "/adm/auth/list.do?key=2007247334380"
+}

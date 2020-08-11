@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="fscms.mods.user.service.UserMapper">
+
+	<sql id="columns">
+		USER_SN                  AS userSn
+		, ROLE_SN                AS roleSn
+		, USER_ID                AS userId
+		, USER_PW                AS userPw
+		, USER_NM                AS userNm
+		, USER_TELNO             AS userTelno
+		, USER_MBTLNUM           AS userMbtlnum
+		, USER_MBTLNUM_RECPTN_AT AS userMbtlnumRecptnAt
+		, USER_EMAIL             AS userEmail
+		, USER_EMAIL_RECPTN_AT   AS userEmailRecptnAt
+		, USER_ZIP               AS userZip
+		, USER_ADRES_BASS        AS userAdresBass
+		, USER_ADRES_DETAIL      AS userAdresDetail
+		, USER_RM                AS userRm
+		, USER_SALT              AS userSalt
+		, USER_STTUS             AS userSttus
+		, LOGIN_DE               AS loginDe
+		, LOCK_CO                AS lockCo
+		, LOCK_DE                AS lockDe
+		, VIRTL_SN               AS virtlSn
+		, REGIST_DE              AS registDe
+		, UPDT_DE                AS updtDe
+		
+		, NICK_NM                AS nickNm
+		, NOTE_SN                AS noteSn
+		, HINT                   AS hint
+		, HINT_ANSWER            AS hintAnswer
+		, EXPIRE_DE              AS expireDe
+		, DROP_REASON            AS dropReason
+	</sql>
+	
+	<sql id="wheres">
+		<where>
+			<if test="userSn != null and userSn != ''">
+				USER_SN = #{userSn}
+			</if>
+			<if test="userId != null and userId != ''">
+				AND USER_ID = #{userId}
+			</if>
+		</where>
+	</sql>
+	
+	<sql id="searchWheres">
+		<where>
+			<if test="sw_entry != null and sw_entry != ''">
+				(
+					<choose>
+						<when test="sc != null and sc != ''">
+							${sc} = #{sw_entry}
+						</when>
+						<otherwise>
+							(
+								USER_ID    = #{sw_entry}
+								OR USER_NM = #{sw_entry}
+							)
+						</otherwise>
+					</choose>
+				) OR (
+					<choose>
+						<when test="sc != null and sc != ''">
+							${sc} LIKE CONCAT('%', #{sw}, '%')
+						</when>
+						<otherwise>
+							(
+								USER_ID    LIKE CONCAT('%', #{sw}, '%')
+								OR USER_NM LIKE CONCAT('%', #{sw}, '%')
+							)
+						</otherwise>
+					</choose>
+				)
+			</if>
+			
+			<if test="userSttus != null and userSttus != ''">
+				<choose>
+					<when test="userSttus == 0">
+						AND USER_STTUS in ('2' , '3')
+					</when>
+					<otherwise>
+						AND USER_STTUS = #{userSttus}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="sc_push != null and sc_push != ''">
+				<choose>
+					<when test='sc_push == "sms"'>
+						AND USER_MBTLNUM_RECPTN_AT = 'Y'
+					</when>
+					<when test='sc_push == "mail"'>
+						AND USER_EMAIL_RECPTN_AT = 'Y'
+					</when>
+					<otherwise>
+						AND (USER_MBTLNUM_RECPTN_AT = 'Y' OR USER_EMAIL_RECPTN_AT = 'Y')
+					</otherwise>
+				</choose>
+			</if>
+			
+			<if test="sc_wDateS != null and sc_wDateS != ''">
+				AND DATE_FORMAT(REGIST_DE, '%Y-%m-%d') <![CDATA[>=]]> #{sc_wDateS}
+			</if>
+			<if test="sc_wDateE != null and sc_wDateE != ''">
+				AND DATE_FORMAT(REGIST_DE, '%Y-%m-%d') <![CDATA[<=]]> #{sc_wDateE}
+			</if>
+			<if test='sc_expire != null and sc_expire != "" and sc_expire == "Y"'>	
+				AND DATE_FORMAT(EXPIRE_DE, '%Y-%m-%d') <![CDATA[>=]]> DATE_FORMAT(DATE_ADD(now(), INTERVAL -1 MONTH), '%Y-%m-%d')
+				AND DATE_FORMAT(EXPIRE_DE, '%Y-%m-%d') <![CDATA[<=]]> DATE_FORMAT(now(), '%Y-%m-%d')
+			</if>
+		</where>
+	</sql>
+	
+	<select id="selectObj" parameterType="userVO" resultType="userVO">
+		SELECT	<include refid="columns" />
+		FROM	FS_USER
+		<include refid="wheres" />
+	</select>
+	
+	<select id="selectTCount" parameterType="userSearchVO" resultType="int">
+		SELECT	COUNT(USER_SN)
+		FROM	FS_USER
+		<include refid="searchWheres" />
+	</select>
+	
+	<select id="selectPageList" parameterType="userSearchVO" resultType="userVO">
+		SELECT	<include refid="columns" />
+		FROM	FS_USER
+		<include refid="searchWheres" />
+		
+		<choose>
+			<when test="orderBy != null and orderBy != ''">
+				ORDER BY ${orderBy}
+			</when>
+			<otherwise>
+				ORDER BY REGIST_DE DESC
+			</otherwise>
+		</choose>
+		
+		LIMIT #{firstIndex}, #{recordCountPerPage}
+	</select>
+	
+	<insert id="insertInfo" useGeneratedKeys="true" keyProperty="userSn" parameterType="userVO">
+		INSERT INTO FS_USER
+			(ROLE_SN, USER_ID, USER_PW, USER_NM,
+			USER_TELNO, USER_MBTLNUM, USER_MBTLNUM_RECPTN_AT, USER_EMAIL,
+			USER_EMAIL_RECPTN_AT, USER_ZIP, USER_ADRES_BASS, USER_ADRES_DETAIL,
+			USER_RM, USER_SALT, USER_STTUS, VIRTL_SN,
+			REGIST_DE, UPDT_DE, NICK_NM, NOTE_SN, HINT, HINT_ANSWER, EXPIRE_DE
+			<if test="userMbtlnumRecptnAt != null and userMbtlnumRecptnAt != '' and userEmailRecptnAt != null and userEmailRecptnAt != ''">
+				<if test='userMbtlnumRecptnAt == "Y" or userEmailRecptnAt =="Y"'>
+					,AGREE_DE
+				</if>
+			</if>
+			)
+		VALUES
+			(#{roleSn}, #{userId}, #{userPw, jdbcType=VARCHAR}, #{userNm},
+			#{userTelno, jdbcType=VARCHAR}, #{userMbtlnum, jdbcType=VARCHAR}, #{userMbtlnumRecptnAt, jdbcType=VARCHAR}, #{userEmail, jdbcType=VARCHAR},
+			#{userEmailRecptnAt, jdbcType=VARCHAR}, #{userZip, jdbcType=VARCHAR}, #{userAdresBass, jdbcType=VARCHAR}, #{userAdresDetail, jdbcType=VARCHAR},
+			#{userRm, jdbcType=VARCHAR}, #{userSalt, jdbcType=VARCHAR}, #{userSttus}, #{virtlSn, jdbcType=VARCHAR},
+			NOW(), NOW(), #{nickNm}, #{noteSn}, #{hint}, #{hintAnswer}, DATE_ADD(now(), INTERVAL 24 MONTH)
+			<if test="userMbtlnumRecptnAt != null and userMbtlnumRecptnAt != '' and userEmailRecptnAt != null and userEmailRecptnAt != ''">
+				<if test='userMbtlnumRecptnAt == "Y" or userEmailRecptnAt =="Y"'>
+					,NOW()
+				</if>
+			</if>
+			)
+	</insert>
+	
+	<update id="updateInfo" parameterType="userVO">
+		UPDATE	FS_USER
+		<set>
+			<if test="roleSn != null and roleSn != ''">
+				ROLE_SN = #{roleSn},
+			</if>
+			<if test="userPw != null and userPw != ''">
+				USER_PW = #{userPw},
+			</if>
+			<if test="userNm != null and userNm != ''">
+				USER_NM = #{userNm},
+			</if>
+			<if test="userTelno != null">
+				USER_TELNO = #{userTelno, jdbcType=VARCHAR},
+			</if>
+			<if test="userMbtlnum != null">
+				USER_MBTLNUM = #{userMbtlnum, jdbcType=VARCHAR},
+			</if>
+			<if test="userMbtlnumRecptnAt != null">
+				USER_MBTLNUM_RECPTN_AT = #{userMbtlnumRecptnAt, jdbcType=VARCHAR},
+				<if test='userMbtlnumRecptnAt == "Y"'>
+					AGREE_DE = NOW(),
+				</if>
+			</if>
+			<if test="userEmail != null">
+				USER_EMAIL = #{userEmail, jdbcType=VARCHAR},
+			</if>
+			<if test="userEmailRecptnAt != null">
+				USER_EMAIL_RECPTN_AT = #{userEmailRecptnAt, jdbcType=VARCHAR},
+				<if test='userEmailRecptnAt == "Y"'>
+					AGREE_DE = NOW(),
+				</if>
+			</if>
+			<if test="userZip != null">
+				USER_ZIP = #{userZip, jdbcType=VARCHAR},
+			</if>
+			<if test="userAdresBass != null">
+				USER_ADRES_BASS = #{userAdresBass, jdbcType=VARCHAR},
+			</if>
+			<if test="userAdresDetail != null">
+				USER_ADRES_DETAIL = #{userAdresDetail, jdbcType=VARCHAR},
+			</if>
+			<if test="userRm != null">
+				USER_RM = #{userRm, jdbcType=VARCHAR},
+			</if>
+			<if test="loginDe != null and loginDe != ''">
+				LOGIN_DE = NOW(),
+			</if>
+			<if test="lockCo != null">
+				LOCK_CO = #{lockCo},
+			</if>
+			<if test="lockDe != null and lockDe != ''">
+				<choose>
+					<when test="lockDe == 'Y'.toString()">
+						LOCK_DE = NOW(),
+					</when>
+					<otherwise>
+						LOCK_DE = NULL,
+					</otherwise>
+				</choose>
+			</if>
+			<if test="userSttus != null and userSttus != ''">
+				USER_STTUS = #{userSttus},
+			</if>
+			
+			<if test="nickNm != null and nickNm != ''">
+				NICK_NM = #{nickNm},
+			</if>
+			<if test="noteSn != null and noteSn != ''">
+				NOTE_SN = #{noteSn},
+			</if>
+			<if test="hint != null and hint != ''">
+				HINT = #{hint},
+			</if>
+			<if test="hintAnswer != null and hintAnswer != ''">
+				HINT_ANSWER = #{hintAnswer},
+			</if>
+			<if test="expireDe != null and expireDe != ''">
+				EXPIRE_DE = #{expireDe},
+			</if>
+			<if test="dropReason != null and dropReason != ''">
+				DROP_REASON = #{expireDe},
+			</if>
+			
+			UPDT_DE = NOW()
+		</set>
+		WHERE	USER_SN = #{userSn}
+	</update>
+	
+	<delete id="deleteInfo" parameterType="userVO">
+		DELETE FROM FS_USER
+		WHERE USER_SN = #{userSn}
+	</delete>
+	
+	<update id="deleteNote" parameterType="userVO">
+		UPDATE FS_USER
+		SET NOTE_SN = #{noteSn}
+		WHERE USER_SN = #{userSn}
+	</update>
+	
+</mapper>

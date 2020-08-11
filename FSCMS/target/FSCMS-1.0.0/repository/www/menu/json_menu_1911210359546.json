@@ -1,0 +1,19 @@
+{
+	"accKey"   : "null",
+	"fKey"     : "1910168794317",
+	"fNm"      : "시각화서비스",
+	"pKey"     : "1910168794317",
+	"pNm"      : "시각화서비스",
+	"menuG"    : "2",
+	"nm"       : "조사자료 통계",
+	"page"     : "1",
+	"target"   : "_self",
+	"tag"      : "",
+	"class"    : "",
+	"fileImage": "null",
+	"filePath" : "null",
+	"actAt"    : "Y",
+	"useAt"    : "Y",
+	"link"     : "/stats/examin/form.do?key=1911210359546?ty=2",
+	"subImg"   : ""
+}

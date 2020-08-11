@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+
+	<typeAliases>
+		<typeAlias alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap" />
+		
+		<typeAlias alias="atchmnflVO"                  type="fscms.mods.atchmnfl.vo.AtchmnflVO"/>
+		<typeAlias alias="atchmnflManageVO"            type="fscms.mods.atchmnfl.vo.AtchmnflManageVO"/>
+        <typeAlias alias="atchmnflManageSearchVO"      type="fscms.mods.atchmnfl.vo.AtchmnflManageSearchVO"/>
+		
+		<typeAlias alias="bannerVO"                    type="fscms.mods.banner.vo.BannerVO"/>
+		<typeAlias alias="bannerSearchVO"              type="fscms.mods.banner.vo.BannerSearchVO"/>
+		<typeAlias alias="bannerEstbsVO"               type="fscms.mods.banner.vo.BannerEstbsVO"/>
+		<typeAlias alias="bannerEstbsSearchVO"         type="fscms.mods.banner.vo.BannerEstbsSearchVO"/>
+		
+		<typeAlias alias="bbsCtgryVO"                  type="fscms.mods.bbs.vo.BbsCtgryVO"/>
+		<typeAlias alias="bbsCtgrySubVO"               type="fscms.mods.bbs.vo.BbsCtgrySubVO"/>
+		<typeAlias alias="bbsCmVO"                     type="fscms.mods.bbs.vo.BbsCmVO"/>
+		<typeAlias alias="bbsCmSearchVO"               type="fscms.mods.bbs.vo.BbsCmSearchVO"/>
+		<typeAlias alias="bbsEstbsVO"                  type="fscms.mods.bbs.vo.BbsEstbsVO"/>
+		<typeAlias alias="bbsEstbsSearchVO"            type="fscms.mods.bbs.vo.BbsEstbsSearchVO"/>
+		<typeAlias alias="bbsFieldVO"                  type="fscms.mods.bbs.vo.BbsFieldVO"/>
+		<typeAlias alias="bbsRoleVO"                   type="fscms.mods.bbs.vo.BbsRoleVO"/>
+		<typeAlias alias="bbsSknVO"                    type="fscms.mods.bbs.vo.BbsSknVO"/>
+		<typeAlias alias="bbsThumbVO"                  type="fscms.mods.bbs.vo.BbsThumbVO"/>
+		<typeAlias alias="bbsVO"                       type="fscms.mods.bbs.vo.BbsVO"/>
+		<typeAlias alias="bbsSearchVO"                 type="fscms.mods.bbs.vo.BbsSearchVO"/>
+		
+		<typeAlias alias="cntntsChghstVO"              type="fscms.mods.cntnts.vo.CntntsChghstVO"/>
+		<typeAlias alias="cntntsChghstSearchVO"        type="fscms.mods.cntnts.vo.CntntsChghstSearchVO"/>
+		<typeAlias alias="conectrStatsVO"              type="fscms.mods.conectr.vo.ConectrStatsVO"/>
+		<typeAlias alias="conectrStatsSearchVO"        type="fscms.mods.conectr.vo.ConectrStatsSearchVO"/>
+		<typeAlias alias="conectrStatsMenuVO"          type="fscms.mods.conectr.vo.ConectrStatsMenuVO"/>
+		<typeAlias alias="conectrStatsMenuSearchVO"    type="fscms.mods.conectr.vo.ConectrStatsMenuSearchVO"/>
+		
+		<typeAlias alias="codeVO"                      type="fscms.mods.code.vo.CodeVO"/>
+		<typeAlias alias="codeSearchVO"                type="fscms.mods.code.vo.CodeSearchVO"/>
+		<typeAlias alias="codeClVO"                    type="fscms.mods.code.vo.CodeClVO"/>
+		<typeAlias alias="codeClSearchVO"              type="fscms.mods.code.vo.CodeClSearchVO"/>
+		<typeAlias alias="codeDetailVO"                type="fscms.mods.code.vo.CodeDetailVO"/>
+		
+		<typeAlias alias="dataChghstVO"                type="fscms.mods.data.vo.DataChghstVO"/>
+		<typeAlias alias="dataChghstSearchVO"          type="fscms.mods.data.vo.DataChghstSearchVO"/>
+		
+		<typeAlias alias="errorHistVO"                 type="fscms.mods.error.vo.ErrorHistVO"/>
+		<typeAlias alias="errorHistSearchVO"           type="fscms.mods.error.vo.ErrorHistSearchVO"/>
+		
+		<typeAlias alias="indvdlinfoAccesHistVO"       type="fscms.mods.indvdlinfo.vo.IndvdlinfoAccesHistVO"/>
+		<typeAlias alias="indvdlinfoAccesHistSearchVO" type="fscms.mods.indvdlinfo.vo.IndvdlinfoAccesHistSearchVO"/>
+		
+		<typeAlias alias="mngrVO"                      type="fscms.mods.mngr.vo.MngrVO"/>
+		<typeAlias alias="mngrSearchVO"                type="fscms.mods.mngr.vo.MngrSearchVO"/>
+		<typeAlias alias="mngrEstbsVO"                 type="fscms.mods.mngr.vo.MngrEstbsVO"/>
+		<typeAlias alias="mngrIpEstbsVO"               type="fscms.mods.mngr.vo.MngrIpEstbsVO"/>
+		<typeAlias alias="mngrLoginHistVO"             type="fscms.mods.mngr.vo.MngrLoginHistVO"/>
+		<typeAlias alias="mngrLoginHistSearchVO"       type="fscms.mods.mngr.vo.MngrLoginHistSearchVO"/>
+		<typeAlias alias="mngrMenuVO"                  type="fscms.mods.mngr.vo.MngrMenuVO"/>
+		<typeAlias alias="mngrMenuAccVO"               type="fscms.mods.mngr.vo.MngrMenuAccVO"/>
+		<typeAlias alias="mngrRoleVO"                  type="fscms.mods.mngr.vo.MngrRoleVO"/>
+		<typeAlias alias="mngrRoleSearchVO"            type="fscms.mods.mngr.vo.MngrRoleSearchVO"/>
+		
+		<typeAlias alias="popupVO"                     type="fscms.mods.popup.vo.PopupVO"/>
+		<typeAlias alias="popupSearchVO"               type="fscms.mods.popup.vo.PopupSearchVO"/>
+		
+		<typeAlias alias="siteVO"                      type="fscms.mods.site.vo.SiteVO"/>
+		
+		<typeAlias alias="userVO"                      type="fscms.mods.user.vo.UserVO"/>
+		<typeAlias alias="userSearchVO"                type="fscms.mods.user.vo.UserSearchVO"/>
+		<typeAlias alias="userMenuVO"                  type="fscms.mods.user.vo.UserMenuVO"/>
+		<typeAlias alias="userMenuAccVO"               type="fscms.mods.user.vo.UserMenuAccVO"/>
+		<typeAlias alias="userRoleVO"                  type="fscms.mods.user.vo.UserRoleVO"/>
+		<typeAlias alias="userRoleSearchVO"            type="fscms.mods.user.vo.UserRoleSearchVO"/>
+		
+		<typeAlias alias="appVersionVO"                type="fscms.mods.app.vo.AppVersionVO"/>
+		
+		<typeAlias alias="userLoginHistVO"             type="fscms.mods.user.vo.UserLoginHistVO"/>
+		<typeAlias alias="userLoginHistSearchVO"       type="fscms.mods.user.vo.UserLoginHistSearchVO"/>
+		
+		<typeAlias alias="contestVO"                   type="fscms.mods.contest.vo.ContestVO"/>
+		<typeAlias alias="contestSearchVO"             type="fscms.mods.contest.vo.ContestSearchVO"/>
+		<typeAlias alias="contestEstbsVO"              type="fscms.mods.contest.vo.ContestEstbsVO"/>
+		<typeAlias alias="contestEstbsSearchVO"        type="fscms.mods.contest.vo.ContestEstbsSearchVO"/>
+		
+		<typeAlias alias="authUploadVO"                type="fscms.mods.auth.vo.AuthUploadVO"/>
+		<typeAlias alias="authUploadSearchVO"          type="fscms.mods.auth.vo.AuthUploadSearchVO"/>
+		
+		<typeAlias alias="authNoteVO"                  type="fscms.mods.auth.vo.AuthNoteVO"/>
+		<typeAlias alias="authNoteSearchVO"            type="fscms.mods.auth.vo.AuthNoteSearchVO"/>
+		
+		<typeAlias alias="roadVO"                      type="fscms.mods.road.vo.RoadVO"/>
+		
+		<typeAlias alias="pushVO"                      type="fscms.mods.push.vo.PushVO"/>
+		<typeAlias alias="pushsearchVO"                type="fscms.mods.push.vo.PushSearchVO"/>
+		
+		<typeAlias alias="eduVO"                      type="fscms.mods.edu.vo.EduVO"/>
+		<typeAlias alias="eduSearchVO"                type="fscms.mods.edu.vo.EduSearchVO"/>
+	</typeAliases>
+
+</configuration>

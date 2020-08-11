@@ -1,0 +1,12 @@
+{
+	"accKey" : "null",
+	"fKey"   : "1910117192310",
+	"pKey"   : "1910117192310",
+	"menuG"  : "2",
+	"nm"     : "교육일정 관리",
+	"page"   : "1",
+	"target" : "_self",
+	"actAt"  : "Y",
+	"useAt"  : "Y",
+	"link"   : "/adm/edu/list.do?key=2008035037595"
+}

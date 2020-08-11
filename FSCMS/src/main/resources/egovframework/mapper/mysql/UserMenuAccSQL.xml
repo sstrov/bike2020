@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="fscms.mods.user.service.UserMenuAccMapper">
+
+	<sql id="columns">
+		MENU_ACC_SN AS menuAccSn
+		, MENU_SN   AS menuSn
+		, ROLE_SN   AS roleSn
+	</sql>
+	
+	<sql id="wheres">
+		<where>
+			<if test="menuAccSn != null and menuAccSn != ''">
+				MENU_ACC_SN = #{menuAccSn}
+			</if>
+			
+			<if test="menuSn != null and menuSn != ''">
+				AND MENU_SN = #{menuSn}
+			</if>
+			
+			<if test="roleSn != null and roleSn != ''">
+				AND ROLE_SN = #{roleSn}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="selectObj" resultType="userMenuAccVO">
+		SELECT	<include refid="columns" />
+		FROM	FS_USER_MENU_ACC
+		<include refid="wheres" />
+	</select>
+	
+	<select id="selectList" parameterType="userMenuAccVO" resultType="userMenuAccVO">
+		SELECT	<include refid="columns" />
+		FROM	FS_USER_MENU_ACC
+		<include refid="wheres" />
+		ORDER BY MENU_ACC_SN ASC
+	</select>
+	
+	<insert id="insertInfo" useGeneratedKeys="true" keyProperty="menuAccSn" parameterType="userMenuAccVO">
+		INSERT INTO FS_USER_MENU_ACC
+			(MENU_SN, ROLE_SN)
+		VALUES
+			(#{menuSn}, #{roleSn})
+	</insert>
+	
+	<delete id="deleteInfo" parameterType="userMenuAccVO">
+		DELETE FROM FS_USER_MENU_ACC
+		WHERE MENU_ACC_SN = #{menuAccSn}
+	</delete>
+	
+</mapper>

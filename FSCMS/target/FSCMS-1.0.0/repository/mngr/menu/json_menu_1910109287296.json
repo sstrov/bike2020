@@ -1,0 +1,12 @@
+{
+	"accKey" : "null",
+	"fKey"   : "1910072181253",
+	"pKey"   : "1910109286303",
+	"menuG"  : "3",
+	"nm"     : "세부코드 관리",
+	"page"   : "1",
+	"target" : "_self",
+	"actAt"  : "Y",
+	"useAt"  : "Y",
+	"link"   : "/adm/code/list.do?key=1910109287296"
+}

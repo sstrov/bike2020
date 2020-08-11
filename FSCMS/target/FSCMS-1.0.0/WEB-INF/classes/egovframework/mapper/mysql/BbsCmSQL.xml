@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="fscms.mods.bbs.service.BbsCmMapper">
+
+	<sql id="columns">
+		BBS_CM_SN                       AS bbsCmSn
+		, BBS_SN                        AS bbsSn
+		, USER_ID                       AS userId
+		, MNGR_ID                       AS mngrId
+		, BBS_CM_BEST_SN                AS bbsCmBestSn
+		, BBS_CM_UPPER_SN               AS bbsCmUpperSn
+		, BBS_CM_ORDR                   AS bbsCmOrdr
+		, BBS_CM_DP                     AS bbsCmDp
+		, CONVERT(BBS_CM_CN USING utf8) AS bbsCmCn 
+		, REGISTER_NM                   AS registerNm
+		, REGIST_PW                     AS registPw
+		, ANSWER_CO                     AS answerCo
+		, DELETE_AT                     AS deleteAt
+		, REGIST_DE                     AS registDe
+		, REGIST_IP                     AS registIp
+		, UPDT_DE                       AS updtDe
+		, UPDT_IP                       AS updtIp
+	</sql>
+	
+	<sql id="wheres">
+		<where>
+			<if test="bbsCmSn != null and bbsCmSn != ''">
+				BBS_CM_SN = #{bbsCmSn}
+			</if>
+			
+			<if test="bbsSn != null and bbsSn != ''">
+				AND BBS_SN = #{bbsSn}
+			</if>
+			
+			<if test="bbsCmBestSn != null and bbsCmBestSn != ''">
+				AND BBS_CM_BEST_SN = #{bbsCmBestSn}
+			</if>
+			
+			<if test="bbsCmUpperSn != null and bbsCmUpperSn != ''">
+				AND BBS_CM_UPPER_SN = #{bbsCmUpperSn}
+			</if>
+			
+			<if test="bbsCmOrdr != null and bbsCmOrdr != ''">
+				AND BBS_CM_ORDR = #{bbsCmOrdr}
+			</if>
+			
+			<if test="bbsCmDp != null and bbsCmDp != ''">
+				AND BBS_CM_DP = #{bbsCmDp}
+			</if>
+			
+			<if test="deleteAt != null and deleteAt != ''">
+				AND DELETE_AT = #{deleteAt}
+			</if>
+		</where>
+	</sql>
+	
+	<sql id="searchWheres">
+		<where>
+			<if test="sw_entry != null and sw_entry != ''">
+				(
+					<choose>
+						<when test="sc != null and sc != ''">
+							<choose>
+								<when test="sc == 'USER_ID'.toString()">
+									(
+										USER_ID        = #{sw_entry}
+										OR MNGR_ID     = #{sw_entry}
+									)
+								</when>
+								<otherwise>
+									${sc} = #{sw_entry}
+								</otherwise>
+							</choose>
+						</when>
+						<otherwise>
+							(
+								USER_ID      = #{sw_entry}
+								OR MNGR_ID   = #{sw_entry}
+							)
+						</otherwise>
+					</choose>
+				) OR (
+					<choose>
+						<when test="sc != null and sc != ''">
+							${sc} LIKE CONCAT('%', #{sw}, '%')
+						</when>
+						<otherwise>
+							(
+								BBS_CM_CN      LIKE CONCAT('%', #{sw}, '%')
+								OR REGISTER_NM LIKE CONCAT('%', #{sw}, '%')
+							)
+						</otherwise>
+					</choose>
+				)
+			</if>
+			
+			<if test="bbsSn != null and bbsSn != ''">
+				AND BBS_SN = #{bbsSn}
+			</if>
+			
+			<if test="bbsCmBestSn != null and bbsCmBestSn != ''">
+				AND BBS_CM_BEST_SN = #{bbsCmBestSn}
+			</if>
+			
+			<if test="bbsCmUpperSn != null and bbsCmUpperSn != ''">
+				AND BBS_CM_UPPER_SN = #{bbsCmUpperSn}
+			</if>
+			
+			<if test="bbsCmOrdr != null and bbsCmOrdr != ''">
+				AND BBS_CM_ORDR = #{bbsCmOrdr}
+			</if>
+			
+			<if test="bbsCmDp != null and bbsCmDp != ''">
+				AND BBS_CM_DP = #{bbsCmDp}
+			</if>
+			
+			<if test="deleteAt != null and deleteAt != ''">
+				AND DELETE_AT = #{deleteAt}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="selectObj" parameterType="bbsCmVO" resultType="bbsCmVO">
+		SELECT	<include refid="columns" />
+		FROM	FS_BBS_CM
+		<include refid="wheres" />
+	</select>
+	
+	<select id="selectList" parameterType="bbsCmSearchVO" resultType="bbsCmVO">
+		SELECT	<include refid="columns" />
+				, (SELECT DELETE_AT FROM FS_BBS_CM B WHERE B.BBS_SN = FS_BBS_CM.BBS_CM_BEST_SN) AS upperDeleteAt
+		FROM	FS_BBS_CM
+		<include refid="wheres" />
+		
+		<choose>
+			<when test="orderBy != null and orderBy != ''">
+				ORDER BY ${orderBy}
+			</when>
+			<otherwise>
+				ORDER BY BBS_CM_BEST_SN DESC, BBS_CM_ORDR ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="selectTCount" parameterType="bbsCmSearchVO" resultType="int">
+		SELECT	COUNT(BBS_CM_SN)
+		FROM	FS_BBS_CM
+		<include refid="searchWheres" />
+	</select>
+	
+	<select id="selectPageList" parameterType="bbsCmSearchVO" resultType="bbsCmVO">
+		SELECT	<include refid="columns" />
+				, (SELECT DELETE_AT FROM FS_BBS_CM B WHERE B.BBS_SN = FS_BBS_CM.BBS_CM_BEST_SN) AS upperDeleteAt
+		FROM	FS_BBS_CM
+		<include refid="searchWheres" />
+		
+		<choose>
+			<when test="orderBy != null and orderBy != ''">
+				ORDER BY ${orderBy}
+			</when>
+			<otherwise>
+				ORDER BY BBS_CM_BEST_SN DESC, BBS_CM_ORDR ASC
+			</otherwise>
+		</choose>
+		
+		LIMIT #{firstIndex}, #{recordCountPerPage}
+	</select>
+	
+	<select id="selectSumCmntCnt" parameterType="bbsCmVO" resultType="int">
+		SELECT	IFNULL(SUM(ANSWER_CO), 0) + COUNT(BBS_CM_SN)
+		FROM	FS_BBS_CM
+		<include refid="wheres" />
+	</select>
+	
+	<insert id="insertInfo" useGeneratedKeys="true" keyProperty="bbsCmSn" parameterType="bbsCmVO">
+		INSERT INTO FS_BBS_CM
+			(BBS_SN, MNGR_ID, BBS_CM_BEST_SN, BBS_CM_UPPER_SN,
+			BBS_CM_ORDR, BBS_CM_DP, BBS_CM_CN, REGISTER_NM,
+			REGIST_PW, ANSWER_CO, DELETE_AT, REGIST_DE,
+			REGIST_IP, UPDT_DE, UPDT_IP)
+		VALUES
+			(#{bbsSn}, #{mngrId, jdbcType=VARCHAR}, #{bbsCmBestSn, jdbcType=INTEGER}, #{bbsCmUpperSn, jdbcType=INTEGER},
+			#{bbsCmOrdr, jdbcType=INTEGER}, #{bbsCmDp, jdbcType=INTEGER}, #{bbsCmCn:BLOB, jdbcType=VARCHAR}, #{registerNm, jdbcType=VARCHAR},
+			#{registPw, jdbcType=VARCHAR}, 0, 'N', NOW(),
+			#{registIp}, NOW(), #{updtIp})
+	</insert>
+	
+	<update id="updateInfo" parameterType="bbsCmVO">
+		UPDATE	FS_BBS_CM
+		<set>
+			<if test="bbsCmBestSn != null and bbsCmBestSn != ''">
+				BBS_CM_BEST_SN = #{bbsCmBestSn, jdbcType=INTEGER},
+			</if>
+			<if test="bbsCmUpperSn != null">
+				BBS_CM_UPPER_SN = #{bbsCmUpperSn, jdbcType=INTEGER},
+			</if>
+			<if test="bbsCmOrdr != null and bbsCmOrdr != ''">
+				BBS_CM_ORDR = #{bbsCmOrdr},
+			</if>
+			<if test="bbsCmDp != null and bbsCmDp != ''">
+				BBS_CM_DP = #{bbsCmDp},
+			</if>
+			<if test="bbsCmCn != null and bbsCmCn != ''">
+				BBS_CM_CN = #{bbsCmCn:BLOB},
+			</if>
+			<if test="registerNm != null and registerNm != ''">
+				REGISTER_NM = #{registerNm},
+			</if>
+			<if test="registPw != null and registPw != ''">
+				REGIST_PW = #{registPw},
+			</if>
+			<if test="answerCo != null">
+				ANSWER_CO = #{answerCo},
+			</if>
+			<if test="deleteAt != null and deleteAt != ''">
+				DELETE_AT = #{deleteAt},
+			</if>
+			<if test="updtIp != null and updtIp != ''">
+				UPDT_DE = #{updtIp},
+			</if>
+			UPDT_DE = NOW()
+		</set>
+		WHERE	BBS_CM_SN = #{bbsCmSn}
+	</update>
+	
+	<update id="updateOrder" parameterType="bbsCmVO">
+		UPDATE	FS_BBS_CM
+		SET		BBS_CM_ORDR = BBS_CM_ORDR + 1
+		WHERE	BBS_CM_BEST_SN = #{bbsCmBestSn}
+				AND BBS_CM_ORDR <![CDATA[>=]]> #{bbsCmOrdr}
+	</update>
+	
+	<delete id="deleteInfo" parameterType="bbsCmVO">
+		DELETE FROM FS_BBS_CM
+		WHERE BBS_CM_SN = #{bbsCmSn}
+	</delete>
+	
+</mapper>

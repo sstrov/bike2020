@@ -1,0 +1,12 @@
+{
+	"accKey" : "null",
+	"fKey"   : "1910072181253",
+	"pKey"   : "1910072181253",
+	"menuG"  : "2",
+	"nm"     : "사이트 정보 관리",
+	"page"   : "1",
+	"target" : "_self",
+	"actAt"  : "Y",
+	"useAt"  : "Y",
+	"link"   : "/adm/site/form.do?key=1910072213465"
+}

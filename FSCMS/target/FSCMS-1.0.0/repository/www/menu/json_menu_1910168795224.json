@@ -1,0 +1,19 @@
+{
+	"accKey"   : "null",
+	"fKey"     : "1910168793914",
+	"fNm"      : "통계데이터",
+	"pKey"     : "1910168793914",
+	"pNm"      : "통계데이터",
+	"menuG"    : "2",
+	"nm"       : "세종통계데이터",
+	"page"     : "1",
+	"target"   : "_self",
+	"tag"      : "",
+	"class"    : "",
+	"fileImage": "null",
+	"filePath" : "null",
+	"actAt"    : "Y",
+	"useAt"    : "Y",
+	"link"     : "/stats/form.do?key=1910168795224",
+	"subImg"   : ""
+}

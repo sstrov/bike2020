@@ -1,0 +1,12 @@
+{
+	"accKey" : "null",
+	"fKey"   : "2006176759357",
+	"pKey"   : "2006176759357",
+	"menuG"  : "2",
+	"nm"     : "DB업로드",
+	"page"   : "1",
+	"target" : "_self",
+	"actAt"  : "Y",
+	"useAt"  : "Y",
+	"link"   : "/adm/auth/upload/list.do?key=2006176762413"
+}

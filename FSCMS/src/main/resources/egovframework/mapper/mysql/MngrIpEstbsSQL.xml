@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="fscms.mods.mngr.service.MngrIpEstbsMapper">
+
+	<sql id="columns">
+		IP_ESTBS_SN   AS ipEstbsSn
+		, IP_ESTBS_TY AS ipEstbsTy
+		, IP_ESTBS_DC AS ipEstbsDc
+		, REGIST_IP   AS registIp
+		, REGIST_DE   AS registDe
+		, UPDT_DE     AS updtDe
+	</sql>
+	
+	<sql id="wheres">
+		<where>
+			<if test="ipEstbsSn != null and ipEstbsSn != ''">
+				IP_ESTBS_SN = #{ipEstbsSn}
+			</if>
+			
+			<if test="keyArr != null and keyArr != ''">
+				AND IP_ESTBS_SN NOT IN
+				<foreach item="item" collection="keyArr" separator="," open="(" close=")">
+					#{item}
+				</foreach>
+			</if>
+		</where>
+	</sql>
+	
+	<select id="selectObj" parameterType="mngrIpEstbsVO" resultType="mngrIpEstbsVO">
+		SELECT	<include refid="columns" />
+		FROM	FS_MNGR_IP_ESTBS
+		<include refid="wheres" />
+	</select>
+	
+	<select id="selectList" parameterType="mngrIpEstbsVO" resultType="mngrIpEstbsVO">
+		SELECT	<include refid="columns" />
+		FROM	FS_MNGR_IP_ESTBS
+		<include refid="wheres" />
+		ORDER BY IP_ESTBS_SN ASC
+	</select>
+	
+	<insert id="insertInfo" useGeneratedKeys="true" keyProperty="ipEstbsSn" parameterType="mngrIpEstbsVO">
+		INSERT INTO FS_MNGR_IP_ESTBS
+			(IP_ESTBS_TY, IP_ESTBS_DC, REGIST_IP, REGIST_DE, UPDT_DE)
+		VALUES
+			(#{ipEstbsTy}, #{ipEstbsDc, jdbcType=VARCHAR}, #{registIp}, NOW(), NOW())
+	</insert>
+	
+	<update id="updateInfo" parameterType="mngrIpEstbsVO">
+		UPDATE	FS_MNGR_IP_ESTBS
+		<set>
+			<if test="ipEstbsDc != null">
+				IP_ESTBS_DC = #{ipEstbsDc, jdbcType=VARCHAR},
+			</if>
+			<if test="registIp != null and registIp != ''">
+				REGIST_IP = #{registIp},
+			</if>
+			UPDT_DE = NOW()
+		</set>
+		WHERE	IP_ESTBS_SN = #{ipEstbsSn}
+	</update>
+	
+	<delete id="deleteInfo" parameterType="mngrIpEstbsVO">
+		DELETE FROM FS_MNGR_IP_ESTBS
+		WHERE IP_ESTBS_SN = #{ipEstbsSn}
+	</delete>
+	
+</mapper>

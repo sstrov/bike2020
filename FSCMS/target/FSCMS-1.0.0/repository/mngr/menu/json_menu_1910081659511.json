@@ -1,0 +1,12 @@
+{
+	"accKey" : "null",
+	"fKey"   : "1910072181253",
+	"pKey"   : "1910081650856",
+	"menuG"  : "3",
+	"nm"     : "관리자 역할 관리",
+	"page"   : "1",
+	"target" : "_self",
+	"actAt"  : "Y",
+	"useAt"  : "Y",
+	"link"   : "/adm/mngr/role/list.do?key=1910081659511"
+}

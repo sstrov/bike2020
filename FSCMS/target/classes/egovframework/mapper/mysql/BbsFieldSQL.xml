@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="fscms.mods.bbs.service.BbsFieldMapper">
+
+	<sql id="columns">
+		BBS_FIELD_SN              AS bbsFieldSn
+		, BBS_ESTBS_SN            AS bbsEstbsSn
+		, BBS_FIELD_CODE          AS bbsFieldCode
+		, BBS_FIELD_NM            AS bbsFieldNm
+		, LIST_ORDR               AS listOrdr
+		, VIEW_ORDR               AS viewOrdr
+		, FIELD_TY                AS fieldTy
+		, FIELD_TY_ACTVTY_AT      AS fieldTyActvty
+		, FIELD_TY_TEXT           AS fieldTyText
+		, FIELD_TY_TEXT_ACTVTY_AT AS fieldTyTextActvty
+		, FIELD_USE_AT            AS fieldUseAt
+		, FIELD_USE_ACTVTY_AT     AS fieldUseActvtyAt
+		, FIELD_ESSNTL_AT         AS fieldEssntlAt
+		, FIELD_ESSNTL_ACTVTY_AT  AS fieldEssntlActvtyAt
+		, FIELD_SEARCH_AT         AS fieldSearchAt
+		, FIELD_SEARCH_ACTVTY_AT  AS fieldSearchActvtyAt
+		, FIELD_LIST_AT           AS fieldListAt
+		, FIELD_LIST_ACTVTY_AT    AS fieldListActvtyAt
+		, FIELD_LIST_SIZE         AS fieldListSize
+		, FIELD_LIST_STYLE        AS fieldListStyle
+		, FIELD_VIEW_AT           AS fieldViewAt
+		, FIELD_VIEW_ACTVTY_AT    AS fieldViewActvtyAt
+	</sql>
+	
+	<sql id="wheres">
+		<where>
+			<if test="bbsFieldSn != null and bbsFieldSn != ''">
+				BBS_FIELD_SN = #{bbsFieldSn}
+			</if>
+			
+			<if test="bbsEstbsSn != null and bbsEstbsSn != ''">
+				AND BBS_ESTBS_SN = #{bbsEstbsSn}
+			</if>
+			
+			<if test="bbsFieldCode != null and bbsFieldCode != ''">
+				AND BBS_FIELD_CODE = #{bbsFieldCode}
+			</if>
+			
+			<if test="fieldUseAt != null and fieldUseAt != ''">
+				AND FIELD_USE_AT = #{fieldUseAt}
+			</if>
+			
+			<if test="fieldSearchAt != null and fieldSearchAt != ''">
+				AND FIELD_SEARCH_AT = #{fieldSearchAt}
+			</if>
+			
+			<if test="fieldListAt != null and fieldListAt != ''">
+				AND FIELD_LIST_AT = #{fieldListAt}
+			</if>
+			
+			<if test="fieldViewAt != null and fieldViewAt != ''">
+				AND FIELD_VIEW_AT = #{fieldViewAt}
+			</if>
+			
+			<if test="sc_keyArr != null and sc_keyArr != ''">
+				AND BBS_FIELD_SN NOT IN
+				<foreach item="item" collection="sc_keyArr" separator="," open="(" close=")">
+					#{item}
+				</foreach>
+			</if>
+		</where>
+	</sql>
+	
+	<select id="selectObj" parameterType="bbsFieldVO" resultType="bbsFieldVO">
+		SELECT	<include refid="columns" />
+		FROM	FS_BBS_FIELD
+		<include refid="wheres" />
+	</select>
+	
+	<select id="selectList" parameterType="bbsFieldVO" resultType="bbsFieldVO">
+		SELECT	<include refid="columns" />
+		FROM	FS_BBS_FIELD
+		<include refid="wheres" />
+		
+		<choose>
+			<when test="orderBy != null and orderBy != ''">
+				ORDER BY ${orderBy}
+			</when>
+			<otherwise>
+				ORDER BY BBS_FIELD_SN ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insertInfo" useGeneratedKeys="true" keyProperty="bbsFieldSn" parameterType="bbsFieldVO">
+		INSERT INTO FS_BBS_FIELD
+			(BBS_ESTBS_SN, BBS_FIELD_CODE, BBS_FIELD_NM, LIST_ORDR,
+			VIEW_ORDR, FIELD_TY, FIELD_TY_ACTVTY_AT, FIELD_TY_TEXT,
+			FIELD_TY_TEXT_ACTVTY_AT, FIELD_USE_AT, FIELD_USE_ACTVTY_AT, FIELD_ESSNTL_AT,
+			FIELD_ESSNTL_ACTVTY_AT, FIELD_SEARCH_AT, FIELD_SEARCH_ACTVTY_AT, FIELD_LIST_AT,
+			FIELD_LIST_ACTVTY_AT, FIELD_LIST_SIZE, FIELD_LIST_STYLE, FIELD_VIEW_AT,
+			FIELD_VIEW_ACTVTY_AT)
+		VALUES
+			(#{bbsEstbsSn}, #{bbsFieldCode}, #{bbsFieldNm}, #{listOrdr},
+			#{viewOrdr}, #{fieldTy}, #{fieldTyActvtyAt}, #{fieldTyText, jdbcType=VARCHAR},
+			#{fieldTyTextActvtyAt}, #{fieldUseAt}, #{fieldUseActvtyAt}, #{fieldEssntlAt},
+			#{fieldEssntlActvtyAt}, #{fieldSearchAt}, #{fieldSearchActvtyAt}, #{fieldListAt},
+			#{fieldListActvtyAt}, #{fieldListSize, jdbcType=INTEGER}, #{fieldListStyle, jdbcType=VARCHAR}, #{fieldViewAt},
+			#{fieldViewActvtyAt})
+	</insert>
+	
+	<update id="updateInfo" parameterType="bbsFieldVO">
+		UPDATE	FS_BBS_FIELD
+		<set>
+			<if test="bbsFieldNm != null and bbsFieldNm != ''">
+				BBS_FIELD_NM = #{bbsFieldNm},
+			</if>
+			<if test="listOrdr != null and listOrdr != ''">
+				LIST_ORDR = #{listOrdr},
+			</if>
+			<if test="viewOrdr != null and viewOrdr != ''">
+				VIEW_ORDR = #{viewOrdr},
+			</if>
+			<if test="fieldTy != null and fieldTy != ''">
+				FIELD_TY = #{fieldTy},
+			</if>
+			<if test="fieldTyActvtyAt != null and fieldTyActvtyAt != ''">
+				FIELD_TY_ACTVTY_AT = #{fieldTyActvtyAt},
+			</if>
+			<if test="fieldTyText != null">
+				FIELD_TY_TEXT = #{fieldTyText, jdbcType=VARCHAR},
+			</if>
+			<if test="fieldTyTextActvtyAt != null and fieldTyTextActvtyAt != ''">
+				FIELD_TY_TEXT_ACTVTY_AT = #{fieldTyTextActvtyAt},
+			</if>
+			<if test="fieldUseAt != null and fieldUseAt != ''">
+				FIELD_USE_AT = #{fieldUseAt},
+			</if>
+			<if test="fieldUseActvtyAt != null and fieldUseActvtyAt != ''">
+				FIELD_USE_ACTVTY_AT = #{fieldUseActvtyAt},
+			</if>
+			<if test="fieldEssntlAt != null and fieldEssntlAt != ''">
+				FIELD_ESSNTL_AT = #{fieldEssntlAt},
+			</if>
+			<if test="fieldEssntlActvtyAt != null and fieldEssntlActvtyAt != ''">
+				FIELD_ESSNTL_ACTVTY_AT = #{fieldEssntlActvtyAt},
+			</if>
+			<if test="fieldSearchAt != null and fieldSearchAt != ''">
+				FIELD_SEARCH_AT = #{fieldSearchAt},
+			</if>
+			<if test="fieldSearchActvtyAt != null and fieldSearchActvtyAt != ''">
+				FIELD_SEARCH_ACTVTY_AT = #{fieldSearchActvtyAt},
+			</if>
+			<if test="fieldListAt != null and fieldListAt != ''">
+				FIELD_LIST_AT = #{fieldListAt},
+			</if>
+			<if test="fieldListActvtyAt != null and fieldListActvtyAt != ''">
+				FIELD_LIST_ACTVTY_AT = #{fieldListActvtyAt},
+			</if>
+			<if test="fieldListSize != null">
+				FIELD_LIST_SIZE = #{fieldListSize, jdbcType=INTEGER},
+			</if>
+			<if test="fieldListStyle != null">
+				FIELD_LIST_STYLE = #{fieldListStyle, jdbcType=VARCHAR},
+			</if>
+			<if test="fieldViewAt != null and fieldViewAt != ''">
+				FIELD_VIEW_AT = #{fieldViewAt},
+			</if>
+			<if test="fieldViewActvtyAt != null and fieldViewActvtyAt != ''">
+				FIELD_VIEW_ACTVTY_AT = #{fieldViewActvtyAt}
+			</if>
+		</set>
+		WHERE	BBS_FIELD_SN = #{bbsFieldSn}
+	</update>
+	
+	<update id="updateOrder" parameterType="bbsFieldVO">
+		UPDATE	FS_BBS_FIELD
+		<set>
+			<if test="listOrdr != null and listOrdr != ''">
+				LIST_ORDR = #{listOrdr},
+			</if>
+			<if test="viewOrdr != null and viewOrdr != ''">
+				VIEW_ORDR = #{viewOrdr}
+			</if>
+		</set>
+		<include refid="wheres" />
+	</update>
+	
+	<delete id="deleteInfo" parameterType="bbsFieldVO">
+		DELETE FROM FS_BBS_FIELD
+		WHERE BBS_FIELD_SN = #{bbsFieldSn}
+	</delete>
+	
+</mapper>

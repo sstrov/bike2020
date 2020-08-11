@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="fscms.mods.cntnts.service.CntntsChghstMapper">
+
+	<sql id="columns">
+		CNTNTS_CHGHST_SN                       AS cntntsChghstSn
+		, MENU_SN                              AS menuSn
+		, CONVERT(CNTNTS_CHGHST_CN USING utf8) AS cntntsChghstCn
+		, REGIST_ID                            AS registId
+		, REGIST_IP                            AS registIp
+		, REGIST_DE                            AS registDe
+	</sql>
+	
+	<sql id="wheres">
+		<where>
+			<if test="cntntsChghstSn != null and cntntsChghstSn != ''">
+				CNTNTS_CHGHST_SN = #{cntntsChghstSn}
+			</if>
+			<if test="menuSn != null and menuSn != ''">
+				AND MENU_SN = #{menuSn}
+			</if>
+		</where>
+	</sql>
+	
+	<sql id="searchWheres">
+		<where>
+			<if test="cntntsChghstSn != null and cntntsChghstSn != ''">
+				CNTNTS_CHGHST_SN = #{cntntsChghstSn}
+			</if>
+			<if test="menuSn != null and menuSn != ''">
+				AND MENU_SN = #{menuSn}
+			</if>
+			<if test="registDe != null and registDe != ''">
+				AND DATE_FORMAT(REGIST_DE, '%Y-%m-%d') <![CDATA[>=]]> #{registDe}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="selectObj" parameterType="cntntsChghstVO" resultType="cntntsChghstVO">
+		SELECT	<include refid="columns" />
+		FROM	FS_CNTNTS_CHGHST
+		<include refid="wheres" />
+	</select>
+	
+	<select id="selectTCount" parameterType="cntntsChghstSearchVO" resultType="int">
+		SELECT	COUNT(CNTNTS_CHGHST_SN)
+		FROM	FS_CNTNTS_CHGHST
+		<include refid="searchWheres" />
+	</select>
+	
+	<select id="selectPageList" parameterType="cntntsChghstSearchVO" resultType="cntntsChghstVO">
+		SELECT	<include refid="columns" />
+		FROM	FS_CNTNTS_CHGHST
+		<include refid="searchWheres" />
+		
+		<choose>
+			<when test="orderBy != null and orderBy != ''">
+				ORDER BY ${orderBy}
+			</when>
+			<otherwise>
+				ORDER BY REGIST_DE DESC
+			</otherwise>
+		</choose>
+		
+		LIMIT #{firstIndex}, #{recordCountPerPage}
+	</select>
+	
+	<insert id="insertInfo" useGeneratedKeys="true" keyProperty="cntntsChghstSn" parameterType="cntntsChghstVO">
+		INSERT INTO FS_CNTNTS_CHGHST
+			(MENU_SN, CNTNTS_CHGHST_CN, REGIST_ID, REGIST_IP,
+			REGIST_DE)
+		VALUES
+			(#{menuSn}, #{cntntsChghstCn:BLOB, jdbcType=VARCHAR}, #{registId}, #{registIp},
+			<choose>
+				<when test="registDe != null">DATE_FORMAT(#{registDe}, '%Y-%m-%d %H:%i:%s')</when>
+				<otherwise>NOW()</otherwise>
+			</choose>)
+	</insert>
+	
+</mapper>

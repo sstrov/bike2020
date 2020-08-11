@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="format-detection" content="telephone=no,email=no,address=no" />
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
+<meta name="author" content="" />
+<meta name="Keywords" content="" />
+<meta name="description" content="" />
+<meta name="copyright" content="" />
+<title>요청하신 페이지를 찾을 수 없습니다.</title>
+
+<link rel="stylesheet" href="/resource/cmm/error/css/html5_reset.css">
+<link rel="stylesheet" href="/resource/cmm/error/css/nfound.css">
+<script src="/resource/mngr/plugins/jquery/jquery-1.9.1.min.js"></script>
+<script>
+function goIndex() {
+	var siteId = getQuerystring('id');
+	if(siteId == "" || siteId.length == 0) {
+		document.location.href = "/";
+	} else {
+		document.location.href = "/" + siteId + "/index.do";
+	}
+	
+	return false;
+}
+
+function getQuerystring(paramName){
+	var _tempUrl = window.location.search.substring(1); //url에서 처음부터 '?'까지 삭제
+	var _tempArray = _tempUrl.split('&'); // '&'을 기준으로 분리하기
+	for(var i = 0; _tempArray.length; i++) {
+		var _keyValuePair = _tempArray[i].split('='); // '=' 을 기준으로 분리하기
+		
+		if(_keyValuePair[0] == paramName) { // _keyValuePair[0] : 파라미터 명
+			// _keyValuePair[1] : 파라미터 값
+			return _keyValuePair[1];
+		} 
+	}
+}
+</script>
+</head>
+
+<body>
+	<div id="fs_wrap">
+		<div id="fs_container_wrap">
+			<section class="fs_snb_contents">
+				<div class="fs_snb_contents_box">
+					<div class="fs_content">
+						<div class="con_body">
+
+							<div class="nfound">
+								<div class="top_box">
+									<div class="txt_box">
+										<p class="tit">주소가 잘못 입력되었거나, 변경 혹은 삭제되어 <strong><em>요청하신 페이지</em>를 찾을 수 없습니다.</strong></p>
+										<p class="con">
+											입력하신 주소가 정확한지 다시한번 확인해 주세요.<br />문의사항이 있을 경우 관리자에게 문의하시기 바랍니다.
+										</p>
+									</div>
+								</div>
+								<div class="btn_box">
+									<a href="#none" onclick="goIndex();">홈으로 이동</a>
+									<a href="#none" onclick="history.back();">이전 페이지</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+		</div>
+	</div>
+</body>
+</html>

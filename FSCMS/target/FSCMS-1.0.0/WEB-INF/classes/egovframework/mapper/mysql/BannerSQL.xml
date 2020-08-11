@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="fscms.mods.banner.service.BannerMapper">
+
+	<sql id="columns">
+		BANNER_SN                    AS bannerSn
+		, BANNER_ESTBS_SN            AS bannerEstbsSn
+		, BANNER_NM                  AS bannerNm
+		, BANNER_ORDR                AS bannerOrdr
+		, BANNER_BGNDE               AS bannerBgnde
+		, BANNER_ENDDE               AS bannerEndde
+		, BANNER_ITNADR              AS bannerItnadr
+		, BANNER_TRGT                AS bannerTrgt
+		, CONVERT(TAG_CN USING utf8) AS tagCn
+		, ATCHMNFL_IMAGE             AS atchmnflImage
+		, ATCHMNFL_BCRN_IMAGE        AS atchmnflBcrnImage
+		, FLPTH                      AS flpth
+		, CLASS_NM                   AS classNm
+		, USE_AT                     AS useAt
+		, REGIST_DE                  AS registDe
+		, UPDT_DE                    AS updtDe
+	</sql>
+	
+	<sql id="wheres">
+		<where>
+			<if test="bannerSn != null and bannerSn != ''">
+				BANNER_SN = #{bannerSn}
+			</if>
+			<if test="bannerEstbsSn != null and bannerEstbsSn != ''">
+				AND BANNER_ESTBS_SN = #{bannerEstbsSn}
+			</if>
+			<if test="useAt != null and useAt != ''">
+				AND USE_AT = #{useAt}
+			</if>
+			<if test="mainAt != null and mainAt != ''">
+				AND (
+					(
+						BANNER_BGNDE IS NULL
+						OR (
+							BANNER_BGNDE IS NOT NULL
+							AND DATE_FORMAT(BANNER_BGNDE, '%Y%m%d%H%i%s') <![CDATA[<=]]> DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
+						)
+					) AND (
+						BANNER_ENDDE IS NULL
+						OR (
+							BANNER_ENDDE IS NOT NULL
+							AND DATE_FORMAT(BANNER_ENDDE, '%Y%m%d%H%i%s') <![CDATA[>=]]> DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
+						)
+					)
+				)
+			</if>
+		</where>
+	</sql>
+	
+	<sql id="searchWheres">
+		<where>
+			<if test="sw != null and sw != ''">
+				<choose>
+					<when test="sc != null and sc != ''">
+						${sc} LIKE '%'||#{sw}||'%'
+					</when>
+					<otherwise>
+						(
+							BANNER_NM LIKE CONCAT('%', #{sw}, '%')
+						)
+					</otherwise>
+				</choose>
+			</if>
+			
+			<if test="bannerEstbsSn != null and bannerEstbsSn != ''">
+				AND BANNER_ESTBS_SN = #{bannerEstbsSn}
+			</if>
+			
+			<if test="useAt != null and useAt != ''">
+				AND USE_AT = #{useAt}
+			</if>
+			
+			<if test="sc_wDateS != null and sc_wDateS != ''">
+				AND DATE_FORMAT(REGIST_DE, '%Y-%m-%d') <![CDATA[>=]]> #{sc_wDateS}
+			</if>
+			<if test="sc_wDateE != null and sc_wDateE != ''">
+				AND DATE_FORMAT(REGIST_DE, '%Y-%m-%d') <![CDATA[<=]]> #{sc_wDateE}
+			</if>
+			
+			<if test="sc_stateArr != null and sc_stateArr != ''">
+				AND
+				<foreach item="item" collection="sc_stateArr" separator="OR" open="(" close=")">
+					<if test="item == '1'.toString()">
+						<!-- 준비중 -->
+						(
+							USE_AT = 'Y'
+							AND BANNER_BGNDE IS NOT NULL
+							AND DATE_FORMAT(BANNER_BGNDE, '%Y%m%d%H%i%s') <![CDATA[>]]> DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
+						)
+					</if>
+					<if test="item == '2'.toString()">
+						<!-- 사용중 -->
+						(
+							USE_AT = 'Y'
+							AND (
+								BANNER_BGNDE IS NULL
+								OR (
+									BANNER_BGNDE IS NOT NULL
+									AND DATE_FORMAT(BANNER_BGNDE, '%Y%m%d%H%i%s') <![CDATA[<=]]> DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
+								)
+							) AND (
+								BANNER_ENDDE IS NULL
+								OR (
+									BANNER_ENDDE IS NOT NULL
+									AND DATE_FORMAT(BANNER_ENDDE, '%Y%m%d%H%i%s') <![CDATA[>=]]> DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
+								)
+							)
+						)
+					</if>
+					<if test="item == '3'.toString()">
+						<!-- 사용안함 -->
+						USE_AT = 'N'
+					</if>
+					<if test="item == '4'.toString()">
+						<!-- 기간만료 -->
+						(
+							USE_AT = 'Y'
+							AND (
+								BANNER_ENDDE IS NOT NULL
+								AND DATE_FORMAT(BANNER_ENDDE, '%Y%m%d%H%i%s') <![CDATA[<]]> DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
+							)
+						)
+					</if>
+				</foreach>
+			</if>
+		</where>
+	</sql>
+	
+	<select id="selectObj" parameterType="bannerVO" resultType="bannerVO">
+		SELECT	<include refid="columns" />
+		FROM	FS_BANNER
+		<include refid="wheres" />
+	</select>
+	
+	<select id="selectList" parameterType="bannerVO" resultType="bannerVO">
+		SELECT	<include refid="columns" />
+		FROM	FS_BANNER
+		<include refid="wheres" />
+		ORDER BY BANNER_ORDR ASC
+	</select>
+	
+	<select id="selectTCount" parameterType="bannerSearchVO" resultType="int">
+		SELECT	COUNT(BANNER_SN)
+		FROM	FS_BANNER
+		<include refid="searchWheres" />
+	</select>
+	
+	<select id="selectPageList" parameterType="bannerSearchVO" resultType="bannerVO">
+		SELECT	<include refid="columns" />
+		FROM	FS_BANNER
+		<include refid="searchWheres" />
+		
+		<choose>
+			<when test="orderBy != null and orderBy != ''">
+				ORDER BY ${orderBy}
+			</when>
+			<otherwise>
+				ORDER BY BANNER_ORDR ASC
+			</otherwise>
+		</choose>
+		
+		LIMIT #{firstIndex}, #{recordCountPerPage}
+	</select>
+	
+	<insert id="insertInfo" useGeneratedKeys="true" keyProperty="bannerSn" parameterType="bannerVO">
+		INSERT INTO FS_BANNER
+			(BANNER_ESTBS_SN, BANNER_NM, BANNER_ORDR, BANNER_BGNDE,
+			BANNER_ENDDE, BANNER_ITNADR, BANNER_TRGT, TAG_CN,
+			ATCHMNFL_IMAGE, ATCHMNFL_BCRN_IMAGE, CLASS_NM,
+			USE_AT, REGIST_DE, UPDT_DE)
+		VALUES
+			(#{bannerEstbsSn}, #{bannerNm}, #{bannerOrdr}, <choose>
+				<when test="bannerBgnde != null and bannerBgnde != ''">DATE_FORMAT(#{bannerBgnde}, '%Y-%m-%d %H:%i:%s')</when>
+				<otherwise>null</otherwise>
+			</choose>, <choose>
+				<when test="bannerEndde != null and bannerEndde != ''">DATE_FORMAT(#{bannerEndde}, '%Y-%m-%d %H:%i:%s')</when>
+				<otherwise>null</otherwise>
+			</choose>, #{bannerItnadr, jdbcType=VARCHAR}, #{bannerTrgt}, #{tagCn:BLOB, jdbcType=VARCHAR},
+			#{atchmnflImage, jdbcType=VARCHAR}, #{atchmnflBcrnImage, jdbcType=VARCHAR}, #{classNm, jdbcType=VARCHAR},
+			#{useAt}, NOW(), NOW())
+	</insert>
+	
+	<update id="updateInfo" parameterType="bannerVO">
+		UPDATE	FS_BANNER
+		<set>
+			<if test="bannerNm != null and bannerNm != ''">
+				BANNER_NM = #{bannerNm},
+			</if>
+			<if test="bannerOrdr != null and bannerOrdr != ''">
+				BANNER_ORDR = #{bannerOrdr},
+			</if>
+			<choose>
+				<when test="bannerBgnde != null and bannerBgnde != ''">
+					BANNER_BGNDE = DATE_FORMAT(#{bannerBgnde}, '%Y-%m-%d %H:%i:%s'),
+				</when>
+				<otherwise>
+					BANNER_BGNDE = null,
+				</otherwise>
+			</choose>
+			<choose>
+				<when test="bannerEndde != null and bannerEndde != ''">
+					BANNER_ENDDE = DATE_FORMAT(#{bannerEndde}, '%Y-%m-%d %H:%i:%s'),
+				</when>
+				<otherwise>
+					BANNER_ENDDE = null,
+				</otherwise>
+			</choose>
+			<if test="bannerItnadr != null">
+				BANNER_ITNADR = #{bannerItnadr, jdbcType=VARCHAR},
+			</if>
+			<if test="bannerTrgt != null and bannerTrgt != ''">
+				BANNER_TRGT = #{bannerTrgt},
+			</if>
+			<if test="tagCn != null">
+				TAG_CN = #{tagCn:BLOB, jdbcType=VARCHAR},
+			</if>
+			<if test="atchmnflImage != null">
+				ATCHMNFL_IMAGE = #{atchmnflImage, jdbcType=VARCHAR},
+			</if>
+			<if test="atchmnflBcrnImage != null">
+				ATCHMNFL_BCRN_IMAGE = #{atchmnflBcrnImage, jdbcType=VARCHAR},
+			</if>
+			<if test="flpth != null and flpth != ''">
+				FLPTH = #{flpth},
+			</if>
+			<if test="classNm != null">
+				CLASS_NM = #{classNm, jdbcType=VARCHAR},
+			</if>
+			<if test="useAt != null and useAt != ''">
+				USE_AT = #{useAt},
+			</if>
+			UPDT_DE = NOW()
+		</set>
+		WHERE	BANNER_SN = #{bannerSn}
+	</update>
+	
+	<update id="updateOrder" parameterType="bannerVO">
+		UPDATE	FS_BANNER
+		SET		BANNER_ORDR = BANNER_ORDR + 1
+		WHERE	BANNER_ESTBS_SN = #{bannerEstbsSn}
+				AND BANNER_ORDR <![CDATA[>=]]> #{bannerOrdr}
+	</update>
+	
+	<delete id="deleteInfo" parameterType="bannerVO">
+		DELETE FROM FS_BANNER
+		WHERE BANNER_SN = #{bannerSn}
+	</delete>
+	
+</mapper>

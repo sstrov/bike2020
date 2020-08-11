@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="fscms.mods.atchmnfl.service.AtchmnflMapper">
+
+	<sql id="columns">
+		ATCHMNFL_SN        AS atchmnflSn
+		, ACC_TY           AS accTy
+		, ACC_SN           AS accSn
+		, ATCHMNFL_ORDR    AS atchmnflOrdr
+		, ATCHMNFL_NM      AS atchmnflNm
+		, ATCHMNFL_REAL_NM AS atchmnflRealNm
+		, ATCHMNFL_SIZE    AS atchmnflSize
+		, ATCHMNFL_TY      AS atchmnflTy
+		, ATCHMNFL_EXTSN   AS atchmnflExtsn
+		, ATCHMNFL_RM      AS atchmnflRm
+		, FLPTH            AS flpth
+		, REPRSNT_THUMB_AT AS reprsntThumbAt
+		, REGIST_DE        AS registDe
+	</sql>
+	
+	<sql id="wheres">
+		<where>
+			<if test="atchmnflSn != null and atchmnflSn != ''">
+				ATCHMNFL_SN = #{atchmnflSn}
+			</if>
+			<if test="accTy != null and accTy != ''">
+				AND ACC_TY = #{accTy}
+			</if>
+			<if test="accSn != null and accSn != ''">
+				AND ACC_SN = #{accSn}
+			</if>
+			<if test="atchmnflRealNm != null and atchmnflRealNm != ''">
+				AND ATCHMNFL_REAL_NM = #{atchmnflRealNm}
+			</if>
+			<if test="atchmnflRm != null and atchmnflRm != ''">
+				AND ATCHMNFL_RM = #{atchmnflRm}
+			</if>
+			<if test="reprsntThumbAt != null and reprsntThumbAt != ''">
+				AND REPRSNT_THUMB_AT = #{reprsntThumbAt}
+			</if>
+			<if test="notKey != null and notKey != ''">
+				AND ATCHMNFL_SN NOT IN
+				<foreach item="item" collection="notKey" separator="," open="(" close=")">
+					#{item}
+				</foreach>
+			</if>
+		</where>
+	</sql>
+	
+	<select id="selectObj" parameterType="atchmnflVO" resultType="atchmnflVO">
+		SELECT	<include refid="columns" />
+		FROM	FS_ATCHMNFL
+		<include refid="wheres" />
+	</select>
+	
+	<select id="selectList" parameterType="atchmnflVO" resultType="atchmnflVO">
+		SELECT	<include refid="columns" />
+		FROM	FS_ATCHMNFL
+		<include refid="wheres" />
+		ORDER BY ATCHMNFL_ORDR ASC
+	</select>
+	
+	<insert id="insertInfo" useGeneratedKeys="true" keyProperty="atchmnflSn" parameterType="atchmnflVO">
+		INSERT INTO FS_ATCHMNFL
+			(ACC_TY, ACC_SN, ATCHMNFL_ORDR, ATCHMNFL_NM,
+			ATCHMNFL_REAL_NM, ATCHMNFL_SIZE, ATCHMNFL_TY, ATCHMNFL_EXTSN,
+			ATCHMNFL_RM, FLPTH, REPRSNT_THUMB_AT, REGIST_DE)
+		VALUES
+			(#{accTy}, #{accSn}, #{atchmnflOrdr}, #{atchmnflNm},
+			#{atchmnflRealNm}, #{atchmnflSize}, #{atchmnflTy}, #{atchmnflExtsn},
+			#{atchmnflRm}, #{flpth}, #{reprsntThumbAt}, NOW())
+	</insert>
+	
+	<update id="updateInfo" parameterType="atchmnflVO">
+		UPDATE	FS_ATCHMNFL
+		<set>
+			<if test="atchmnflOrdr != null and atchmnflOrdr != ''">
+				ATCHMNFL_ORDR = #{atchmnflOrdr},
+			</if>
+			<if test="atchmnflNm != null and atchmnflNm != ''">
+				ATCHMNFL_NM = #{atchmnflNm},
+			</if>
+			<if test="atchmnflRealNm != null and atchmnflRealNm != ''">
+				ATCHMNFL_REAL_NM = #{atchmnflRealNm},
+			</if>
+			<if test="atchmnflSize != null and atchmnflSize != ''">
+				ATCHMNFL_SIZE = #{atchmnflSize},
+			</if>
+			<if test="atchmnflTy != null and atchmnflTy != ''">
+				ATCHMNFL_TY = #{atchmnflTy},
+			</if>
+			<if test="atchmnflExtsn != null and atchmnflExtsn != ''">
+				ATCHMNFL_EXTSN = #{atchmnflExtsn},
+			</if>
+			<if test="atchmnflRm != null and atchmnflRm != ''">
+				ATCHMNFL_RM = #{atchmnflRm},
+			</if>
+			<if test="flpth != null and flpth != ''">
+				FLPTH = #{flpth},
+			</if>
+			<if test="reprsntThumbAt != null and reprsntThumbAt != ''">
+				REPRSNT_THUMB_AT = #{reprsntThumbAt}
+			</if>
+		</set>
+		WHERE	ATCHMNFL_SN = #{atchmnflSn}
+	</update>
+	
+	<delete id="deleteInfo" parameterType="atchmnflVO">
+		DELETE FROM FS_ATCHMNFL
+		WHERE ATCHMNFL_SN = #{atchmnflSn}
+	</delete>
+	
+</mapper>

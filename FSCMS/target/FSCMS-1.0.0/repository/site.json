@@ -1,0 +1,12 @@
+{
+	"name"            : "FSCMS",
+	"roleSn"          : "null",
+	"actAt"           : "2",
+	"snsAt"           : "Y",
+	"openDe"          : "",
+	"dplctLoginAt"    : "N",
+	"loginFailrLockCo": "5",
+	"mngrIpUseAt"     : "N",
+	"mngrIpBlocks"    : "127.0.0.1,0:0:0:0:0:0:0:1",
+	"mngrIpNones"     : "101.110.110.110"
+}

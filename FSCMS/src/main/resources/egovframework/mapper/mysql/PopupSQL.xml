@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="fscms.mods.popup.service.PopupMapper">
+
+	<sql id="columns">
+		POPUP_SN                       AS popupSn
+		, POPUP_NM                     AS popupNm
+		, CONVERT(POPUP_CN USING utf8) AS popupCn
+		, POPUP_TY                     AS popupTy
+		, POPUP_LINK                   AS popupLink
+		, POPUP_ORDER                  AS popupOrdr
+		, WIDTH_LC                     AS widthLc
+		, VRTICL_LC                    AS vrticlLc
+		, WIDTH_SIZE                   AS widthSize
+		, VRTICL_SIZE                  AS vrticlSize
+		, POPUP_BGNDE                  AS popupBgnde
+		, POPUP_ENDDE                  AS popupEndde
+		, ATMC_SIZE_AT                 AS atmcSizeAt
+		, USE_AT                       AS useAt
+		, REGIST_DE                    AS registDe
+		, UPDT_DE                      AS updtDe
+	</sql>
+	
+	<sql id="wheres">
+		<where>
+			<if test="popupSn != null and popupSn != ''">
+				POPUP_SN = #{popupSn}
+			</if>
+			<if test="useAt != null and useAt != ''">
+				AND USE_AT = #{useAt}
+			</if>
+			<if test="mainAt != null and mainAt != ''">
+				AND (
+					(
+						POPUP_BGNDE IS NULL
+						OR (
+							POPUP_BGNDE IS NOT NULL
+							AND DATE_FORMAT(POPUP_BGNDE, '%Y%m%d%H%i%s') <![CDATA[<=]]> DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
+						)
+					) AND (
+						POPUP_ENDDE IS NULL
+						OR (
+							POPUP_ENDDE IS NOT NULL
+							AND DATE_FORMAT(POPUP_ENDDE, '%Y%m%d%H%i%s') <![CDATA[>=]]> DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
+						)
+					)
+				)
+			</if>
+		</where>
+	</sql>
+	
+	<sql id="searchWheres">
+		<where>
+			<if test="sw != null and sw != ''">
+				<choose>
+					<when test="sc != null and sc != ''">
+						${sc} LIKE '%'||#{sw}||'%'
+					</when>
+					<otherwise>
+						(
+							OR POPUP_NM LIKE CONCAT('%', #{sw}, '%')
+							OR POPUP_CN LIKE CONCAT('%', #{sw}, '%')
+						)
+					</otherwise>
+				</choose>
+			</if>
+			
+			<if test="useAt != null and useAt != ''">
+				AND USE_AT = #{useAt}
+			</if>
+			
+			<if test="sc_wDateS != null and sc_wDateS != ''">
+				AND DATE_FORMAT(REGIST_DE, '%Y-%m-%d') <![CDATA[>=]]> #{sc_wDateS}
+			</if>
+			<if test="sc_wDateE != null and sc_wDateE != ''">
+				AND DATE_FORMAT(REGIST_DE, '%Y-%m-%d') <![CDATA[<=]]> #{sc_wDateE}
+			</if>
+			
+			<if test="sc_stateArr != null and sc_stateArr != ''">
+				AND
+				<foreach item="item" collection="sc_stateArr" separator="OR" open="(" close=")">
+					<if test="item == '1'.toString()">
+						<!-- 준비중 -->
+						(
+							USE_AT = 'Y'
+							AND POPUP_BGNDE IS NOT NULL
+							AND DATE_FORMAT(POPUP_BGNDE, '%Y%m%d%H%i%s') <![CDATA[>]]> DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
+						)
+					</if>
+					<if test="item == '2'.toString()">
+						<!-- 사용중 -->
+						(
+							USE_AT = 'Y'
+							AND (
+								POPUP_BGNDE IS NULL
+								OR (
+									POPUP_BGNDE IS NOT NULL
+									AND DATE_FORMAT(POPUP_BGNDE, '%Y%m%d%H%i%s') <![CDATA[<=]]> DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
+								)
+							) AND (
+								POPUP_ENDDE IS NULL
+								OR (
+									POPUP_ENDDE IS NOT NULL
+									AND DATE_FORMAT(POPUP_ENDDE, '%Y%m%d%H%i%s') <![CDATA[>=]]> DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
+								)
+							)
+						)
+					</if>
+					<if test="item == '3'.toString()">
+						<!-- 사용안함 -->
+						USE_AT = 'N'
+					</if>
+					<if test="item == '4'.toString()">
+						<!-- 기간만료 -->
+						(
+							USE_AT = 'Y'
+							AND (
+								POPUP_ENDDE IS NOT NULL
+								AND DATE_FORMAT(POPUP_ENDDE, '%Y%m%d%H%i%s') <![CDATA[<]]> DATE_FORMAT(NOW(), '%Y%m%d%H%i%s')
+							)
+						)
+					</if>
+				</foreach>
+			</if>
+		</where>
+	</sql>
+	
+	<select id="selectObj" parameterType="popupVO" resultType="popupVO">
+		SELECT	<include refid="columns" />
+		FROM	FS_POPUP
+		<include refid="wheres" />
+	</select>
+	
+	<select id="selectList" parameterType="popupVO" resultType="popupVO">
+		SELECT	<include refid="columns" />
+		FROM	FS_POPUP
+		<include refid="wheres" />
+		ORDER BY POPUP_ORDER ASC, REGIST_DE DESC
+	</select>
+	
+	<select id="selectTCount" parameterType="popupSearchVO" resultType="int">
+		SELECT	COUNT(POPUP_SN)
+		FROM	FS_POPUP
+		<include refid="searchWheres" />
+	</select>
+	
+	<select id="selectPageList" parameterType="popupSearchVO" resultType="popupVO">
+		SELECT	<include refid="columns" />
+		FROM	FS_POPUP
+		<include refid="searchWheres" />
+		
+		<choose>
+			<when test="orderBy != null and orderBy != ''">
+				ORDER BY ${orderBy}
+			</when>
+			<otherwise>
+				ORDER BY POPUP_ORDER ASC, REGIST_DE DESC
+			</otherwise>
+		</choose>
+		
+		LIMIT #{firstIndex}, #{recordCountPerPage}
+	</select>
+	
+	<insert id="insertInfo" useGeneratedKeys="true" keyProperty="popupSn" parameterType="popupVO">
+		INSERT INTO FS_POPUP
+			(POPUP_NM, POPUP_CN, POPUP_TY, WIDTH_LC,
+			VRTICL_LC, WIDTH_SIZE, VRTICL_SIZE, POPUP_BGNDE,
+			POPUP_ENDDE, ATMC_SIZE_AT, USE_AT, REGIST_DE, UPDT_DE)
+		VALUES
+			(#{popupNm}, #{popupCn:BLOB}, #{popupTy}, #{widthLc, jdbcType=INTEGER},
+			#{vrticlLc, jdbcType=INTEGER}, #{widthSize, jdbcType=INTEGER}, #{vrticlSize, jdbcType=INTEGER}, <choose>
+				<when test="popupBgnde != null and popupBgnde != ''">DATE_FORMAT(#{popupBgnde}, '%Y-%m-%d %H:%i:%s')</when>
+				<otherwise>null</otherwise>
+			</choose>, <choose>
+				<when test="popupEndde != null and popupEndde != ''">DATE_FORMAT(#{popupEndde}, '%Y-%m-%d %H:%i:%s')</when>
+				<otherwise>null</otherwise>
+			</choose>, #{atmcSizeAt}, #{useAt}, NOW(), NOW())
+	</insert>
+	
+	<update id="updateInfo" parameterType="popupVO">
+		UPDATE	FS_POPUP
+		<set>
+			<if test="popupNm != null and popupNm != ''">
+				POPUP_NM = #{popupNm},
+			</if>
+			<if test="popupCn != null and popupCn != ''">
+				POPUP_CN = #{popupCn:BLOB},
+			</if>
+			<if test="popupTy != null and popupTy != ''">
+				POPUP_TY = #{popupTy},
+			</if>
+			<if test="widthLc != null">
+				WIDTH_LC = #{widthLc, jdbcType=INTEGER},
+			</if>
+			<if test="vrticlLc != null">
+				VRTICL_LC = #{vrticlLc, jdbcType=INTEGER},
+			</if>
+			<if test="widthSize != null">
+				WIDTH_SIZE = #{widthSize, jdbcType=INTEGER},
+			</if>
+			<if test="vrticlSize != null">
+				VRTICL_SIZE = #{vrticlSize, jdbcType=INTEGER},
+			</if>
+			<choose>
+				<when test="popupBgnde != null and popupBgnde != ''">
+					POPUP_BGNDE = DATE_FORMAT(#{popupBgnde}, '%Y-%m-%d %H:%i:%s'),
+				</when>
+				<otherwise>
+					POPUP_BGNDE = null,
+				</otherwise>
+			</choose>
+			<choose>
+				<when test="popupEndde != null and popupEndde != ''">
+					POPUP_ENDDE = DATE_FORMAT(#{popupEndde}, '%Y-%m-%d %H:%i:%s'),
+				</when>
+				<otherwise>
+					POPUP_ENDDE = null,
+				</otherwise>
+			</choose>
+			<if test="atmcSizeAt != null and atmcSizeAt != ''">
+				ATMC_SIZE_AT = #{atmcSizeAt},
+			</if>
+			<if test="useAt != null and useAt != ''">
+				USE_AT = #{useAt},
+			</if>
+			UPDT_DE = NOW()
+		</set>
+		WHERE	POPUP_SN = #{popupSn}
+	</update>
+	
+	<delete id="deleteInfo" parameterType="popupVO">
+		DELETE FROM FS_POPUP
+		WHERE POPUP_SN = #{popupSn}
+	</delete>
+	
+</mapper>

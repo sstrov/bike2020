@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="fscms.mods.mngr.service.MngrEstbsMapper">
+
+	<sql id="columns">
+		IP_INTRCP_AT AS ipIntrcpAt
+	</sql>
+	
+	<select id="selectObj" resultType="mngrEstbsVO">
+		SELECT	<include refid="columns" />
+		FROM	FS_MNGR_ESTBS
+	</select>
+	
+	<insert id="insertInfo" parameterType="mngrEstbsVO">
+		INSERT INTO FS_MNGR_ESTBS
+			(IP_INTRCP_AT)
+		VALUES
+			(#{ipIntrcpAt})
+	</insert>
+	
+	<update id="updateInfo" parameterType="mngrEstbsVO">
+		UPDATE	FS_MNGR_ESTBS
+		<set>
+			<if test="ipIntrcpAt != null and ipIntrcpAt != ''">
+				IP_INTRCP_AT = #{ipIntrcpAt}
+			</if>
+		</set>
+	</update>
+	
+</mapper>

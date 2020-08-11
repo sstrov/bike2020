@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="fscms.mods.code.service.CodeDetailMapper">
+
+	<sql id="columns">
+		CODE_DETAIL_SN     AS codeDetailSn
+		, CODE_ID          AS codeId
+		, CODE_DETAIL_ID   AS codeDetailId
+		, CODE_DETAIL_NM   AS codeDetailNm
+		, CODE_DETAIL_DC   AS codeDetailDc
+		, CODE_DETAIL_ORDR AS codeDetailOrdr
+		, DELETE_AT        AS deleteAt
+		, REGIST_DE        AS registDe
+		, UPDT_DE          AS updtDe
+	</sql>
+	
+	<sql id="wheres">
+		<where>
+			<if test="codeDetailSn != null and codeDetailSn != ''">
+				CODE_DETAIL_SN = #{codeDetailSn}
+			</if>
+			<if test="codeId != null and codeId != ''">
+				AND CODE_ID = #{codeId}
+			</if>
+			<if test="codeDetailId != null and codeDetailId != ''">
+				AND CODE_DETAIL_ID = #{codeDetailId}
+			</if>
+			<if test="deleteAt != null and deleteAt != ''">
+				AND DELETE_AT = #{deleteAt}
+			</if>
+			
+			<if test="keyArr != null and keyArr != ''">
+				AND CODE_DETAIL_SN NOT IN
+				<foreach item="item" collection="keyArr" separator="," open="(" close=")">
+					#{item}
+				</foreach>
+			</if>
+		</where>
+	</sql>
+	
+	<select id="selectObj" parameterType="codeDetailVO" resultType="codeDetailVO">
+		SELECT	<include refid="columns" />
+		FROM	FS_CODE_DETAIL
+		<include refid="wheres" />
+	</select>
+	
+	<select id="selectList" parameterType="codeDetailVO" resultType="codeDetailVO">
+		SELECT	<include refid="columns" />
+		FROM	FS_CODE_DETAIL
+		<include refid="wheres" />
+		ORDER BY CODE_DETAIL_ORDR ASC
+	</select>
+	
+	<insert id="insertInfo" useGeneratedKeys="true" keyProperty="codeDetailSn" parameterType="codeDetailVO">
+		INSERT INTO FS_CODE_DETAIL
+			(CODE_ID, CODE_DETAIL_ID, CODE_DETAIL_NM, CODE_DETAIL_DC,
+			CODE_DETAIL_ORDR, DELETE_AT, REGIST_DE, UPDT_DE)
+		VALUES
+			(#{codeId}, #{codeDetailId}, #{codeDetailNm}, #{codeDetailDc, jdbcType=VARCHAR},
+			#{codeDetailOrdr}, #{deleteAt}, NOW(), NOW())
+	</insert>
+	
+	<update id="updateInfo" parameterType="codeDetailVO">
+		UPDATE	FS_CODE_DETAIL
+		<set>
+			<if test="codeDetailId != null and codeDetailId != ''">
+				CODE_DETAIL_ID = #{codeDetailId},
+			</if>
+			<if test="codeDetailNm != null and codeDetailNm != ''">
+				CODE_DETAIL_NM = #{codeDetailNm},
+			</if>
+			<if test="codeDetailDc != null">
+				CODE_DETAIL_DC = #{codeDetailDc, jdbcType=VARCHAR},
+			</if>
+			<if test="codeDetailOrdr != null and codeDetailOrdr != ''">
+				CODE_DETAIL_ORDR = #{codeDetailOrdr},
+			</if>
+			<if test="deleteAt != null and deleteAt != ''">
+				DELETE_AT = #{deleteAt},
+			</if>
+			UPDT_DE = NOW()
+		</set>
+		WHERE	CODE_DETAIL_SN = #{codeDetailSn}
+	</update>
+	
+</mapper>

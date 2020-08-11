@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="fscms.mods.conectr.service.ConectrStatsMapper">
+
+	<select id="selectYear" parameterType="conectrStatsSearchVO" resultType="conectrStatsVO">
+		SELECT	STATS_YEAR                AS statsYear
+				, COUNT(CONECTR_STATS_SN) AS tCount
+				, ROUND(COUNT(CONECTR_STATS_SN) / (
+						SELECT	COUNT(CONECTR_STATS_SN)
+						FROM	FS_CONECTR_STATS
+					) * 100, 2
+				) AS tPer
+		FROM	FS_CONECTR_STATS
+		GROUP BY STATS_YEAR
+		ORDER BY STATS_YEAR DESC
+	</select>
+	
+	<select id="selectMonth" parameterType="conectrStatsSearchVO" resultType="conectrStatsVO">
+		SELECT	STATS_MONTH               AS statsMonth
+				, COUNT(CONECTR_STATS_SN) AS tCount
+				, ROUND(COUNT(CONECTR_STATS_SN) / (
+						SELECT	COUNT(CONECTR_STATS_SN)
+						FROM	FS_CONECTR_STATS
+						WHERE	STATS_YEAR = #{sc_year}
+								AND DATE_FORMAT(REGIST_DE, '%Y') = #{sc_year}
+					) * 100, 2
+				) AS tPer
+		FROM	FS_CONECTR_STATS
+		WHERE	STATS_YEAR = #{sc_year}
+				AND DATE_FORMAT(REGIST_DE, '%Y') = #{sc_year}
+		GROUP BY STATS_MONTH
+		ORDER BY STATS_MONTH ASC
+	</select>
+	
+	<select id="selectDate" parameterType="conectrStatsSearchVO" resultType="conectrStatsVO">
+		SELECT	STATS_DATE                AS statsDate
+				, COUNT(CONECTR_STATS_SN) AS tCount
+				, ROUND(COUNT(CONECTR_STATS_SN) / (
+						SELECT	COUNT(CONECTR_STATS_SN)
+						FROM	FS_CONECTR_STATS
+						WHERE	STATS_YEAR      = #{sc_year}
+								AND STATS_MONTH = #{sc_month}
+								AND DATE_FORMAT(REGIST_DE, '%Y-%m') = CONCAT(#{sc_year}, '-', #{sc_month})
+					) * 100, 2
+				) AS tPer
+		FROM	FS_CONECTR_STATS
+		WHERE	STATS_YEAR      = #{sc_year}
+				AND STATS_MONTH = #{sc_month}
+				AND DATE_FORMAT(REGIST_DE, '%Y-%m') = CONCAT(#{sc_year}, '-', #{sc_month})
+		GROUP BY STATS_DATE
+		ORDER BY STATS_DATE ASC
+	</select>
+	
+	<select id="selectHour" parameterType="conectrStatsSearchVO" resultType="conectrStatsVO">
+		SELECT	STATS_HOUR                AS statsHour
+				, COUNT(CONECTR_STATS_SN) AS tCount
+				, ROUND(COUNT(CONECTR_STATS_SN) / (
+						SELECT	COUNT(CONECTR_STATS_SN)
+						FROM	FS_CONECTR_STATS
+						WHERE	STATS_YEAR      = #{sc_year}
+								AND STATS_MONTH = #{sc_month}
+								AND STATS_DATE  = #{sc_date}
+								AND DATE_FORMAT(REGIST_DE, '%Y-%m-%d') = CONCAT(#{sc_year}, '-', #{sc_month}, '-', #{sc_date})
+					) * 100, 2
+				) AS tPer
+		FROM	FS_CONECTR_STATS
+		WHERE	STATS_YEAR      = #{sc_year}
+				AND STATS_MONTH = #{sc_month}
+				AND STATS_DATE  = #{sc_date}
+				AND DATE_FORMAT(REGIST_DE, '%Y-%m-%d') = CONCAT(#{sc_year}, '-', #{sc_month}, '-', #{sc_date})
+		GROUP BY STATS_HOUR
+		ORDER BY STATS_HOUR ASC
+	</select>
+	
+	<select id="selectWeek" parameterType="conectrStatsSearchVO" resultType="conectrStatsVO">
+		SELECT	STATS_WEEK                AS statsWeek
+				, COUNT(CONECTR_STATS_SN) AS tCount
+				, ROUND(COUNT(CONECTR_STATS_SN) / (
+						SELECT	COUNT(CONECTR_STATS_SN)
+						FROM	FS_CONECTR_STATS
+						WHERE	1 = 1
+								<if test="sc_wDateS != null and sc_wDateS != ''">
+									AND DATE_FORMAT(REGIST_DE, '%Y-%m-%d') <![CDATA[>=]]> #{sc_wDateS}
+								</if>
+								<if test="sc_wDateE != null and sc_wDateE != ''">
+									AND DATE_FORMAT(REGIST_DE, '%Y-%m-%d') <![CDATA[<=]]> #{sc_wDateE}
+								</if>
+					) * 100, 2
+				) AS tPer
+		FROM	FS_CONECTR_STATS
+		WHERE	1 = 1
+				<if test="sc_wDateS != null and sc_wDateS != ''">
+					AND DATE_FORMAT(REGIST_DE, '%Y-%m-%d') <![CDATA[>=]]> #{sc_wDateS}
+				</if>
+				<if test="sc_wDateE != null and sc_wDateE != ''">
+					AND DATE_FORMAT(REGIST_DE, '%Y-%m-%d') <![CDATA[<=]]> #{sc_wDateE}
+				</if>
+		GROUP BY STATS_WEEK
+		ORDER BY STATS_WEEK ASC
+	</select>
+	
+	<sql id="searchWheres">
+		<where>
+			<if test="sc_wDateS != null and sc_wDateS != ''">
+				DATE_FORMAT(REGIST_DE, '%Y-%m-%d') <![CDATA[>=]]> #{sc_wDateS}
+			</if>
+			<if test="sc_wDateE != null and sc_wDateE != ''">
+				AND DATE_FORMAT(REGIST_DE, '%Y-%m-%d') <![CDATA[<=]]> #{sc_wDateE}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="selectTCount" parameterType="conectrStatsSearchVO" resultType="int">
+		SELECT	COUNT(CONECTR_STATS_SN)
+		FROM	FS_CONECTR_STATS
+		<include refid="searchWheres" />
+	</select>
+	
+	<select id="selectBrowNm" parameterType="conectrStatsSearchVO" resultType="conectrStatsVO">
+		SELECT	STATS_BRWSR_NM            AS statsBrwsrNm
+				, COUNT(CONECTR_STATS_SN) AS tCount
+				, ROUND(COUNT(CONECTR_STATS_SN) / (
+						SELECT	COUNT(CONECTR_STATS_SN)
+						FROM	FS_CONECTR_STATS
+						WHERE	STATS_YEAR      = #{sc_year}
+								AND STATS_MONTH = #{sc_month}
+								AND DATE_FORMAT(REGIST_DE, '%Y-%m') = CONCAT(#{sc_year}, '-', #{sc_month})
+					) * 100, 2
+				) AS tPer
+		FROM	FS_CONECTR_STATS
+		WHERE	STATS_YEAR      = #{sc_year}
+				AND STATS_MONTH = #{sc_month}
+				AND DATE_FORMAT(REGIST_DE, '%Y-%m') = CONCAT(#{sc_year}, '-', #{sc_month})
+		GROUP BY STATS_BRWSR_NM
+		ORDER BY STATS_BRWSR_NM ASC
+	</select>
+	
+</mapper>

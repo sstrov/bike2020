@@ -1,0 +1,19 @@
+{
+	"accKey"   : "24",
+	"fKey"     : "2006176952456",
+	"fNm"      : "공모전",
+	"pKey"     : "2006176952456",
+	"pNm"      : "공모전",
+	"menuG"    : "2",
+	"nm"       : "수상작보기",
+	"page"     : "3",
+	"target"   : "_self",
+	"tag"      : "",
+	"class"    : "",
+	"fileImage": "null",
+	"filePath" : "null",
+	"actAt"    : "Y",
+	"useAt"    : "Y",
+	"link"     : "/bbs/list.do?key=2006177036600",
+	"subImg"   : ""
+}

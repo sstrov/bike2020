@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="fscms.mods.contest.service.ContestMapper">
+
+	<sql id="columns">
+		CONTEST_SN			AS contestSn,
+		CONTEST_ESTBS_SN	AS contestEstbsSn,
+		CONTEST_NM			AS contestNm,
+		CONTEST_CN			AS contestCn,
+		(CASE
+		WHEN CONTEST_TYPE = 'IMG'
+		THEN '사진'
+		ELSE CONTEST_TYPE
+		END)				AS contestType,
+		ATCHMNFL_IMAGE		AS atchmnflImage,
+		ORI_FILE			AS oriFile,
+		FLPTH				AS flpth,
+		REGIST_DE			AS registDe,
+		REGIST_NM			AS registNm
+	</sql>
+	
+	<sql id="wheres">
+		<where>
+			1 = 1
+		</where>
+	</sql>
+	
+	<sql id="searchWheres">
+		<where>
+			<if test="contestEstbsSn != null and contestEstbsSn != ''">
+				CONTEST_ESTBS_SN = #{contestEstbsSn}
+			</if>
+			
+			<if test="sw != null and sw != ''">
+				<choose>
+					<when test="sc != null and sc != ''">
+						AND ${sc} LIKE '%'||#{sw}||'%'
+					</when>
+					<otherwise>
+						AND (
+							CONTEST_NM    LIKE CONCAT('%', #{sw}, '%')
+							OR CONTEST_CN LIKE CONCAT('%', #{sw}, '%')
+						)
+					</otherwise>
+				</choose>
+			</if>
+			
+			<if test="sc_wDateS != null and sc_wDateS != ''">
+				AND DATE_FORMAT(REGIST_DE, '%Y-%m-%d') <![CDATA[>=]]> #{sc_wDateS}
+			</if>
+			<if test="sc_wDateE != null and sc_wDateE != ''">
+				AND DATE_FORMAT(REGIST_DE, '%Y-%m-%d') <![CDATA[<=]]> #{sc_wDateE}
+			</if>
+			
+			<if test="sc_type != null and sc_type != ''">
+				AND CONTEST_TYPE = #{sc_type}
+			</if>
+				AND USE_AT = 'Y'
+		</where>
+	</sql>
+	
+	
+	<select id="selectTCount" parameterType="contestSearchVO" resultType="int">
+		SELECT	COUNT(CONTEST_SN)
+		FROM	FS_CONTEST
+		<include refid="searchWheres" />
+	</select>
+	
+	<select id="selectPageList" parameterType="contestSearchVO" resultType="contestVO">
+		SELECT	<include refid="columns" />
+		FROM	FS_CONTEST
+		<include refid="searchWheres" />
+		
+		
+		<choose>
+			<when test="orderBy != null and orderBy != ''">
+				ORDER BY ${orderBy}
+			</when>
+			<otherwise>
+				ORDER BY REGIST_DE DESC
+			</otherwise>
+		</choose>
+		
+		LIMIT #{firstIndex}, #{recordCountPerPage}
+	</select>
+	
+	<select id="selectObj" parameterType="contestVO" resultType="contestVO">
+		SELECT	<include refid="columns" />
+		FROM	FS_CONTEST
+		WHERE CONTEST_SN = ${contestSn}
+	</select>
+	
+	<insert id="insertInfo" useGeneratedKeys="true" keyProperty="contestSn" parameterType="contestVO">
+		INSERT INTO FS_CONTEST
+			(CONTEST_SN, CONTEST_ESTBS_SN, CONTEST_NM, CONTEST_CN, USE_AT,
+			CONTEST_TYPE, ATCHMNFL_IMAGE, REGIST_DE, REGIST_NM, UPDT_DE, UPDT_NM)
+		VALUES
+			(#{contestSn}, #{contestEstbsSn}, #{contestNm}, #{contestCn:BLOB, jdbcType=VARCHAR}, 'Y',
+			#{contestType, jdbcType=CHAR}, #{atchmnflImage, jdbcType=VARCHAR}, NOW(), #{registNm, jdbcType=VARCHAR}, NOW(), #{registNm, jdbcType=VARCHAR})
+	</insert>
+	
+	<update id="updateInfo" parameterType="contestVO">
+		UPDATE	FS_CONTEST
+		<set>
+			<if test="contestNm != null and contestNm != ''">
+				CONTEST_NM = #{contestNm},
+			</if>
+			<if test="contestCn != null">
+				CONTEST_CN = #{contestCn:BLOB, jdbcType=VARCHAR},
+			</if>
+			<if test="contestType != null and contestType != ''">
+				CONTEST_TYPE = #{contestType, jdbcType=CHAR},
+			</if>
+			<if test="atchmnflImage != null">
+				ATCHMNFL_IMAGE = #{atchmnflImage, jdbcType=VARCHAR},
+			</if>
+			<if test="flpth != null and flpth != ''">
+				FLPTH = #{flpth},
+			</if>
+			<if test="updtNm != null and updtNm != ''">
+				UPDT_NM = #{updtNm},
+			</if>
+			<if test="useAt != null and useAt != ''">
+				USE_AT = #{useAt},
+			</if>
+			<if test="oriFile != null and oriFile != ''">
+				ORI_FILE = #{oriFile},
+			</if>
+			UPDT_DE = NOW()
+		</set>
+		WHERE	CONTEST_SN = #{contestSn}
+	</update>
+	
+	<delete id="deleteInfo" parameterType="contestVO">
+		DELETE FROM FS_CONTEST
+		WHERE CONTEST_SN = #{contestSn}
+	</delete>
+	
+	<select id="selectExcelList" parameterType="contestSearchVO" resultType="contestVO">
+		SELECT	<include refid="columns" />
+		FROM	FS_CONTEST
+		<include refid="searchWheres" />
+		
+		ORDER BY REGIST_DE ASC
+	</select>
+	
+</mapper>

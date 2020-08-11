@@ -1,0 +1,12 @@
+{
+	"accKey" : "null",
+	"fKey"   : "1910117195936",
+	"pKey"   : "1910117195936",
+	"menuG"  : "2",
+	"nm"     : "탈퇴회원관리",
+	"page"   : "1",
+	"target" : "_self",
+	"actAt"  : "Y",
+	"useAt"  : "Y",
+	"link"   : "/adm/user/dropList.do?key=2006176749091"
+}

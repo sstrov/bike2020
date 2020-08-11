@@ -1,0 +1,12 @@
+{
+	"accKey" : "null",
+	"fKey"   : "2004233211751",
+	"pKey"   : "2004233211751",
+	"menuG"  : "2",
+	"nm"     : "시장님 지시사항 관리",
+	"page"   : "1",
+	"target" : "_self",
+	"actAt"  : "Y",
+	"useAt"  : "Y",
+	"link"   : "/adm/drct/list.do?key=2004259185381"
+}

@@ -1,0 +1,500 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="fscms.mods.bbs.service.BbsMapper">
+
+	<sql id="columns">
+		BBS_SN                       AS bbsSn
+		, BBS_ESTBS_SN               AS bbsEstbsSn
+		, BBS_CTGRY_SN               AS bbsCtgrySn
+		, USER_ID                    AS userId
+		, MNGR_ID                    AS mngrId
+		, BBS_BEST_SN                AS bbsBestSn
+		, BBS_UPPER_SN               AS bbsUpperSn
+		, BBS_ORDR                   AS bbsOrdr
+		, BBS_DP                     AS bbsDp
+		, BBS_SJ                     AS bbsSj
+		, CONVERT(BBS_CN USING utf8) AS bbsCn
+		, REGISTER_NM                AS registerNm
+		, REGIST_PW                  AS registPw
+		, NOTICE_AT                  AS noticeAt
+		, SECRET_AT                  AS secretAt
+		, RDCNT                      AS rdcnt
+		, CM_CO                      AS cmCo
+		, BBS_ETC1                   AS bbsEtc1
+		, BBS_ETC2                   AS bbsEtc2
+		, BBS_ETC3                   AS bbsEtc3
+		, BBS_ETC4                   AS bbsEtc4
+		, BBS_ETC5                   AS bbsEtc5
+		, BBS_ETC6                   AS bbsEtc6
+		, BBS_ETC7                   AS bbsEtc7
+		, BBS_ETC8                   AS bbsEtc8
+		, BBS_ETC9                   AS bbsEtc9
+		, BBS_ETC10                  AS bbsEtc10
+		, BBS_ETC11                  AS bbsEtc11
+		, BBS_ETC12                  AS bbsEtc12
+		, BBS_ETC13                  AS bbsEtc13
+		, BBS_ETC14                  AS bbsEtc14
+		, BBS_ETC15                  AS bbsEtc15
+		, BBS_ETC16                  AS bbsEtc16
+		, BBS_ETC17                  AS bbsEtc17
+		, BBS_ETC18                  AS bbsEtc18
+		, BBS_ETC19                  AS bbsEtc19
+		, BBS_ETC20                  AS bbsEtc20
+		, DELETE_AT                  AS deleteAt
+		, REGIST_DE                  AS registDe
+		, REGIST_IP                  AS registIp
+		, UPDT_DE                    AS updtDe
+		, UPDT_IP                    AS updtIp
+	</sql>
+	
+	<sql id="wheres">
+		<where>
+			<if test="bbsSn != null and bbsSn != ''">
+				BBS_SN = #{bbsSn}
+			</if>
+			
+			<if test="bbsEstbsSn != null and bbsEstbsSn != ''">
+				AND BBS_ESTBS_SN = #{bbsEstbsSn}
+			</if>
+			
+			<if test="bbsCtgrySn != null and bbsCtgrySn != ''">
+				AND BBS_CTGRY_SN = #{bbsCtgrySn}
+			</if>
+			
+			<if test="bbsBestSn != null and bbsBestSn != ''">
+				AND BBS_BEST_SN = #{bbsBestSn}
+			</if>
+			
+			<if test="bbsUpperSn != null and bbsUpperSn != ''">
+				AND BBS_UPPER_SN = #{bbsUpperSn}
+			</if>
+			
+			<if test="bbsOrdr != null and bbsOrdr != ''">
+				AND BBS_ORDR = #{bbsOrdr}
+			</if>
+			
+			<if test="bbsDp != null and bbsDp != ''">
+				AND BBS_DP = #{bbsDp}
+			</if>
+			
+			<if test="noticeAt != null and noticeAt != ''">
+				AND NOTICE_AT = #{noticeAt}
+			</if>
+			
+			<if test="deleteAt != null and deleteAt != ''">
+				AND DELETE_AT = #{deleteAt}
+			</if>
+		</where>
+	</sql>
+	
+	<sql id="searchWheres">
+		<where>
+			<if test="sw_entry != null and sw_entry != ''">
+				(
+					<choose>
+						<when test="sc != null and sc != ''">
+							<choose>
+								<when test="sc == 'USER_ID'.toString()">
+									(
+										USER_ID        = #{sw_entry}
+										OR MNGR_ID     = #{sw_entry}
+									)
+								</when>
+								<otherwise>
+									${sc} = #{sw_entry}
+								</otherwise>
+							</choose>
+						</when>
+						<otherwise>
+							(
+								USER_ID      = #{sw_entry}
+								OR MNGR_ID   = #{sw_entry}
+							)
+						</otherwise>
+					</choose>
+				) OR (
+					<choose>
+						<when test="sc != null and sc != ''">
+							${sc} LIKE CONCAT('%', #{sw}, '%')
+						</when>
+						<otherwise>
+							(
+								BBS_SJ         LIKE CONCAT('%', #{sw}, '%')
+								OR BBS_CN      LIKE CONCAT('%', #{sw}, '%')
+								OR REGISTER_NM LIKE CONCAT('%', #{sw}, '%')
+								OR BBS_ETC1    LIKE CONCAT('%', #{sw}, '%')
+								OR BBS_ETC2    LIKE CONCAT('%', #{sw}, '%')
+								OR BBS_ETC3    LIKE CONCAT('%', #{sw}, '%')
+								OR BBS_ETC4    LIKE CONCAT('%', #{sw}, '%')
+								OR BBS_ETC5    LIKE CONCAT('%', #{sw}, '%')
+								OR BBS_ETC6    LIKE CONCAT('%', #{sw}, '%')
+								OR BBS_ETC7    LIKE CONCAT('%', #{sw}, '%')
+								OR BBS_ETC8    LIKE CONCAT('%', #{sw}, '%')
+								OR BBS_ETC9    LIKE CONCAT('%', #{sw}, '%')
+								OR BBS_ETC10   LIKE CONCAT('%', #{sw}, '%')
+								OR BBS_ETC11   LIKE CONCAT('%', #{sw}, '%')
+								OR BBS_ETC12   LIKE CONCAT('%', #{sw}, '%')
+								OR BBS_ETC13   LIKE CONCAT('%', #{sw}, '%')
+								OR BBS_ETC14   LIKE CONCAT('%', #{sw}, '%')
+								OR BBS_ETC15   LIKE CONCAT('%', #{sw}, '%')
+								OR BBS_ETC16   LIKE CONCAT('%', #{sw}, '%')
+								OR BBS_ETC17   LIKE CONCAT('%', #{sw}, '%')
+								OR BBS_ETC18   LIKE CONCAT('%', #{sw}, '%')
+								OR BBS_ETC19   LIKE CONCAT('%', #{sw}, '%')
+								OR BBS_ETC20   LIKE CONCAT('%', #{sw}, '%')
+							)
+						</otherwise>
+					</choose>
+				)
+			</if>
+			
+			<if test="bbsEstbsSn != null and bbsEstbsSn != ''">
+				AND BBS_ESTBS_SN = #{bbsEstbsSn}
+			</if>
+			
+			<if test="bbsCtgrySn != null and bbsCtgrySn != ''">
+				AND BBS_CTGRY_SN = #{bbsCtgrySn}
+			</if>
+			
+			<if test="bbsBestSn != null and bbsBestSn != ''">
+				AND BBS_BEST_SN = #{bbsBestSn}
+			</if>
+			
+			<if test="bbsUpperSn != null and bbsUpperSn != ''">
+				AND BBS_UPPER_SN = #{bbsUpperSn}
+			</if>
+			
+			<if test="bbsOrdr != null and bbsOrdr != ''">
+				AND BBS_ORDR = #{bbsOrdr}
+			</if>
+			
+			<if test="bbsDp != null and bbsDp != ''">
+				AND BBS_DP = #{bbsDp}
+			</if>
+			
+			<if test="noticeAt != null and noticeAt != ''">
+				AND NOTICE_AT = #{noticeAt}
+			</if>
+			
+			<if test="deleteAt != null and deleteAt != ''">
+				AND DELETE_AT = #{deleteAt}
+			</if>
+			
+			<if test="sc_keywordArr != null and sc_keywordArr != ''">
+				AND 
+				<foreach item="item" collection="sc_keywordArr" separator="OR" open="(" close=")">
+					BBS_SJ         LIKE CONCAT('%', #{item}, '%')
+					OR BBS_CN      LIKE CONCAT('%', #{item}, '%')
+					OR REGISTER_NM LIKE CONCAT('%', #{item}, '%')
+					OR BBS_ETC1    LIKE CONCAT('%', #{item}, '%')
+					OR BBS_ETC2    LIKE CONCAT('%', #{item}, '%')
+					OR BBS_ETC3    LIKE CONCAT('%', #{item}, '%')
+					OR BBS_ETC4    LIKE CONCAT('%', #{item}, '%')
+					OR BBS_ETC5    LIKE CONCAT('%', #{item}, '%')
+					OR BBS_ETC6    LIKE CONCAT('%', #{item}, '%')
+					OR BBS_ETC7    LIKE CONCAT('%', #{item}, '%')
+					OR BBS_ETC8    LIKE CONCAT('%', #{item}, '%')
+					OR BBS_ETC9    LIKE CONCAT('%', #{item}, '%')
+					OR BBS_ETC10   LIKE CONCAT('%', #{item}, '%')
+					OR BBS_ETC11   LIKE CONCAT('%', #{item}, '%')
+					OR BBS_ETC12   LIKE CONCAT('%', #{item}, '%')
+					OR BBS_ETC13   LIKE CONCAT('%', #{item}, '%')
+					OR BBS_ETC14   LIKE CONCAT('%', #{item}, '%')
+					OR BBS_ETC15   LIKE CONCAT('%', #{item}, '%')
+					OR BBS_ETC16   LIKE CONCAT('%', #{item}, '%')
+					OR BBS_ETC17   LIKE CONCAT('%', #{item}, '%')
+					OR BBS_ETC18   LIKE CONCAT('%', #{item}, '%')
+					OR BBS_ETC19   LIKE CONCAT('%', #{item}, '%')
+					OR BBS_ETC20   LIKE CONCAT('%', #{item}, '%')
+				</foreach>
+			</if>
+			
+			<if test="sc_wDateS != null and sc_wDateS != ''">
+				AND DATE_FORMAT(REGIST_DE, '%Y-%m-%d') <![CDATA[>=]]> #{sc_wDateS}
+			</if>
+			<if test="sc_wDateE != null and sc_wDateE != ''">
+				AND DATE_FORMAT(REGIST_DE, '%Y-%m-%d') <![CDATA[<=]]> #{sc_wDateE}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="selectObj" parameterType="bbsVO" resultType="bbsVO">
+		SELECT	<include refid="columns" />
+				, (SELECT CTGRY_NM FROM FS_BBS_CTGRY WHERE BBS_CTGRY_SN = FS_BBS.BBS_CTGRY_SN) AS ctgryNm
+		FROM	FS_BBS
+		<include refid="wheres" />
+	</select>
+	
+	<sql id="rnumWhere">
+		<where>
+			<if test="bbsEstbsSn != null and bbsEstbsSn != ''">
+				BBS_ESTBS_SN = #{bbsEstbsSn}
+			</if>
+			
+			<if test="bbsCtgrySn != null and bbsCtgrySn != ''">
+				AND BBS_CTGRY_SN = #{bbsCtgrySn}
+			</if>
+			
+			<if test="bbsBestSn != null and bbsBestSn != ''">
+				AND BBS_BEST_SN = #{bbsBestSn}
+			</if>
+			
+			<if test="bbsUpperSn != null and bbsUpperSn != ''">
+				AND BBS_UPPER_SN = #{bbsUpperSn}
+			</if>
+			
+			<if test="bbsOrdr != null and bbsOrdr != ''">
+				AND BBS_ORDR = #{bbsOrdr}
+			</if>
+			
+			<if test="bbsDp != null and bbsDp != ''">
+				AND BBS_DP = #{bbsDp}
+			</if>
+			
+			<if test="noticeAt != null and noticeAt != ''">
+				AND NOTICE_AT = #{noticeAt}
+			</if>
+			
+			<if test="deleteAt != null and deleteAt != ''">
+				AND DELETE_AT = #{deleteAt}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="selectRnum" parameterType="bbsVO" resultType="bbsVO">
+		SELECT	B.*
+		FROM	(
+			SELECT	A.*
+					, AA.BBS_SN AS nextBbsSn
+					, AB.BBS_SN AS prevBbsSn
+			FROM	(
+				SELECT	<include refid="columns" />
+						, (SELECT CTGRY_NM FROM FS_BBS_CTGRY WHERE BBS_CTGRY_SN = FS_BBS.BBS_CTGRY_SN) AS ctgryNm
+						, @rownum:=@rownum+1 AS rnum
+				FROM	FS_BBS,
+						(SELECT @rownum:=0) TMP
+				
+				<include refid="rnumWhere" />
+				ORDER BY BBS_BEST_SN DESC, BBS_ORDR ASC
+			) A
+			LEFT JOIN (
+				SELECT	T.*
+				FROM	(
+					SELECT	BBS_SN
+							, @rownumA:=@rownumA+1 AS rnum
+					FROM	FS_BBS,
+							(SELECT @rownumA:=0) TMP
+					
+					<include refid="rnumWhere" />
+					ORDER BY BBS_BEST_SN DESC, BBS_ORDR ASC
+				) T
+			) AA ON (AA.rnum = (A.rnum - 1))
+			LEFT JOIN (
+				SELECT	T.*
+				FROM	(
+					SELECT	BBS_SN
+							, @rownumB:=@rownumB+1 AS rnum
+					FROM	FS_BBS,
+							(SELECT @rownumB:=0) TMP
+					
+					<include refid="rnumWhere" />
+					ORDER BY BBS_BEST_SN DESC, BBS_ORDR ASC
+				) T
+			) AB ON (AB.rnum = (A.rnum + 1))
+		) B
+		WHERE	B.bbsSn = #{bbsSn}
+	</select>
+	
+	<select id="selectList" parameterType="bbsSearchVO" resultType="bbsVO">
+		SELECT	<include refid="columns" />
+				, (SELECT CTGRY_NM FROM FS_BBS_CTGRY WHERE BBS_CTGRY_SN = FS_BBS.BBS_CTGRY_SN) AS ctgryNm
+				, (SELECT DELETE_AT FROM FS_BBS B WHERE B.BBS_SN = FS_BBS.BBS_BEST_SN)         AS upperDeleteAt
+		FROM	FS_BBS
+		<include refid="searchWheres" />
+		
+		<choose>
+			<when test="orderBy != null and orderBy != ''">
+				ORDER BY ${orderBy}
+			</when>
+			<otherwise>
+				ORDER BY BBS_BEST_SN DESC, BBS_ORDR ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="selectTCount" parameterType="bbsSearchVO" resultType="int">
+		SELECT	COUNT(BBS_SN)
+		FROM	FS_BBS
+		<include refid="searchWheres" />
+	</select>
+	
+	<select id="selectPageList" parameterType="bbsSearchVO" resultType="bbsVO">
+		SELECT	<include refid="columns" />
+				, (SELECT CTGRY_NM FROM FS_BBS_CTGRY WHERE BBS_CTGRY_SN = FS_BBS.BBS_CTGRY_SN) AS ctgryNm
+				, (SELECT DELETE_AT FROM FS_BBS B WHERE B.BBS_SN = FS_BBS.BBS_BEST_SN)         AS upperDeleteAt
+		FROM	FS_BBS
+		<include refid="searchWheres" />
+		
+		<choose>
+			<when test="orderBy != null and orderBy != ''">
+				ORDER BY ${orderBy}
+			</when>
+			<otherwise>
+				ORDER BY BBS_BEST_SN DESC, BBS_ORDR ASC
+			</otherwise>
+		</choose>
+		
+		LIMIT #{firstIndex}, #{recordCountPerPage}
+	</select>
+	
+	<insert id="insertInfo" useGeneratedKeys="true" keyProperty="bbsSn" parameterType="bbsVO">
+		INSERT INTO FS_BBS
+			(BBS_ESTBS_SN, BBS_CTGRY_SN, MNGR_ID, BBS_BEST_SN,
+			BBS_UPPER_SN, BBS_ORDR, BBS_DP, BBS_SJ,
+			BBS_CN, REGISTER_NM, REGIST_PW, NOTICE_AT,
+			SECRET_AT, RDCNT, CM_CO, BBS_ETC1,
+			BBS_ETC2, BBS_ETC3, BBS_ETC4, BBS_ETC5,
+			BBS_ETC6, BBS_ETC7, BBS_ETC8, BBS_ETC9,
+			BBS_ETC10, BBS_ETC11, BBS_ETC12, BBS_ETC13,
+			BBS_ETC14, BBS_ETC15, BBS_ETC16, BBS_ETC17,
+			BBS_ETC18, BBS_ETC19, BBS_ETC20, DELETE_AT,
+			REGIST_DE, REGIST_IP, UPDT_DE, UPDT_IP)
+		VALUES
+			(#{bbsEstbsSn}, #{bbsCtgrySn, jdbcType=INTEGER}, #{mngrId, jdbcType=VARCHAR}, #{bbsBestSn, jdbcType=INTEGER},
+			#{bbsUpperSn, jdbcType=INTEGER}, #{bbsOrdr, jdbcType=INTEGER}, #{bbsDp, jdbcType=INTEGER}, #{bbsSj},
+			#{bbsCn:BLOB, jdbcType=VARCHAR}, #{registerNm, jdbcType=VARCHAR}, #{registPw, jdbcType=VARCHAR}, #{noticeAt},
+			#{secretAt}, #{rdcnt}, #{cmCo}, #{bbsEtc1, jdbcType=VARCHAR},
+			#{bbsEtc2, jdbcType=VARCHAR}, #{bbsEtc3, jdbcType=VARCHAR}, #{bbsEtc4, jdbcType=VARCHAR}, #{bbsEtc5, jdbcType=VARCHAR},
+			#{bbsEtc6, jdbcType=VARCHAR}, #{bbsEtc7, jdbcType=VARCHAR}, #{bbsEtc8, jdbcType=VARCHAR}, #{bbsEtc9, jdbcType=VARCHAR},
+			#{bbsEtc10, jdbcType=VARCHAR}, #{bbsEtc11, jdbcType=VARCHAR}, #{bbsEtc12, jdbcType=VARCHAR}, #{bbsEtc13, jdbcType=VARCHAR},
+			#{bbsEtc14, jdbcType=VARCHAR}, #{bbsEtc15, jdbcType=VARCHAR}, #{bbsEtc16, jdbcType=VARCHAR}, #{bbsEtc17, jdbcType=VARCHAR},
+			#{bbsEtc18, jdbcType=VARCHAR}, #{bbsEtc19, jdbcType=VARCHAR}, #{bbsEtc20, jdbcType=VARCHAR}, 'N',
+			NOW(), #{registIp}, NOW(), #{updtIp})
+	</insert>
+	
+	<update id="updateInfo" parameterType="bbsVO">
+		UPDATE	FS_BBS
+		<set>
+			<if test="bbsCtgrySn != null">
+				BBS_CTGRY_SN = #{bbsCtgrySn, jdbcType=INTEGER},
+			</if>
+			<if test="bbsBestSn != null and bbsBestSn != ''">
+				BBS_BEST_SN = #{bbsBestSn, jdbcType=INTEGER},
+			</if>
+			<if test="bbsUpperSn != null">
+				BBS_UPPER_SN = #{bbsUpperSn, jdbcType=INTEGER},
+			</if>
+			<if test="bbsOrdr != null and bbsOrdr != ''">
+				BBS_ORDR = #{bbsOrdr},
+			</if>
+			<if test="bbsDp != null and bbsDp != ''">
+				BBS_DP = #{bbsDp},
+			</if>
+			<if test="bbsSj != null and bbsSj != ''">
+				BBS_SJ = #{bbsSj},
+			</if>
+			<if test="bbsCn != null">
+				BBS_CN = #{bbsCn:BLOB, jdbcType=VARCHAR},
+			</if>
+			<if test="registerNm != null and registerNm != ''">
+				REGISTER_NM = #{registerNm},
+			</if>
+			<if test="registPw != null and registPw != ''">
+				REGIST_PW = #{registPw},
+			</if>
+			<if test="noticeAt != null and noticeAt != ''">
+				NOTICE_AT = #{noticeAt},
+			</if>
+			<if test="secretAt != null and secretAt != ''">
+				SECRET_AT = #{secretAt},
+			</if>
+			<if test="rdcnt != null">
+				RDCNT = #{rdcnt},
+			</if>
+			<if test="cmCo != null">
+				CM_CO = #{cmCo},
+			</if>
+			<if test="bbsEtc1 != null">
+				BBS_ETC1 = #{bbsEtc1, jdbcType=VARCHAR},
+			</if>
+			<if test="bbsEtc2 != null">
+				BBS_ETC2 = #{bbsEtc2, jdbcType=VARCHAR},
+			</if>
+			<if test="bbsEtc3 != null">
+				BBS_ETC3 = #{bbsEtc3, jdbcType=VARCHAR},
+			</if>
+			<if test="bbsEtc4 != null">
+				BBS_ETC4 = #{bbsEtc4, jdbcType=VARCHAR},
+			</if>
+			<if test="bbsEtc5 != null">
+				BBS_ETC5 = #{bbsEtc5, jdbcType=VARCHAR},
+			</if>
+			<if test="bbsEtc6 != null">
+				BBS_ETC6 = #{bbsEtc6, jdbcType=VARCHAR},
+			</if>
+			<if test="bbsEtc7 != null">
+				BBS_ETC7 = #{bbsEtc7, jdbcType=VARCHAR},
+			</if>
+			<if test="bbsEtc8 != null">
+				BBS_ETC8 = #{bbsEtc8, jdbcType=VARCHAR},
+			</if>
+			<if test="bbsEtc9 != null">
+				BBS_ETC9 = #{bbsEtc9, jdbcType=VARCHAR},
+			</if>
+			<if test="bbsEtc10 != null">
+				BBS_ETC10 = #{bbsEtc10, jdbcType=VARCHAR},
+			</if>
+			<if test="bbsEtc11 != null">
+				BBS_ETC11 = #{bbsEtc11, jdbcType=VARCHAR},
+			</if>
+			<if test="bbsEtc12 != null">
+				BBS_ETC12 = #{bbsEtc12, jdbcType=VARCHAR},
+			</if>
+			<if test="bbsEtc13 != null">
+				BBS_ETC13 = #{bbsEtc13, jdbcType=VARCHAR},
+			</if>
+			<if test="bbsEtc14 != null">
+				BBS_ETC14 = #{bbsEtc14, jdbcType=VARCHAR},
+			</if>
+			<if test="bbsEtc15 != null">
+				BBS_ETC15 = #{bbsEtc15, jdbcType=VARCHAR},
+			</if>
+			<if test="bbsEtc16 != null">
+				BBS_ETC16 = #{bbsEtc16, jdbcType=VARCHAR},
+			</if>
+			<if test="bbsEtc17 != null">
+				BBS_ETC17 = #{bbsEtc17, jdbcType=VARCHAR},
+			</if>
+			<if test="bbsEtc18 != null">
+				BBS_ETC18 = #{bbsEtc18, jdbcType=VARCHAR},
+			</if>
+			<if test="bbsEtc19 != null">
+				BBS_ETC19 = #{bbsEtc19, jdbcType=VARCHAR},
+			</if>
+			<if test="bbsEtc20 != null">
+				BBS_ETC20 = #{bbsEtc20, jdbcType=VARCHAR},
+			</if>
+			<if test="deleteAt != null and deleteAt != ''">
+				DELETE_AT = #{deleteAt},
+			</if>
+			<if test="updtIp != null and updtIp != ''">
+				UPDT_IP = #{updtIp},
+			</if>
+			UPDT_DE = NOW()
+		</set>
+		WHERE	BBS_SN = #{bbsSn}
+	</update>
+	
+	<update id="updateOrder" parameterType="bbsVO">
+		UPDATE	FS_BBS
+		SET		BBS_ORDR = BBS_ORDR + 1
+		WHERE	BBS_BEST_SN = #{bbsBestSn}
+				AND BBS_ORDR <![CDATA[>=]]> #{bbsOrdr}
+	</update>
+	
+	<delete id="deleteInfo" parameterType="bbsVO">
+		DELETE FROM FS_BBS
+		WHERE BBS_SN = #{bbsSn}
+	</delete>
+	
+</mapper>

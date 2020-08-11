@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="fscms.mods.bbs.service.BbsCtgrySubMapper">
+
+	<sql id="columns">
+		BBS_CTGRY_SUB_SN	AS bbsCtgrySubSn,
+		BBS_CTGRY_SN 		AS bbsCtgrySn, 
+		CTGRY_SUB_NM		AS ctgrySubNm
+	</sql>
+	
+	<sql id="wheres">
+		<where>
+			<if test="bbsCtgrySn != null and bbsCtgrySn != ''">
+				BBS_CTGRY_SN = #{bbsCtgrySn}
+			</if>
+			
+			<if test="bbsCtgrySubSn != null and bbsCtgrySubSn != ''">
+				AND BBS_CTGRY_SUB_SN = #{bbsCtgrySubSn}
+			</if>
+			
+			<if test="sc_keyArr != null and sc_keyArr != ''">
+				AND BBS_CTGRY_SUB_SN NOT IN
+				<foreach item="item" collection="sc_keyArr" separator="," open="(" close=")">
+					#{item}
+				</foreach>
+			</if>
+		</where>
+	</sql>
+	
+	<select id="selectObj" parameterType="bbsCtgrySubVO" resultType="bbsCtgrySubVO">
+		SELECT	<include refid="columns" />
+		FROM	FS_BBS_CTGRY_SUB
+		<include refid="wheres" />
+	</select>
+	
+	<select id="selectList" parameterType="bbsCtgrySubVO" resultType="bbsCtgrySubVO">
+		SELECT	<include refid="columns" />
+		FROM	FS_BBS_CTGRY_SUB
+		<include refid="wheres" />
+		ORDER BY BBS_CTGRY_SN ASC
+	</select>
+	
+	<insert id="insertInfo" useGeneratedKeys="true" keyProperty="bbsCtgrySubSn" parameterType="bbsCtgrySubVO">
+		INSERT INTO FS_BBS_CTGRY_SUB
+			(BBS_CTGRY_SN, CTGRY_SUB_NM)
+		VALUES
+			(#{bbsCtgrySn}, #{ctgrySubNm})
+	</insert>
+	
+	<update id="updateInfo" parameterType="bbsCtgrySubVO">
+		UPDATE	FS_BBS_CTGRY_SUB
+		<set>
+			<if test="ctgrySubNm != null and ctgrySubNm != ''">
+				CTGRY_SUB_NM = #{ctgrySubNm}
+			</if>
+		</set>
+		WHERE	BBS_CTGRY_SUB_SN = #{bbsCtgrySubSn}
+	</update>
+	
+	<delete id="deleteInfo" parameterType="bbsCtgrySubVO">
+		DELETE FROM FS_BBS_CTGRY_SUB
+		WHERE BBS_CTGRY_SUB_SN = #{bbsCtgrySubSn}
+	</delete>
+	
+</mapper>

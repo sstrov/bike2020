@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="fscms.mods.code.service.CodeMapper">
+
+	<sql id="columns">
+		CODE_ID      AS codeId
+		, CODE_CL_ID AS codeClId
+		, CODE_NM    AS codeNm
+		, CODE_DC    AS codeDc
+		, USE_AT     AS useAt
+		, REGIST_DE  AS registDe
+		, UPDT_DE    AS updtDe
+	</sql>
+	
+	<sql id="wheres">
+		<where>
+			<if test="codeId != null and codeId != ''">
+				CODE_ID = #{codeId}
+			</if>
+			<if test="codeClId != null and codeClId != ''">
+				AND CODE_CL_ID = #{codeClId}
+			</if>
+			<if test="useAt != null and useAt != ''">
+				AND FS_CODE.USE_AT = #{useAt}
+			</if>
+		</where>
+	</sql>
+	
+	<sql id="searchWheres">
+		<where>
+			<if test="sw != null and sw != ''">
+				<choose>
+					<when test="sc != null and sc != ''">
+						${sc} LIKE CONCAT('%', #{sw}, '%')
+					</when>
+					<otherwise>
+						(
+							CODE_ID       LIKE CONCAT('%', #{sw}, '%')
+							OR CODE_CL_ID LIKE CONCAT('%', #{sw}, '%')
+							OR CODE_NM    LIKE CONCAT('%', #{sw}, '%')
+							OR CODE_DC    LIKE CONCAT('%', #{sw}, '%')
+						)
+					</otherwise>
+				</choose>
+			</if>
+			
+			<if test="sc_useAtArr != null and sc_useAtArr != ''">
+				AND USE_AT IN
+				<foreach item="item" collection="sc_useAtArr" separator="," open="(" close=")">
+					#{item}
+				</foreach>
+			</if>
+			
+			<if test="sc_wDateS != null and sc_wDateS != ''">
+				AND DATE_FORMAT(REGIST_DE, '%Y-%m-%d') <![CDATA[>=]]> #{sc_wDateS}
+			</if>
+			<if test="sc_wDateE != null and sc_wDateE != ''">
+				AND DATE_FORMAT(REGIST_DE, '%Y-%m-%d') <![CDATA[<=]]> #{sc_wDateE}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="selectObj" parameterType="codeVO" resultType="codeVO">
+		SELECT	<include refid="columns" />
+				, (SELECT CODE_CL_NM FROM FS_CODE_CL WHERE CODE_CL_ID = FS_CODE.CODE_CL_ID) AS codeClNm
+		FROM	FS_CODE
+		<include refid="wheres" />
+	</select>
+	
+	<select id="selectList" parameterType="codeVO" resultType="codeVO">
+		SELECT	<include refid="columns" />
+		FROM	FS_CODE
+		<include refid="wheres" />
+		ORDER BY CODE_ID ASC
+	</select>
+	
+	<select id="selectTCount" parameterType="codeSearchVO" resultType="int">
+		SELECT	COUNT(CODE_ID)
+		FROM	FS_CODE
+		<include refid="searchWheres" />
+	</select>
+	
+	<select id="selectPageList" parameterType="codeSearchVO" resultType="codeVO">
+		SELECT	<include refid="columns" />
+				, (SELECT CODE_CL_NM FROM FS_CODE_CL WHERE CODE_CL_ID = FS_CODE.CODE_CL_ID) AS codeClNm
+		FROM	FS_CODE
+		<include refid="searchWheres" />
+		
+		<choose>
+			<when test="orderBy != null and orderBy != ''">
+				ORDER BY ${orderBy}
+			</when>
+			<otherwise>
+				ORDER BY REGIST_DE DESC
+			</otherwise>
+		</choose>
+		
+		LIMIT #{firstIndex}, #{recordCountPerPage}
+	</select>
+	
+	<insert id="insertInfo" parameterType="codeVO">
+		INSERT INTO FS_CODE
+			(CODE_ID, CODE_CL_ID, CODE_NM, CODE_DC,
+			USE_AT, REGIST_DE, UPDT_DE)
+		VALUES
+			(#{codeId}, #{codeClId}, #{codeNm}, #{codeDc, jdbcType=VARCHAR},
+			#{useAt}, NOW(), NOW())
+	</insert>
+	
+	<update id="updateInfo" parameterType="codeVO">
+		UPDATE	FS_CODE
+		<set>
+			<if test="codeClId != null and codeClId != ''">
+				CODE_CL_ID = #{codeClId},
+			</if>
+			<if test="codeNm != null and codeNm != ''">
+				CODE_NM = #{codeNm},
+			</if>
+			<if test="codeDc != null">
+				CODE_DC = #{codeDc, jdbcType=VARCHAR},
+			</if>
+			<if test="useAt != null and useAt != ''">
+				USE_AT = #{useAt},
+			</if>
+			UPDT_DE = NOW()
+		</set>
+		WHERE	CODE_ID = #{codeId}
+	</update>
+	
+</mapper>

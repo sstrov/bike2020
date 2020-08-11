@@ -1,0 +1,12 @@
+{
+	"accKey" : "null",
+	"fKey"   : "2007061957378",
+	"pKey"   : "2007061957378",
+	"menuG"  : "2",
+	"nm"     : "공모전 관리",
+	"page"   : "1",
+	"target" : "_self",
+	"actAt"  : "Y",
+	"useAt"  : "Y",
+	"link"   : "/adm/contest/estbs/list.do?key=2007061959109"
+}

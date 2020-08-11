@@ -1,0 +1,19 @@
+{
+	"accKey"   : "null",
+	"fKey"     : "2001272673529",
+	"fNm"      : "마이페이지",
+	"pKey"     : "2001272673529",
+	"pNm"      : "마이페이지",
+	"menuG"    : "2",
+	"nm"       : "인증수첩관리",
+	"page"     : "0",
+	"target"   : "_self",
+	"tag"      : "null",
+	"class"    : "null",
+	"fileImage": "null",
+	"filePath" : "null",
+	"actAt"    : "Y",
+	"useAt"    : "Y",
+	"link"     : "/sub.do?key=2006177052761",
+	"subImg"   : ""
+}

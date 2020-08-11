@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="fscms.mods.mngr.service.MngrRoleMapper">
+
+	<sql id="columns">
+		ROLE_SN     AS roleSn
+		, ROLE_NM   AS roleNm
+		, ROLE_ORDR AS roleOrdr
+		, REGIST_DE AS registDe
+		, UPDT_DE   AS updtDe
+	</sql>
+	
+	<sql id="wheres">
+		<where>
+			<if test="roleSn != null and roleSn != ''">
+				ROLE_SN = #{roleSn}
+			</if>
+			<if test="roleNm != null and roleNm != ''">
+				AND ROLE_NM = #{roleNm}
+			</if>
+		</where>
+	</sql>
+	
+	<sql id="searchWheres">
+		<where>
+			<if test="sw != null and sw != ''">
+				<choose>
+					<when test="sc != null and sc != ''">
+						${sc} LIKE CONCAT('%', #{sw}, '%')
+					</when>
+					<otherwise>
+						(
+							ROLE_NM LIKE CONCAT('%', #{sw}, '%')
+						)
+					</otherwise>
+				</choose>
+			</if>
+			
+			<if test="sc_wDateS != null and sc_wDateS != ''">
+				AND DATE_FORMAT(REGIST_DE, '%Y-%m-%d') <![CDATA[>=]]> #{sc_wDateS}
+			</if>
+			<if test="sc_wDateE != null and sc_wDateE != ''">
+				AND DATE_FORMAT(REGIST_DE, '%Y-%m-%d') <![CDATA[<=]]> #{sc_wDateE}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="selectObj" parameterType="mngrRoleVO" resultType="mngrRoleVO">
+		SELECT	<include refid="columns" />
+		FROM	FS_MNGR_ROLE
+		<include refid="wheres" />
+	</select>
+	
+	<select id="selectList" parameterType="mngrRoleVO" resultType="mngrRoleVO">
+		SELECT	<include refid="columns" />
+		FROM	FS_MNGR_ROLE
+		<include refid="wheres" />
+		ORDER BY ROLE_ORDR ASC
+	</select>
+	
+	<select id="selectTCount" parameterType="mngrRoleSearchVO" resultType="int">
+		SELECT	COUNT(ROLE_SN)
+		FROM	FS_MNGR_ROLE
+		<include refid="searchWheres" />
+	</select>
+	
+	<select id="selectPageList" parameterType="mngrRoleSearchVO" resultType="mngrRoleVO">
+		SELECT	<include refid="columns" />
+		FROM	FS_MNGR_ROLE
+		<include refid="searchWheres" />
+		
+		<choose>
+			<when test="orderBy != null and orderBy != ''">
+				ORDER BY ${orderBy}
+			</when>
+			<otherwise>
+				ORDER BY ROLE_ORDR DESC
+			</otherwise>
+		</choose>
+		
+		LIMIT #{firstIndex}, #{recordCountPerPage}
+	</select>
+	
+	<select id="selectMaxO" parameterType="mngrRoleVO" resultType="int">
+		SELECT	IFNULL(MAX(ROLE_ORDR), 0)
+		FROM	FS_MNGR_ROLE
+		<include refid="wheres" />
+	</select>
+	
+	<insert id="insertInfo" useGeneratedKeys="true" keyProperty="roleSn" parameterType="mngrRoleVO">
+		INSERT INTO FS_MNGR_ROLE
+			(ROLE_NM, ROLE_ORDR, REGIST_DE, UPDT_DE)
+		VALUES
+			(#{roleNm}, #{roleOrdr}, NOW(), NOW())
+	</insert>
+	
+	<update id="updateInfo" parameterType="mngrRoleVO">
+		UPDATE	FS_MNGR_ROLE
+		<set>
+			<if test="roleNm != null and roleNm != ''">
+				ROLE_NM = #{roleNm},
+			</if>
+			<if test="roleOrdr != null and roleOrdr != ''">
+				ROLE_ORDR = #{roleOrdr},
+			</if>
+			UPDT_DE = NOW()
+		</set>
+		WHERE	ROLE_SN = #{roleSn}
+	</update>
+	
+	<delete id="deleteInfo" parameterType="mngrRoleVO">
+		DELETE FROM FS_MNGR_ROLE
+		WHERE ROLE_SN = #{roleSn}
+	</delete>
+	
+</mapper>

@@ -1,0 +1,12 @@
+{
+	"accKey" : "null",
+	"fKey"   : "1910117230564",
+	"pKey"   : "1910117230564",
+	"menuG"  : "2",
+	"nm"     : "오류 이력",
+	"page"   : "1",
+	"target" : "_self",
+	"actAt"  : "Y",
+	"useAt"  : "Y",
+	"link"   : "/adm/error/hist/list.do?key=1910179784526"
+}

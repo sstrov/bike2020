@@ -1,0 +1,12 @@
+{
+	"accKey" : "null",
+	"fKey"   : "1910117192310",
+	"pKey"   : "1910117192310",
+	"menuG"  : "2",
+	"nm"     : "앱버전관리",
+	"page"   : "1",
+	"target" : "_self",
+	"actAt"  : "Y",
+	"useAt"  : "Y",
+	"link"   : "/adm/app/version/form.do?key=2006176838598"
+}

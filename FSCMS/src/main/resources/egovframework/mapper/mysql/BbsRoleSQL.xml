@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="fscms.mods.bbs.service.BbsRoleMapper">
+
+	<sql id="columns">
+		BBS_ROLE_SN    AS bbsRoleSn
+		, BBS_ESTBS_SN AS bbsEstbsSn
+		, ROLE_SN      AS roleSn
+		, ROLE_TY      AS roleTy
+	</sql>
+	
+	<sql id="wheres">
+		<where>
+			<if test="bbsRoleSn != null and bbsRoleSn != ''">
+				BBS_ROLE_SN = #{bbsRoleSn}
+			</if>
+			
+			<if test="bbsEstbsSn != null and bbsEstbsSn != ''">
+				AND BBS_ESTBS_SN = #{bbsEstbsSn}
+			</if>
+			
+			<if test="roleSn != null and roleSn != ''">
+				AND ROLE_SN = #{roleSn}
+			</if>
+			
+			<if test="roleTy != null and roleTy != ''">
+				AND ROLE_TY = #{roleTy}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="selectObj" parameterType="bbsRoleVO" resultType="bbsRoleVO">
+		SELECT	<include refid="columns" />
+		FROM	FS_BBS_ROLE
+		<include refid="wheres" />
+	</select>
+	
+	<select id="selectList" parameterType="bbsRoleVO" resultType="bbsRoleVO">
+		SELECT	<include refid="columns" />
+		FROM	FS_BBS_ROLE
+		<include refid="wheres" />
+		ORDER BY BBS_ROLE_SN ASC
+	</select>
+	
+	<insert id="insertInfo" useGeneratedKeys="true" keyProperty="bbsRoleSn" parameterType="bbsRoleVO">
+		INSERT INTO FS_BBS_ROLE
+			(BBS_ESTBS_SN, ROLE_SN, ROLE_TY)
+		VALUES
+			(#{bbsEstbsSn}, #{roleSn}, #{roleTy})
+	</insert>
+	
+	<delete id="deleteInfo" parameterType="bbsRoleVO">
+		DELETE FROM FS_BBS_ROLE
+		WHERE BBS_ROLE_SN = #{bbsRoleSn}
+	</delete>
+	
+</mapper>

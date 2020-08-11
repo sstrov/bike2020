@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="fscms.mods.user.service.UserLoginHistMapper">
+
+	 <sql id="columns">
+		LOGIN_HIST_SN                AS loginHistSn
+		, FS_USER_LOGIN_HIST.USER_SN AS userSn
+		, SESION_ID                  AS sesionId
+		, LOGIN_IP                   AS loginIp
+		, LOGIN_PLTFOM               AS loginPltfom
+		, LOGIN_BRWSR_NM             AS loginBrwsrNm
+		, LOGIN_BRWSR_VER            AS loginBrwsrVer
+		, LOGIN_BGNDE                AS loginBgnde
+		, LOGIN_ENDDE                AS loginEndde
+	</sql>
+	
+	<sql id="wheres">
+		<where>
+			<if test="loginHistSn != null and loginHistSn != ''">
+				LOGIN_HIST_SN = #{loginHistSn}
+			</if>
+			<if test="mngrSn != null and mngrSn != ''">
+				AND FS_USER_LOGIN_HIST.USER_SN = #{userSn}
+			</if>
+			
+			<if test="sesionId != null and sesionId != ''">
+				AND (
+					SESION_ID = #{sesionId}
+					AND LOGIN_ENDDE IS NULL
+				)
+			</if>
+			
+			<if test="loginBgnde != null and loginBgnde != ''">
+				AND DATE_FORMAT(LOGIN_BGNDE, '%Y-%m-%d') <![CDATA[>=]]> #{loginBgnde}
+			</if>
+			<if test="loginEndde != null and loginEndde != ''">
+				AND DATE_FORMAT(LOGIN_BGNDE, '%Y-%m-%d') <![CDATA[<=]]> #{loginEndde}
+			</if>
+		</where>
+	</sql>
+	
+	<sql id="searchWheres">
+		<where>
+			<if test="sw_entry != null and sw_entry != ''">
+				(
+					<choose>
+						<when test="sc != null and sc != ''">
+							${sc} = #{sw_entry}
+						</when>
+						<otherwise>
+							(
+								FS_USER.USER_ID    = #{sw_entry}
+								OR FS_USER.USER_NM = #{sw_entry}
+								OR LOGIN_IP        = #{sw_entry}
+							)
+						</otherwise>
+					</choose>
+				) OR (
+					<choose>
+						<when test="sc != null and sc != ''">
+							${sc} LIKE CONCAT('%', #{sw}, '%')
+						</when>
+						<otherwise>
+							(
+								FS_USER.USER_ID    LIKE CONCAT('%', #{sw}, '%')
+								OR FS_USER.USER_NM LIKE CONCAT('%', #{sw}, '%')
+								OR LOGIN_IP        LIKE CONCAT('%', #{sw}, '%')
+							)
+						</otherwise>
+					</choose>
+				)
+			</if>
+			
+			<if test="sc_wDateS != null and sc_wDateS != ''">
+				AND DATE_FORMAT(LOGIN_BGNDE, '%Y-%m-%d') <![CDATA[>=]]> #{sc_wDateS}
+			</if>
+			<if test="sc_wDateE != null and sc_wDateE != ''">
+				AND DATE_FORMAT(LOGIN_BGNDE, '%Y-%m-%d') <![CDATA[<=]]> #{sc_wDateE}
+			</if>
+			
+			<if test="sc_privateAt != null and sc_privateAt != ''">
+				AND LOGIN_ENDDE IS NULL
+			</if>
+		</where>
+	</sql>
+	
+	<select id="selectObj" parameterType="userLoginHistVO" resultType="userLoginHistVO">
+		SELECT	<include refid="columns" />
+				, FS_USER.USER_ID   AS userId
+				, FS_USER.USER_NM   AS userNm
+				, FS_USER.USER_SALT AS userSalt
+		FROM	FS_USER_LOGIN_HIST
+		LEFT OUTER JOIN FS_USER ON (FS_USER.USER_SN = FS_USER_LOGIN_HIST.USER_SN)
+		<include refid="wheres" />
+	</select>
+	
+	<select id="selectTCount" parameterType="userLoginHistSearchVO" resultType="int">
+		SELECT	COUNT(LOGIN_HIST_SN)
+		FROM	FS_USER_LOGIN_HIST
+		LEFT OUTER JOIN FS_USER ON (FS_USER.USER_SN = FS_USER_LOGIN_HIST.USER_SN)
+		<include refid="searchWheres" />
+	</select>
+	
+	<select id="selectList" parameterType="userLoginHistSearchVO" resultType="userLoginHistVO">
+		SELECT	<include refid="columns" />
+		FROM	FS_USER_LOGIN_HIST
+		LEFT OUTER JOIN FS_USER ON (FS_USER.USER_SN = FS_USER_LOGIN_HIST.USER_SN)
+		<include refid="searchWheres" />
+		
+		<choose>
+			<when test="orderBy != null and orderBy != ''">
+				ORDER BY ${orderBy}
+			</when>
+			<otherwise>
+				ORDER BY LOGIN_BGNDE DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="selectPageList" parameterType="userLoginHistSearchVO" resultType="userLoginHistVO">
+		SELECT	<include refid="columns" />
+				, FS_USER.USER_ID   AS userId
+				, FS_USER.USER_NM   AS userNm
+				, FS_USER.USER_SALT AS userSalt
+		FROM	FS_USER_LOGIN_HIST
+		LEFT OUTER JOIN FS_USER ON (FS_USER.USER_SN = FS_USER_LOGIN_HIST.USER_SN)
+		<include refid="searchWheres" />
+		
+		<choose>
+			<when test="orderBy != null and orderBy != ''">
+				ORDER BY ${orderBy}
+			</when>
+			<otherwise>
+				ORDER BY LOGIN_BGNDE DESC
+			</otherwise>
+		</choose>
+		
+		LIMIT #{firstIndex}, #{recordCountPerPage}
+	</select>
+	
+	<update id="updateEDate" parameterType="userLoginHistVO">
+		UPDATE	FS_USER_LOGIN_HIST
+		SET		LOGIN_ENDDE = NOW()
+		WHERE	USER_SN = #{userSn}
+	</update>
+	
+</mapper>

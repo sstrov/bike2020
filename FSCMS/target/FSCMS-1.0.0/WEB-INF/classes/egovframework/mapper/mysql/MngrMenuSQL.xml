@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="fscms.mods.mngr.service.MngrMenuMapper">
+
+	<resultMap type="mngrMenuVO" id="mngrMenu_C">
+		<result property="menuSn"       column="menuSn" />
+		<result property="accSn"        column="accSn" />
+		<result property="menuBestSn"   column="menuBestSn" />
+		<result property="menuUpperSn"  column="menuUpperSn" />
+		<result property="menuOrdr"     column="menuOrdr" />
+		<result property="menuDp"       column="menuDp" />
+		<result property="menuNm"       column="menuNm" />
+		<result property="menuCnncTy"   column="menuCnncTy" />
+		<result property="menuItnadr"   column="menuItnadr" />
+		<result property="menuItnadrTy" column="menuItnadrTy" />
+		<result property="menuTrgt"     column="menuTrgt" />
+		<result property="menuParamtr"  column="menuParamtr" />
+		<result property="actvtyAt"     column="actvtyAt" />
+		<result property="useAt"        column="useAt" />
+		<result property="menuLink"     column="menuLink" />
+		<result property="registDe"     column="registDe" />
+		<result property="updtDe"       column="updtDe" />
+		
+		<collection property="childList" column="{menuUpperSn=menuSn}" javaType="ArrayList" ofType="mngrMenuVO" select="selectList_C" />
+	</resultMap>
+
+	<sql id="columns">
+		FS_MNGR_MENU.MENU_SN AS menuSn
+		, ACC_SN             AS accSn
+		, MENU_BEST_SN       AS menuBestSn
+		, MENU_UPPER_SN      AS menuUpperSn
+		, MENU_ORDR          AS menuOrdr
+		, MENU_DP            AS menuDp
+		, MENU_NM            AS menuNm
+		, MENU_CNNC_TY       AS menuCnncTy
+		, MENU_ITNADR        AS menuItnadr
+		, MENU_ITNADR_TY     AS menuItnadrTy
+		, MENU_TRGT          AS menuTrgt
+		, MENU_PARAMTR       AS menuParamtr
+		, ACTVTY_AT          AS actvtyAt
+		, USE_AT             AS useAt
+		, MENU_LINK          AS menuLink
+		, REGIST_DE          AS registDe
+		, UPDT_DE            AS updtDe
+	</sql>
+	
+	<sql id="wheres">
+		<where>
+			<if test="menuSn != null and menuSn != ''">
+				MENU_SN = #{menuSn}
+			</if>
+			
+			<if test="menuBestSn != null and menuBestSn != ''">
+				AND MENU_BEST_SN = #{menuBestSn}
+			</if>
+			
+			<if test="menuUpperSn != null and menuUpperSn != ''">
+				AND MENU_UPPER_SN = #{menuUpperSn}
+			</if>
+			
+			<if test="menuOrdr != null and menuOrdr != ''">
+				AND MENU_ORDR = #{menuOrdr}
+			</if>
+			
+			<if test="menuDp != null and menuDp != ''">
+				AND MENU_DP = #{menuDp}
+			</if>
+			
+			<if test="menuDpOver != null and menuDpOver != ''">
+				AND MENU_DP > #{menuDpOver}
+			</if>
+			
+			<if test="actvtyAt != null and actvtyAt != ''">
+				AND ACTVTY_AT = #{actvtyAt}
+			</if>
+			
+			<if test="useAt != null and useAt != ''">
+				AND USE_AT = #{useAt}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="selectObj" parameterType="mngrMenuVO" resultType="mngrMenuVO">
+		SELECT	<include refid="columns" />
+				, IF(MENU_CNNC_TY = 3, (SELECT BBS_ESTBS_NM FROM FS_BBS_ESTBS WHERE BBS_ESTBS_SN = FS_MNGR_MENU.ACC_SN), '') AS accNm
+		FROM	FS_MNGR_MENU
+		<include refid="wheres" />
+	</select>
+	
+	<select id="selectList" parameterType="mngrMenuVO" resultType="mngrMenuVO">
+		SELECT	<include refid="columns" />
+		FROM	FS_MNGR_MENU
+		<include refid="wheres" />
+		ORDER BY MENU_ORDR ASC
+	</select>
+	
+	<select id="selectList_C" parameterType="mngrMenuVO" resultMap="mngrMenu_C">
+		SELECT	<include refid="columns" />
+		FROM	FS_MNGR_MENU
+		<include refid="wheres" />
+		ORDER BY MENU_ORDR ASC
+	</select>
+	
+	<select id="selectList_acc" parameterType="mngrMenuVO" resultType="mngrMenuVO">
+		SELECT	<include refid="columns" />
+				, FS_MNGR_MENU_ACC.AUTHOR_REDNG  AS authorRedng
+				, FS_MNGR_MENU_ACC.AUTHOR_REGIST AS authorRegist
+		FROM	FS_MNGR_MENU
+		LEFT OUTER JOIN FS_MNGR_MENU_ACC ON (FS_MNGR_MENU_ACC.MENU_SN = FS_MNGR_MENU.MENU_SN AND FS_MNGR_MENU_ACC.ROLE_SN = #{sc_roleSn})
+		<include refid="wheres" />
+		ORDER BY MENU_ORDR ASC
+	</select>
+	
+	<select id="selectMaxO" parameterType="mngrMenuVO" resultType="int">
+		SELECT	IFNULL(MAX(MENU_ORDR), 0)
+		FROM	FS_MNGR_MENU
+		<include refid="wheres" />
+	</select>
+	
+	<insert id="insertInfo" parameterType="mngrMenuVO">
+		INSERT INTO FS_MNGR_MENU
+			(MENU_SN, MENU_BEST_SN, MENU_UPPER_SN, MENU_ORDR,
+			MENU_DP, MENU_NM, MENU_CNNC_TY, MENU_ITNADR_TY,
+			MENU_TRGT, ACTVTY_AT, USE_AT, MENU_LINK,
+			REGIST_DE, UPDT_DE)
+		VALUES
+			(#{menuSn}, #{menuBestSn, jdbcType=VARCHAR}, #{menuUpperSn, jdbcType=VARCHAR}, #{menuOrdr},
+			#{menuDp}, #{menuNm}, #{menuCnncTy}, #{menuItnadrTy, jdbcType=VARCHAR},
+			#{menuTrgt}, #{actvtyAt}, #{useAt}, #{menuLink},
+			NOW(), NOW())
+	</insert>
+	
+	<update id="updateInfo" parameterType="mngrMenuVO">
+		UPDATE	FS_MNGR_MENU
+		<set>
+			<if test="accSn != null">
+				ACC_SN = #{accSn, jdbcType=INTEGER},
+			</if>
+			<if test="menuBestSn != null and menuBestSn != ''">
+				MENU_BEST_SN = #{menuBestSn, jdbcType=VARCHAR},
+			</if>
+			<if test="menuUpperSn != null">
+				<choose>
+					<when test="menuUpperSn == 'Y'.toString()">
+						MENU_UPPER_SN = null,
+					</when>
+					<otherwise>
+						MENU_UPPER_SN = #{menuUpperSn, jdbcType=VARCHAR},
+					</otherwise>
+				</choose>
+			</if>
+			<if test="menuOrdr != null and menuOrdr != ''">
+				MENU_ORDR = #{menuOrdr},
+			</if>
+			<if test="menuDp != null and menuDp != ''">
+				MENU_DP = #{menuDp},
+			</if>
+			<if test="menuNm != null and menuNm != ''">
+				MENU_NM = #{menuNm},
+			</if>
+			<if test="menuCnncTy != null and menuCnncTy != ''">
+				MENU_CNNC_TY = #{menuCnncTy},
+			</if>
+			<if test="menuItnadr != null and menuItnadr != ''">
+				MENU_ITNADR = #{menuItnadr},
+			</if>
+			<if test="menuItnadrTy != null and menuItnadrTy != ''">
+				MENU_ITNADR_TY = #{menuItnadrTy},
+			</if>
+			<if test="menuTrgt != null and menuTrgt != ''">
+				MENU_TRGT = #{menuTrgt},
+			</if>
+			<if test="menuParamtr != null and menuParamtr != ''">
+				MENU_PARAMTR = #{menuParamtr},
+			</if>
+			<if test="actvtyAt != null and actvtyAt != ''">
+				ACTVTY_AT = #{actvtyAt},
+			</if>
+			<if test="useAt != null and useAt != ''">
+				USE_AT = #{useAt},
+			</if>
+			<if test="menuLink != null and menuLink != ''">
+				MENU_LINK = #{menuLink},
+			</if>
+			UPDT_DE = NOW()
+		</set>
+		WHERE	MENU_SN = #{menuSn}
+	</update>
+	
+	<delete id="deleteInfo" parameterType="mngrMenuVO">
+		DELETE FROM FS_MNGR_MENU
+		WHERE MENU_SN = #{menuSn}
+	</delete>
+	
+</mapper>
